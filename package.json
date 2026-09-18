@@ -1,0 +1,20 @@
+{
+  "name": "c-lang-lt-slidev",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build --base /c-lang-lt-slidev/",
+    "export": "slidev export",
+    "format": "prettier --write slides.md components/**/*.vue"
+  },
+  "dependencies": {
+    "@slidev/cli": "latest",
+    "@slidev/theme-default": "latest",
+    "@slidev/theme-seriph": "latest",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "prettier": "latest"
+  }
+}
