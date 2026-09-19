@@ -13,3 +13,7 @@ dist/
 
 # OS metadata
 .DS_Store
+
+# Local verification tooling leftovers
+.playwright-cli/
+wasm/node_modules/

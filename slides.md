@@ -58,27 +58,49 @@ class: text-center
 -->
 
 ---
-layout: center
+layout: two-cols
 ---
 
 # USBを挿すと何が起きているか
 
-<!-- SLOT:USB-ACCURACY -->
+::left::
 
-<div class="grid grid-cols-4 gap-3 mt-10 text-center">
-  <div class="rounded-xl border border-white/10 bg-white/5 p-4"><div class="opacity-60">1</div>接続</div>
-  <div class="rounded-xl border border-white/10 bg-white/5 p-4"><div class="opacity-60">2</div>リセット</div>
-  <div class="rounded-xl border border-green-300/40 bg-green-300/10 p-4"><div class="opacity-60">3</div>記述子を読む</div>
-  <div class="rounded-xl border border-white/10 bg-white/5 p-4"><div class="opacity-60">4</div>設定する</div>
+## enumeration（時系列）
+
+<div class="text-sm leading-relaxed space-y-2 mt-3">
+  <div>接続検出 → バスリセット<br><span class="opacity-65">Default / address 0 / EP0 のみ</span></div>
+  <div><code>GET_DESCRIPTOR(Device, 8)</code><br><span class="opacity-65">offset 7 の <code>bMaxPacketSize0</code> を知る</span></div>
+  <div class="opacity-65">（必要なら再リセット：ホスト実装依存）</div>
+  <div><code>SET_ADDRESS(n)</code><br><span class="opacity-65">新 address は Status ステージ完了後に有効</span></div>
+  <div><code>GET_DESCRIPTOR(Device, 18)</code></div>
+  <div><code>GET_DESCRIPTOR(Configuration, 9)</code><br><span class="opacity-65"><code>wTotalLength</code> を読む</span></div>
+  <div><code>GET_DESCRIPTOR(Configuration, wTotalLength)</code><br><span class="opacity-65">連結された descriptor 群を一括取得</span></div>
+  <div><code>SET_CONFIGURATION(bConfigurationValue)</code></div>
 </div>
 
-<div class="mt-10 text-2xl leading-relaxed">
-PCは「お前は誰で、何ができる？」を<br>小さなバイト列に聞いている。
+::right::
+
+## descriptor（階層）
+
+<pre class="text-sm leading-relaxed mt-3"><code>Device (18B)
+└─ Configuration (9B) × bNumConfigurations
+   └─ Interface (9B) × bNumInterfaces
+      ├─ Endpoint (7B) × bNumEndpoints
+      └─ クラス固有 (HID / CDC …)</code></pre>
+
+<div class="mt-4 text-sm leading-relaxed opacity-80">
+String Descriptor は木の外。各 <code>i*</code> index から横参照する。<br>
+EP0 には Endpoint Descriptor がない。だから <code>bMaxPacketSize0</code> は Device 側にある。
+</div>
+
+<div class="mt-5 rounded-xl bg-yellow-300/10 border border-yellow-300/30 p-3 text-sm">
+<code>GET_DESCRIPTOR</code> はリクエスト種別。木の頂点ではない。
 </div>
 
 <!--
 想定: 60秒
-役割: USB enumeration を入口に、物理デバイスとの会話がバイト列で始まることを示す。詳細は USB 正確版スロットで差し替える。
+役割: 左は起きた順、右は返ってきたデータの形。混ぜると GET_DESCRIPTOR が親に見えてしまう。
+Configuration 以下は順番に別々に取るのではなく、長さを読んでから一つの連結ブロブとして取る。
 -->
 
 ---
@@ -88,23 +110,27 @@ class: text-center
 
 # その答えは、18バイト
 
-<div class="mt-10 rounded-xl bg-black/60 border border-white/10 p-6 font-mono text-base leading-relaxed text-left">
-12 01 00 02 00 00 00 40<br>
-6A 0B 46 53 00 01 01 02<br>
-03 01
+<div class="mt-10 rounded-xl bg-black/60 border border-white/10 p-6 font-mono text-xl leading-relaxed text-left">
+12 01 00 02 00 00 00 08<br>
+6D 04 2B C5 00 12 01 02<br>
+00 01
 </div>
 
-<div class="mt-10 text-2xl">
+<div class="mt-8 text-2xl">
 この時点では、ただの 18 バイト。
 </div>
 
-<div class="mt-5 opacity-70">
+<div class="mt-4 opacity-70">
 意味を与えるのは、次の一手。
+</div>
+
+<div class="mt-6 text-sm opacity-60">
+実機の生ダンプではなく、実在する VID / PID で組んだ説明用の例。
 </div>
 
 <!--
 想定: 45秒
-役割: 生の hex を先に見せ、意味のないバイト列への違和感をつくる。値と解説は USB 正確版スロットで差し替える。
+役割: 生の hex を先に見せ、意味のないバイト列への違和感をつくる。この18バイトは後段のデモでそのまま解析する。
 -->
 
 ---
@@ -112,79 +138,80 @@ class: text-center
 # バイト列が構造体になる
 
 <pre class="mt-5 rounded-xl bg-black/60 border border-white/10 p-5 text-base leading-relaxed"><code>typedef struct {
-  uint8_t  bLength;
-  uint8_t  bDescriptorType;
-  uint16_t bcdUSB;
-  uint8_t  bDeviceClass, bDeviceSubClass;
-  uint8_t  bDeviceProtocol, bMaxPacketSize0;
-  uint16_t idVendor, idProduct, bcdDevice;
-  uint8_t  iManufacturer, iProduct, iSerialNumber;
-  uint8_t  bNumConfigurations;
-} UsbDeviceDescriptor;</code></pre>
+  uint8_t  bLength;             <span class="opacity-50">// offset 0</span>
+  uint8_t  bDescriptorType;     <span class="opacity-50">// 1</span>
+  uint16_t bcdUSB;              <span class="opacity-50">// 2</span>
+  uint8_t  bDeviceClass;        <span class="opacity-50">// 4</span>
+  uint8_t  bDeviceSubClass;     <span class="opacity-50">// 5</span>
+  uint8_t  bDeviceProtocol;     <span class="opacity-50">// 6</span>
+  uint8_t  bMaxPacketSize0;     <span class="opacity-50">// 7</span>
+  uint16_t idVendor;            <span class="opacity-50">// 8</span>
+  uint16_t idProduct;           <span class="opacity-50">// 10</span>
+  uint16_t bcdDevice;           <span class="opacity-50">// 12</span>
+  uint8_t  iManufacturer;       <span class="opacity-50">// 14</span>
+  uint8_t  iProduct;            <span class="opacity-50">// 15</span>
+  uint8_t  iSerialNumber;       <span class="opacity-50">// 16</span>
+  uint8_t  bNumConfigurations;  <span class="opacity-50">// 17</span>
+} UsbDeviceDescriptor;          <span class="opacity-50">// wire format: 18 bytes</span></code></pre>
 
-<div class="mt-7 text-xl">
-同じ 18 バイトを、フィールド名と型で読める。
+<div class="mt-5 text-base opacity-80">
+<code>iManufacturer</code> / <code>iProduct</code> / <code>iSerialNumber</code> は String Descriptor への index。0 は「文字列なし」。
+末尾の <code>bNumConfigurations</code> が、Configuration が複数あり得る入口になる。
 </div>
 
 <!--
 想定: 75秒
-役割: プロトコル上のバイト列を C の構造体として読む接続を見せる。完全な定義・属性は USB 正確版スロットで差し替える。
+役割: 18バイトを18バイトとして読む。末尾4バイトは飾りではない。
+文字列は index で横に飛び、Configuration は複数持てる。
 -->
 
 ---
-layout: center
----
 
-# <code>sizeof</code> != <code>bLength</code>
+# <code>bLength</code> を信じろ。<code>sizeof</code> を信じるな。
 
-<div class="grid grid-cols-2 gap-6 mt-10">
-  <div class="rounded-xl border border-green-300/30 bg-green-300/10 p-6">
-    <div class="text-xl font-bold"><code>bLength</code></div>
-    <div class="mt-4 opacity-80">プロトコルが送ってきた<br>「この記述子は何バイトか」</div>
-  </div>
-  <div class="rounded-xl border border-yellow-300/30 bg-yellow-300/10 p-6">
-    <div class="text-xl font-bold"><code>sizeof</code></div>
-    <div class="mt-4 opacity-80">この環境のコンパイラが決めた<br>「構造体の置き方」</div>
-  </div>
+<table class="mt-6 w-full text-left text-base">
+  <thead><tr class="border-b border-white/20"><th class="pb-2">Descriptor</th><th class="pb-2">wire 上の <code>bLength</code></th><th class="pb-2">よくある ABI での <code>sizeof</code></th></tr></thead>
+  <tbody>
+    <tr><td class="py-1">Device</td><td>18</td><td class="text-green-300">18 — たまたま一致</td></tr>
+    <tr><td class="py-1">Configuration</td><td>9</td><td class="text-red-300">10 — 末尾 padding 1</td></tr>
+    <tr><td class="py-1">Interface</td><td>9</td><td class="text-green-300">9 — たまたま一致</td></tr>
+    <tr><td class="py-1">Endpoint</td><td>7</td><td class="text-red-300">8 — 末尾 padding 1</td></tr>
+  </tbody>
+</table>
+
+<div class="mt-6 text-xl">
+Configuration は <code>wTotalLength</code> bytes の連結ブロブ。<br>
+<code>p += sizeof(*desc)</code> で 1 バイトずれると、以降が全部壊れる。
 </div>
 
-<div class="mt-10 text-2xl">
-同じ「サイズ」でも、見ている境界が違う。
+<div class="mt-4 text-sm opacity-60">
+C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演であって wire format の定義ではない。
 </div>
 
 <!--
 想定: 90秒
-役割: wire format と C のメモリ表現を区別し、Cで境界や実体が表に出る瞬間をつくる。技術詳細は USB 正確版スロットで差し替える。
+役割: Device で18と出るのは正解ではなく偶然。Endpoint は7が8になる。
+同じUSBの descriptor なのに、合うものと合わないものが混ざる。
+だからポインタを進める基準は C の都合ではなく wire 上の bLength。
 -->
 
----
-layout: center
 ---
 
 # LIVE DEMO: C → WASM
 
-<div class="mt-6 text-2xl leading-relaxed">
-さっきのバイト列を、ブラウザの中で<br>
-<span class="text-green-300">C がそのまま読む。</span>
-</div>
-
-<!-- SLOT:WASM-DEMO -->
-
-<div class="mt-10 rounded-xl border border-green-300/30 bg-green-300/10 p-6 text-left">
-<div class="font-mono text-base">C → WebAssembly → Browser</div>
-<div class="mt-4 opacity-80">ここで 18 バイトを入力し、C の読み方と境界をライブで追う。</div>
-</div>
+<UsbDescriptorDemo />
 
 <!--
 想定: 165秒
-役割: USB のバイト列を読む C を WASM としてブラウザ上で実演し、前半の抽象を体験に変える。UsbDescriptorDemo の挿入位置は WASM デモスロット。
+役割: 18バイトをブラウザの linear memory に書き、C/WASM がそれを読む。
+進行: (1) 解析成功で VID/PID (2) bLength 改竄で -2 (3) 8バイトで -1 (4) Big-endian で 0x6D04。
+ポインタ値はただのメモリオフセット。import object は空 = JSグルーもWASI依存もない。
+失敗時: 自動で JS フォールバックに落ちるのでそのまま進行してよい。
 -->
 
 ---
 
 # Cを選ぶ理由は「速いから」だけじゃない
-
-<!-- SLOT:TECH-SELECTION -->
 
 <TechSelection />
 
@@ -232,23 +259,25 @@ AIがコードを書くほど、「実際に何が起きるか」を読む力が
 
 ---
 layout: center
-class: text-center
 ---
 
-# まとめ
+# 次に、この条件を見たら C を思い出す
 
-<div class="text-3xl leading-relaxed mt-10">
-Cは万能ではない。<br>
-でも、候補から最初に消すには惜しい。
+<div class="grid grid-cols-2 gap-4 mt-8 text-left text-xl">
+  <div class="rounded-xl border border-white/10 bg-white/5 p-5">デバイス / OS とつながる</div>
+  <div class="rounded-xl border border-white/10 bg-white/5 p-5">言語をまたぐ共通コアを置く</div>
+  <div class="rounded-xl border border-white/10 bg-white/5 p-5">ランタイムを薄くして小さく動かす</div>
+  <div class="rounded-xl border border-white/10 bg-white/5 p-5">既存の C 資産を Web へ運ぶ</div>
 </div>
 
 <div class="mt-10 text-xl opacity-80">
-速さ / 互換性 / 境界面 / 小ささ / 低レイヤ理解
+このどれにも当てはまらないなら、C を選ばなくてよい。
 </div>
 
 <!--
 想定: 45秒
-役割: Cを選ぶ条件を再掲し、万能ではないという前提を保ったまま結論へ収束させる。
+役割: 「Cは万能ではない」を保ったまま、次の技術選定で思い出すトリガーを4つに絞って渡す。
+最後の1行で、Cを常に選ぶべきという主張にならないよう明示的に逆側を置く。
 -->
 
 ---
