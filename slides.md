@@ -141,7 +141,7 @@ class: bleed mid
 
 # その答えは、18バイト
 
-<div class="bytes hero" style="margin-top: 26px">
+<div class="bytes hero" style="margin-top: 30px">
 <span>12</span>
 <span>01</span>
 <span>00</span>
@@ -162,7 +162,7 @@ class: bleed mid
 <span>01</span>
 </div>
 
-<div class="ruler">
+<div class="ruler hero">
 <span class="t">0</span>
 <span class=""></span>
 <span class=""></span>
@@ -415,7 +415,7 @@ class: bleed spread
 <span class="off">01</span>
 </div>
 
-<div class="ruler">
+<div class="ruler ">
 <span class=""></span>
 <span class=""></span>
 <span class=""></span>

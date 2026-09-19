@@ -23,9 +23,9 @@
   --bg-lift: #0b111b;
   --ink: #e9edf3;
   --ink-2: #98a2b2;
-  --ink-3: #6b7585;
-  --rule: #1a212c;
-  --rule-lit: #2c384a;
+  --ink-3: #78818f;
+  --rule: #232d3c;
+  --rule-lit: #39485e;
   --sig: #ffb000;
   --wide: #58c4f0;
   --err: #ff6b5a;
@@ -183,19 +183,25 @@ body,
 
 /* --------------------------------------------------------------- utilities */
 
-.dim {
+/* Scoped so they outrank the inline-code colour reset below. */
+.dim,
+.slidev-layout .dim {
   color: var(--ink-2);
 }
-.faint {
+.faint,
+.slidev-layout .faint {
   color: var(--ink-3);
 }
-.sig {
+.sig,
+.slidev-layout .sig {
   color: var(--sig);
 }
-.wide {
+.wide,
+.slidev-layout .wide {
   color: var(--wide);
 }
-.err {
+.err,
+.slidev-layout .err {
   color: var(--err);
 }
 .mono {
@@ -242,8 +248,14 @@ body,
 .bytes > span {
   padding: 0.1em 0;
 }
+/* Large, but the gap still has to read: these are 18 discrete bytes,
+   not one long string. */
 .bytes.hero {
-  font-size: 30px;
+  font-size: 31px;
+  column-gap: 0.22em;
+}
+.ruler.hero {
+  column-gap: 0.22em;
 }
 .bytes.small {
   font-size: 17px;
@@ -402,6 +414,18 @@ body,
 .data .num {
   font-family: var(--mono);
   font-weight: 500;
+}
+.data th:nth-child(1),
+.data td:nth-child(1) {
+  width: 28%;
+}
+.data th:nth-child(2),
+.data td:nth-child(2) {
+  width: 18%;
+}
+.data th:nth-child(3),
+.data td:nth-child(3) {
+  width: 24%;
 }
 
 /* ---------------------------------------------------------- the demo shell */
