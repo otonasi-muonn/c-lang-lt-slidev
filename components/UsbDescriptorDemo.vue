@@ -88,28 +88,24 @@
     >
       <button
         class="demo-button border-green-300/50 bg-green-300/15 hover:bg-green-300/25"
-        :disabled="engine === 'loading'"
         @click="runDemo('normal')"
       >
         正常に解析
       </button>
       <button
         class="demo-button border-red-300/50 bg-red-300/10 hover:bg-red-300/20"
-        :disabled="engine === 'loading'"
         @click="runDemo('bad-length')"
       >
         bLength を 0x14 にする
       </button>
       <button
         class="demo-button border-orange-300/50 bg-orange-300/10 hover:bg-orange-300/20"
-        :disabled="engine === 'loading'"
         @click="runDemo('short')"
       >
         8 bytes だけ渡す
       </button>
       <button
         class="demo-button border-blue-300/50 bg-blue-300/10 hover:bg-blue-300/20"
-        :disabled="engine === 'loading'"
         @click="runDemo('big-endian')"
       >
         Big-endian として読む
@@ -127,9 +123,14 @@
           <strong class="text-xl text-green-200">{{
             formatField(field, output[field.outputIndex])
           }}</strong>
-          <span class="ml-2 font-sans text-sm opacity-70">{{
-            field.note
-          }}</span>
+          <span
+            v-if="!isBigEndian"
+            class="ml-2 font-sans text-sm opacity-70"
+            >{{ field.note }}</span
+          >
+          <span v-else class="ml-2 font-sans text-sm text-red-200 opacity-80"
+            >逆に読むと別物</span
+          >
         </div>
       </div>
       <div class="mt-3 grid grid-cols-3 gap-x-3 gap-y-1 font-mono text-base">
@@ -235,7 +236,7 @@ const fields: Field[] = [
 
 const highlightedFields = fields.filter((field) => field.emphasis);
 const displayedFields = fields.filter((field) =>
-  [0, 1, 2, 7, 8].includes(field.outputIndex),
+  [0, 1, 2, 9, 13].includes(field.outputIndex),
 );
 
 const engine = ref<Engine>("loading");
@@ -249,6 +250,10 @@ const bufferAddress = ref("ロード中");
 const outputAddress = ref("ロード中");
 const calledFunction = ref("待機中");
 const runId = ref(0);
+
+const isBigEndian = computed(
+  () => calledFunction.value === "usb_parse_as_big_endian()",
+);
 
 const engineLabel = computed(() => {
   if (engine.value === "wasm") return "WASM 実行中";

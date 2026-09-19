@@ -101,6 +101,13 @@ EP0 には Endpoint Descriptor がない。だから <code>bMaxPacketSize0</code
 想定: 60秒
 役割: 左は起きた順、右は返ってきたデータの形。混ぜると GET_DESCRIPTOR が親に見えてしまう。
 Configuration 以下は順番に別々に取るのではなく、長さを読んでから一つの連結ブロブとして取る。
+
+ペース: このスライドは 75 秒でハードキャップ。語るのは 接続検出 →
+GET_DESCRIPTOR(Device, 8) → SET_ADDRESS → Configuration 2段階取得 の4点だけ。
+再リセットと Status ステージの但し書きは読み上げず画面に置くだけにする。
+
+聞かれたら: bNumInterfaces は interface 番号の数であって Interface Descriptor の総数ではない。
+alternate setting の分だけ Interface Descriptor は増える。
 -->
 
 ---
@@ -154,9 +161,10 @@ class: text-center
   uint8_t  bNumConfigurations;  <span class="opacity-50">// 17</span>
 } UsbDeviceDescriptor;          <span class="opacity-50">// wire format: 18 bytes</span></code></pre>
 
-<div class="mt-5 text-base opacity-80">
-<code>iManufacturer</code> / <code>iProduct</code> / <code>iSerialNumber</code> は String Descriptor への index。0 は「文字列なし」。
-末尾の <code>bNumConfigurations</code> が、Configuration が複数あり得る入口になる。
+<div class="mt-4 text-base opacity-80 leading-snug">
+<code>iManufacturer</code> / <code>iProduct</code> / <code>iSerialNumber</code> は String Descriptor への index。
+末尾の <code>bNumConfigurations</code> が、Configuration が複数あり得る入口になる。<br>
+<span class="text-yellow-200">8–9 バイトは <code>6D 04</code>。値は <code>0x046D</code>。wire は little-endian。</span>
 </div>
 
 <!--
@@ -205,6 +213,8 @@ C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演�
 想定: 165秒
 役割: 18バイトをブラウザの linear memory に書き、C/WASM がそれを読む。
 進行: (1) 解析成功で VID/PID (2) bLength 改竄で -2 (3) 8バイトで -1 (4) Big-endian で 0x6D04。
+(4)が山場: 同じ18バイトなのに意味が変わる。LE を自分で書くか、CPU とコンパイラの都合に
+任せるかが境界面。さっき出した「6D 04 は 0x046D」をここで回収する。
 ポインタ値はただのメモリオフセット。import object は空 = JSグルーもWASI依存もない。
 失敗時: 自動で JS フォールバックに落ちるのでそのまま進行してよい。
 -->
@@ -278,6 +288,10 @@ layout: center
 想定: 45秒
 役割: 「Cは万能ではない」を保ったまま、次の技術選定で思い出すトリガーを4つに絞って渡す。
 最後の1行で、Cを常に選ぶべきという主張にならないよう明示的に逆側を置く。
+
+想定質問「それ Rust でよくないですか」への20秒回答:
+多くの場合 Rust はよい答え。ただし既存の C ABI・既存資産・ツールチェーンが C しかない環境では
+C が現実解になる。そこを「古いから」で塗りつぶさないでほしい、というのが今日の主張。
 -->
 
 ---
@@ -292,7 +306,11 @@ USB の 18 バイトから、ブラウザの WASM まで。<br>
 境界が重要な場面では、C にも席がある。
 </div>
 
-<div class="mt-12 text-xl opacity-70">
+<div class="mt-10 text-lg opacity-75 font-mono">
+https://otonasi-muonn.github.io/c-lang-lt-slidev/
+</div>
+
+<div class="mt-6 text-xl opacity-70">
 Thank you!
 </div>
 
