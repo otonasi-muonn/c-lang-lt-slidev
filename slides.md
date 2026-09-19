@@ -369,7 +369,7 @@ analogy の限界: メモリが消去されるわけではない。使う権利�
 <div class="chain-node">usb_descriptor.c</div>
 <div class="chain-arrow">↓<span class="how">clang --target=wasm32</span></div>
 <div class="chain-node">usb_descriptor.wasm<span class="sz">769 B</span></div>
-<div class="chain-arrow">↓<span class="how">&lt;script&gt; から読み込むだけ</span></div>
+<div class="chain-arrow">↓<span class="how">fetch + WebAssembly.instantiate</span></div>
 <div class="chain-node">ブラウザ</div>
 
 </div>
