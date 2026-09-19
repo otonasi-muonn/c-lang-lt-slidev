@@ -159,6 +159,12 @@ const restFields = fields.filter((field) =>
 );
 
 const engine = ref<Engine>("loading");
+// engine is the capability (is there a usable WASM instance?); ranWith is what
+// actually produced the result on screen. The badge reports ranWith once
+// anything has run, so it can never claim WASM for a JavaScript answer -- and
+// a click that lands during loading does not condemn the rest of the talk to
+// the fallback label.
+const ranWith = ref<"wasm" | "js" | null>(null);
 const wasm = ref<UsbWasmExports | null>(null);
 const fallbackReason = ref("");
 const inputBytes = ref<number[]>(Array.from(descriptor));
@@ -183,15 +189,21 @@ const paddedBytes = computed<(number | null)[]>(() => {
   return cells.slice(0, 18);
 });
 
+const reported = computed<Engine>(() => {
+  if (ranWith.value === "wasm") return "wasm";
+  if (ranWith.value === "js") return "fallback";
+  return engine.value;
+});
+
 const engineLabel = computed(() => {
-  if (engine.value === "wasm") return "WASM 実行中";
-  if (engine.value === "fallback") return "JS フォールバック";
+  if (reported.value === "wasm") return "WASM 実行中";
+  if (reported.value === "fallback") return "JS フォールバック";
   return "WASM をロード中";
 });
 
 const engineClass = computed(() => ({
-  "engine-wasm": engine.value === "wasm",
-  "engine-fallback": engine.value === "fallback",
+  "engine-wasm": reported.value === "wasm",
+  "engine-fallback": reported.value === "fallback",
 }));
 
 const returnClass = computed(() => {
@@ -207,8 +219,8 @@ const resultMessage = computed(() => {
 });
 
 const runSummary = computed(() => {
-  if (engine.value === "fallback") {
-    return `WASM のロードまたは実行に失敗。純 JS の同等ロジックで表示中${fallbackReason.value}`;
+  if (ranWith.value === "js") {
+    return `WASM で実行できず、純 JS の同等ロジックで表示中${fallbackReason.value}`;
   }
   if (returnCode.value === null)
     return "JS が生バイトを linear memory へ書き、C がそれを読んで結果を書き戻す。";
@@ -323,7 +335,7 @@ function applyResult(result: ParseResult) {
 // Anything that is not a live WASM instance is reported as the fallback,
 // including a click that lands while the module is still loading.
 function runWithJavaScript(request: ReturnType<typeof requestFor>) {
-  engine.value = "fallback";
+  ranWith.value = "js";
   bufferAddress.value = "JS";
   outputAddress.value = "JS";
   applyResult(
@@ -344,8 +356,8 @@ function runDemo(mode: DemoMode) {
   runId.value += 1;
 
   if (engine.value !== "wasm" || !wasm.value) {
-    if (engine.value === "loading" && !fallbackReason.value) {
-      fallbackReason.value = " (WASM のロード完了前に実行)";
+    if (engine.value === "loading") {
+      fallbackReason.value = "（WASM のロード完了前に実行）";
     }
     runWithJavaScript(request);
     return;
@@ -368,10 +380,13 @@ function runDemo(mode: DemoMode) {
       code === 18
         ? Array.from(new Uint16Array(ex.memory.buffer, outputPointer, 14))
         : null;
+    ranWith.value = "wasm";
+    fallbackReason.value = "";
     applyResult({ returnCode: code, output: values });
   } catch (error) {
     wasm.value = null;
-    fallbackReason.value = error instanceof Error ? ` (${error.message})` : "";
+    engine.value = "fallback";
+    fallbackReason.value = error instanceof Error ? `（${error.message}）` : "";
     runWithJavaScript(request);
   }
 }
@@ -386,15 +401,15 @@ async function loadWasm() {
     if (!isUsbWasmExports(instance.exports))
       throw new Error("required WASM exports are missing");
     wasm.value = instance.exports;
-    // A click during loading already answered with JS and said so; leave that
-    // verdict standing rather than silently relabelling the visible result.
-    if (engine.value === "loading") {
-      engine.value = "wasm";
+    engine.value = "wasm";
+    // A click that landed during loading was answered by JavaScript and still
+    // says so; the next run will flip the badge back to WASM on its own.
+    if (ranWith.value === null) {
       bufferAddress.value = "—";
       outputAddress.value = "—";
     }
   } catch (error) {
-    fallbackReason.value = error instanceof Error ? ` (${error.message})` : "";
+    fallbackReason.value = error instanceof Error ? `（${error.message}）` : "";
     engine.value = "fallback";
     runDemo("normal");
   }
