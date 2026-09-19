@@ -19,7 +19,6 @@ fonts:
   mono: JetBrains Mono
 ---
 
-
 <div>
 
 <h1 class="say">AI時代に、<br>なぜ今さらC言語なのか</h1>
@@ -57,27 +56,415 @@ fonts:
 
 <!--
 想定: 30秒
-役割: 名乗りと結論を先に置き、USBから技術選定までを一本で話すと宣言する。
+1枚の move: なし。18バイトを黙って置いておくだけ。
+
+名乗り。そのあと、消したスライドのぶんをここで口頭で言う:
+「Cは古いです。危ないです。書きやすくもない。常に最速でもない。
+　それでも今日は、Cがまだ面白い場所の話をします。」
+
+下のバイト列には触れない。「あとで回収します」も言わない。
+気づく人だけ気づけばいい。
 -->
 
 ---
 class: bleed mid
 ---
 
-<p class="note" style="font-size: 20px; line-height: 1.6">古い。危ない。書きやすくはない。常に最速でもない。</p>
+<div class="who">PC</div>
 
-<h1 class="say" style="margin-top: 26px; margin-bottom: 0">それでも、Cはまだ面白い。<br>コンピュータの境界面に立てるから。</h1>
+<div class="ask">君は誰？</div>
+
+<div v-click>
+
+<div class="who" style="margin-top: 44px">USBデバイス</div>
+
+<div class="bytes hero" style="margin-top: 26px">
+<span>12</span>
+<span>01</span>
+<span>00</span>
+<span>02</span>
+<span>00</span>
+<span>00</span>
+<span>00</span>
+<span>08</span>
+<span>6D</span>
+<span>04</span>
+<span>2B</span>
+<span>C5</span>
+<span>00</span>
+<span>12</span>
+<span>01</span>
+<span>02</span>
+<span>00</span>
+<span>01</span>
+</div>
+
+<div class="ruler hero">
+<span class="t">0</span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class="t">8</span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class="t">17</span>
+</div>
+
+<p class="lede" style="margin-top: 30px">ただの 18 バイト。<br><span class="dim">意味を与えるのは、次の一手。</span></p>
+
+<p class="note" style="margin-top: 20px">実機の生ダンプではなく、実在する VID / PID で組んだ説明用の例。</p>
+
+</div>
 
 <!--
-想定: 45秒
-役割: Cを万能視せず弱点を認めた上で、今日の主張を一枚に統合する。
+想定: 70秒
+1枚の move: 「USBは電源と通信の線」→「挿した瞬間に会話が始まっていて、
+最初の返事がこれ」
+
+口頭:
+USBを挿すと、PCは必ず最初に「お前は何者だ」と聞く。
+デバイスは自己紹介を返す。その自己紹介がこれ。18バイト。多くも少なくもない。
+
+analogy は「自己紹介」1つだけ。名刺・履歴書などへ広げない。
+自由記述ではなく決まった様式の用紙である、という限界は次の1枚が即座に回収する。
+
+「descriptor」「enumeration」という語はここでは出さない。
+聞かれたら: この18バイトの正式名称は Device Descriptor。取得の手順全体は
+enumeration と呼ばれ、Appendix にある。
+-->
+
+---
+class: bleed mid
+---
+
+# この18個には、名前がついている
+
+<div class="bytes hero" style="margin-top: 24px">
+<span>12</span>
+<span>01</span>
+<span>00</span>
+<span>02</span>
+<span>00</span>
+<span>00</span>
+<span>00</span>
+<span>08</span>
+<span>6D</span>
+<span>04</span>
+<span>2B</span>
+<span>C5</span>
+<span>00</span>
+<span>12</span>
+<span>01</span>
+<span>02</span>
+<span>00</span>
+<span>01</span>
+</div>
+
+<div class="spans" v-click>
+<i class="" style="grid-column: 1 / span 1"></i>
+<i class="" style="grid-column: 2 / span 1"></i>
+<i class="" style="grid-column: 3 / span 2"></i>
+<i class="" style="grid-column: 5 / span 1"></i>
+<i class="" style="grid-column: 6 / span 1"></i>
+<i class="" style="grid-column: 7 / span 1"></i>
+<i class="" style="grid-column: 8 / span 1"></i>
+<i class="on" style="grid-column: 9 / span 2"></i>
+<i class="" style="grid-column: 11 / span 2"></i>
+<i class="" style="grid-column: 13 / span 2"></i>
+<i class="" style="grid-column: 15 / span 1"></i>
+<i class="" style="grid-column: 16 / span 1"></i>
+<i class="" style="grid-column: 17 / span 1"></i>
+<i class="" style="grid-column: 18 / span 1"></i>
+</div>
+
+<div class="span-labels" v-click>
+<span style="grid-column: 9 / span 2">idVendor</span>
+</div>
+
+<p class="lede" style="margin-top: 40px">どこからどこまでが何か、長さも位置も決まっている。<br><span class="dim">今日は、この2バイトだけ見ます。</span></p>
+
+<!--
+想定: 80秒
+1枚の move: 「意味不明な18個」→「区画に分かれていて、それぞれに名前がある」
+
+口頭:
+18バイトは、のっぺりした塊ではない。1バイトの欄が10個、2バイトの欄が4個。
+どこが何かは規格で決まっている。全部で14個。
+今日はそのうち1つ、8番目から2バイトの欄だけ見ます。
+
+14個の全一覧は Appendix。ここでは出さない。
+名前を読み上げない。1つに集中させる。
+-->
+
+---
+class: bleed mid
+---
+
+<h1 class="compact"><code>6D 04</code> は、いくつ？</h1>
+
+<div class="swap" style="margin-top: 10px">
+
+<div class="swap-k">wire に届いた順</div>
+<div class="swap-row"><span>6D</span><span>04</span></div>
+
+<div class="swap-cross" v-click><svg width="224" height="38" viewBox="0 0 224 38" fill="none" aria-hidden="true"><path d="M46 3 L178 35" stroke="#78818f" stroke-width="1.5"/><path d="M178 3 L46 35" stroke="#78818f" stroke-width="1.5"/></svg></div>
+
+<div v-click>
+<div class="swap-k" style="margin-top: 4px">先に届いた方が下の桁</div>
+<div class="swap-row"><span>04</span><span>6D</span></div>
+</div>
+
+<div class="swap-val" v-click style="margin-top: 12px">0x046D</div>
+
+<div class="swap-mean" v-click>Logitech</div>
+
+</div>
+
+<p class="note" style="margin-top: 18px; text-align: center">見えている順と、値としての向きが違う。これを little-endian と呼ぶ。</p>
+
+<!--
+想定: 80秒
+1枚の move: 「6D 04 という2バイト」→「0x046D という1つの値」→「Logitech」
+
+口頭:
+6D 04。素直に読むと 0x6D04 に見える。でも違う。
+USBの線の上では、小さい桁から先に流れてくる。だから 6D が下の桁、04 が上の桁。
+値は 0x046D。この番号は Logitech に割り当てられている。
+── 今、18個の数字のうち2個から、メーカー名が出てきた。
+
+この反転を自分のコードで書くか、CPUとコンパイラの都合に任せるか。
+その選択があるのがCという言語。
+
+analogy は使わない。入れ替わりの絵そのものが直感になっている。
+little-endian という語は、絵を見せたあとに初めて出す。
+
+聞かれたら: big-endian の機器でそのまま読むと 0x6D04 になる。
+デモの4番目のボタンで実際にそうなる。
+-->
+
+---
+
+# 7バイトのはずが、Cでは8バイトになる
+
+<h2>USB の Endpoint descriptor — wire 上は 7 バイト</h2>
+
+<div class="pad" style="margin-top: 22px">
+
+<div class="pad-k">wire</div>
+<div class="cellrow big"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div class="pad-n">7</div>
+
+<div class="pad-k" v-click="1">C の struct</div>
+<div class="cellrow big" v-click="1"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div>
+<div class="pad-n sig" v-click="1">8</div>
+
+</div>
+
+<p class="punch" style="margin-top: 34px">型の都合で、末尾に隙間が入る。<br><span class="dim">次のブロックの先頭は、<code>sizeof</code> では計算できない。</span></p>
+
+<!--
+想定: 70秒
+1枚の move: 「wireの長さ = Cのstructの長さ」→「別物」
+
+口頭:
+USBには、さっきの18バイト以外にも決まった長さのブロックがある。たとえば7バイトのもの。
+これをCの構造体にすると、8バイトになる。
+荷物そのものは7個でも、棚に置くと棚側の都合で隙間が1つできる。これを padding と言う。
+だから「次のブロックはここから」を sizeof で計算すると1バイトずれて、以降が全部壊れる。
+進む基準は、線の上に書いてある長さのほう。
+
+analogy は「棚の隙間」1つだけ。
+限界: padding は必ず末尾に入るわけでも、必ず1バイトでもない。ABI 依存。
+Appendix に4種類の比較と、C規格はこの sizeof を保証しないという但し書きがある。
+
+Appendix にある正確な規則: 線の上の長さ (bLength) を使う。ただし信頼できない
+入力では bLength 自体も検証する (2 以上、残りバイト数以下)。
+-->
+
+---
+
+<div class="k">LIVE</div>
+
+<h1 class="compact">この C が、いまブラウザで動いている</h1>
+
+<UsbDescriptorDemo />
+
+<!--
+想定: 165秒
+1枚の move: 「Cって組み込みとかOSの言語でしょ」→「いまブラウザで動いてる」
+
+進行:
+(1) まず「正常に解析」だけ押す。18バイトを渡して、idVendor が 0x046D と出る。
+    さっき手で読んだものを、Cが読んだ。これがこのデモの本体。
+(2) そのあとで壊す: bLength を 0x14 に → -2。Cが戻り値で止める。
+(3) 8バイトしか渡さない → -1。
+(4) Big-endian として読む → 0x6D04。同じ18バイトなのに別のデバイスになる。
+    さっきの「6D 04 は 0x046D」をここで回収する。
+
+左の in / call / out はポインタ。最初は空で、押すと実アドレスが出る。
+最初から読み上げない。(2) 以降で「Cが直接メモリを触っている」話をするときに指す。
+
+import object は空。JSグルーもWASI依存もない。
+失敗時: 自動でJSフォールバックに落ち、バッジが「JS フォールバック」に変わる。
+そのまま進行してよい。表示と実際に動いているengineは必ず一致する。
+-->
+
+---
+
+# AIはこれを1秒で書く。コンパイルも通る。
+
+<div class="life" style="margin-top: 26px">
+<div class="life-code">char *copy(const char *s) {</div>
+<div class="life-span" style="grid-row: 2 / 5">buf</div>
+<div class="life-code">  char buf[256];</div>
+<div class="life-code">  strcpy(buf, s);</div>
+<div class="life-code"><span class="sig">  return buf;</span></div>
+<div class="life-code">}</div>
+<div class="life-end">関数を出た時点で無効</div>
+</div>
+
+<p class="punch" style="margin-top: 40px">返しているのは、もう自分のものではないアドレス。<br><span class="dim">書くのがAIでも、何が起きるかを読むのは人間の仕事。</span></p>
+
+<!--
+想定: 75秒
+1枚の move: 「コンパイルが通る = 正しい」→「通るのに、無効なメモリを返している」
+
+口頭:
+ホテルの部屋番号を教えてもらったようなもの。番号は正しい。
+でも関数を出た瞬間にチェックアウト済みで、その部屋はもう自分のものではない。
+これを lifetime、生存期間と言う。
+
+AIはこのコードを1秒で書くし、コンパイルも通るし、動いてしまうこともある。
+だから「コンパイルが通った」は正しさの証明にならない。
+今日見てきたような、バイトの意味・長さ・境界を読む力が、そこで効く。
+
+analogy は「チェックアウト」1つだけ。
+限界: メモリが消去されるわけではない。使う権利がなくなるだけで、
+だから運悪く「動いてしまう」ことがあるのが厄介、という方向で補足する。
+
+言わなくてよい詳細: strcpy の境界チェックがないこと、ABI/FFI、未定義動作の定義。
+聞かれたら答える。
+-->
+
+---
+
+# こういう場面で、Cを思い出す
+
+<div class="k" style="padding-top: 0.6em">if</div>
+
+<div class="evid">
+<div class="evid-row two"><div class="evid-claim">デバイス / OS とつながる</div><div class="evid-fact">18 bytes → 名前のついた値</div></div>
+<div class="evid-row two"><div class="evid-claim">言語をまたぐ共通コアを置く</div><div class="evid-fact">JS → linear memory → C</div></div>
+<div class="evid-row two"><div class="evid-claim">ランタイムを薄くして小さく動かす</div><div class="evid-fact">usb_descriptor.wasm = 769 B</div></div>
+<div class="evid-row two"><div class="evid-claim">既存の C 資産を Web へ運ぶ</div><div class="evid-fact">usb_descriptor.c → .wasm</div></div>
+</div>
+
+<div class="k" style="padding-top: 54px">else</div>
+
+<p class="lede branch">このどれにも当てはまらないなら、<br>C を選ばなくてよい。</p>
+
+<!--
+想定: 80秒
+1枚の move: 「面白いのは分かった。で、いつ使うの？」→「この4つのどれかなら候補」
+
+右の列は全部、今日この場で画面に出たもの。新しい主張は足していない。
+
+口頭:
+全部Cでやれとは言いません。逆です。
+このどれにも当てはまらないなら、Cを選ばなくていい。
+でも当てはまるときに、「古いから」で最初に消さないでほしい。
+
+想定質問「それ Rust でよくないですか」への20秒回答:
+多くの場合 Rust はよい答え。ただし既存の C ABI・既存資産・ツールチェーンが
+C しかない環境では C が現実解になる。そこを「古いから」で塗りつぶさないでほしい、
+というのが今日の主張。
+-->
+
+---
+class: bleed spread
+---
+
+<div>
+
+<h1 class="say">技術選定で、<br>最初からCを候補外にしないでほしい</h1>
+
+<p class="lede" style="margin-top: 26px">18 バイトの意味を読むところから、<br><span class="dim">ブラウザで動く WASM まで。</span></p>
+
+<p class="note" style="margin-top: 26px; font-size: 17px">Thank you!</p>
+
+</div>
+
+<div>
+
+<div class="bytes small">
+<span class="off">12</span>
+<span class="off">01</span>
+<span class="off">00</span>
+<span class="off">02</span>
+<span class="off">00</span>
+<span class="off">00</span>
+<span class="off">00</span>
+<span class="off">08</span>
+<span class="wide">6D</span>
+<span class="wide">04</span>
+<span class="wide">2B</span>
+<span class="wide">C5</span>
+<span class="off">00</span>
+<span class="off">12</span>
+<span class="off">01</span>
+<span class="off">02</span>
+<span class="off">00</span>
+<span class="off">01</span>
+</div>
+
+<div class="ruler ">
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class="twide"></span>
+<span class="twide"></span>
+<span class="twide"></span>
+<span class="twide"></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+</div>
+
+<p class="note mono" style="margin-top: 20px">https://otonasi-muonn.github.io/c-lang-lt-slidev/</p>
+
+</div>
+
+<!--
+想定: 35秒
+1枚の move: 最初に置いた18バイトが、意味を持って戻ってくる。
+
+冒頭と同じ18バイト。今度は8〜11番目に色がついている。
+そこだけ読めるようになった、という絵で閉じる。
 -->
 
 ---
 
 <div class="k">USB 2.0</div>
 
-<h1 class="compact">USBを挿すと、何が起きているか</h1>
+<h1 class="compact">Appendix: 18バイトを受け取るまでの全工程</h1>
 
 <div class="cols">
 <div>
@@ -140,78 +527,21 @@ class: bleed mid
 <p class="punch" style="margin-top: 18px; font-size: 18px"><code>GET_DESCRIPTOR</code> はリクエスト種別。木の頂点ではない。</p>
 
 <!--
-想定: 60秒
-役割: 左は起きた順、右は返ってきたデータの形。混ぜると GET_DESCRIPTOR が親に見えてしまう。
+本編時間外。「どうやって取るの？」と聞かれたときだけ開く。
+
+左は起きた順、右は返ってきたデータの形。混ぜると GET_DESCRIPTOR が親に見えてしまう。
 Configuration 以下は順番に別々に取るのではなく、長さを読んでから一つの連結ブロブとして取る。
 
-ペース: このスライドは 75 秒でハードキャップ。語るのは 接続検出 →
-GET_DESCRIPTOR(Device, 8) → SET_ADDRESS → Configuration 2段階取得 の4点だけ。
-再リセットと Status ステージの但し書きは読み上げず画面に置くだけにする。
+先頭8バイトを読んでから再リセットする流れは代表的なホスト実装であって、
+全ホストへ強制される手順ではない (USB 2.0 §9.1.2 は複数の初期化順を許す)。
 
-聞かれたら: bNumInterfaces は interface 番号の数であって Interface Descriptor の総数ではない。
-alternate setting の分だけ Interface Descriptor は増える。
--->
-
----
-class: bleed mid
----
-
-# その答えは、18バイト
-
-<div class="bytes hero" style="margin-top: 30px">
-<span>12</span>
-<span>01</span>
-<span>00</span>
-<span>02</span>
-<span>00</span>
-<span>00</span>
-<span>00</span>
-<span>08</span>
-<span>6D</span>
-<span>04</span>
-<span>2B</span>
-<span>C5</span>
-<span>00</span>
-<span>12</span>
-<span>01</span>
-<span>02</span>
-<span>00</span>
-<span>01</span>
-</div>
-
-<div class="ruler hero">
-<span class="t">0</span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class="t">8</span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class="t">17</span>
-</div>
-
-<p class="lede" style="margin-top: 40px">この時点では、ただの 18 バイト。<br><span class="dim">意味を与えるのは、次の一手。</span></p>
-
-<p class="note" style="margin-top: 26px">実機の生ダンプではなく、実在する VID / PID で組んだ説明用の例。</p>
-
-<!--
-想定: 45秒
-役割: 生の hex を先に見せ、意味のないバイト列への違和感をつくる。この18バイトは後段のデモでそのまま解析する。
+聞かれたら: bNumInterfaces は interface 番号の数であって Interface Descriptor の
+総数ではない。alternate setting の分だけ Interface Descriptor は増える。
 -->
 
 ---
 
-# バイト列が構造体になる
+<h1 class="compact">Appendix: 18バイトの全フィールド</h1>
 
 <div class="k">offset</div>
 
@@ -234,9 +564,9 @@ class: bleed mid
 <div class="k cl">7</div>
 <div class="dline"><span class="dline-hex ">08</span><span class="dline-src">  uint8_t  bMaxPacketSize0;</span><span class="dline-val "></span></div>
 <div class="k cl">8</div>
-<div class="dline"><span class="dline-hex wide">6D 04</span><span class="dline-src">  uint16_t idVendor;</span><span class="dline-val wide">0x046D<span class="jp">　wire は little-endian</span></span></div>
+<div class="dline"><span class="dline-hex wide">6D 04</span><span class="dline-src">  uint16_t idVendor;</span><span class="dline-val wide">0x046D<span class="jp">　Logitech</span></span></div>
 <div class="k cl">10</div>
-<div class="dline"><span class="dline-hex wide">2B C5</span><span class="dline-src">  uint16_t idProduct;</span><span class="dline-val wide">0xC52B</span></div>
+<div class="dline"><span class="dline-hex wide">2B C5</span><span class="dline-src">  uint16_t idProduct;</span><span class="dline-val wide">0xC52B<span class="jp">　Unifying Receiver</span></span></div>
 <div class="k cl">12</div>
 <div class="dline"><span class="dline-hex wide">00 12</span><span class="dline-src">  uint16_t bcdDevice;</span><span class="dline-val wide">0x1200</span></div>
 <div class="k cl">14</div>
@@ -251,207 +581,57 @@ class: bleed mid
 <div class="dline"><span class="dline-hex "></span><span class="dline-src">} UsbDeviceDescriptor;</span><span class="dline-val "></span></div>
 
 <!--
-想定: 75秒
-役割: 18バイトを18バイトとして読む。末尾4バイトは飾りではない。
+本編時間外。「残りの欄は何？」と聞かれたときだけ開く。
+
+18バイトを18バイトとして読む。末尾4バイトは飾りではない。
 文字列は index で横に飛び、Configuration は複数持てる。
+
+この構造体はフィールド一覧を説明するためのものであって、
+受信バッファをこの型にキャストして読む実装例ではない。理由は次の Appendix。
 -->
 
 ---
 
 <div class="k">ABI</div>
 
-# <code>bLength</code> を信じろ。<code>sizeof</code> を信じるな。
+<h1 class="compact">Appendix: wire の長さと <code>sizeof</code></h1>
 
 <div class="abi" style="margin-top: 8px">
-<div class="abi-name">Device</div><div class="abi-lab">bLength</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">18</div><div></div>
+<div class="abi-name">Device</div><div class="abi-lab">wire</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">18</div><div></div>
 <div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">18</div><div class="abi-note ">たまたま一致</div>
 <div class="abi-gap"></div>
-<div class="abi-name">Configuration</div><div class="abi-lab">bLength</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
+<div class="abi-name">Configuration</div><div class="abi-lab">wire</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
 <div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div><div class="abi-num">10</div><div class="abi-note sig">末尾 padding 1</div>
 <div class="abi-gap"></div>
-<div class="abi-name">Interface</div><div class="abi-lab">bLength</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
+<div class="abi-name">Interface</div><div class="abi-lab">wire</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
 <div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div class="abi-note ">たまたま一致</div>
 <div class="abi-gap"></div>
-<div class="abi-name">Endpoint</div><div class="abi-lab">bLength</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">7</div><div></div>
+<div class="abi-name">Endpoint</div><div class="abi-lab">wire</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">7</div><div></div>
 <div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div><div class="abi-num">8</div><div class="abi-note sig">末尾 padding 1</div>
 </div>
 
-<p class="punch" style="margin-top: 22px; font-size: 20px">Configuration は <code>wTotalLength</code> bytes の連結ブロブ。<br><code>p += sizeof(*desc)</code> で 1 バイトずれると、以降が全部壊れる。</p>
+<p class="punch" style="margin-top: 22px; font-size: 20px">進む基準は wire 上の長さ。<br><span class="dim">ただし信頼できない入力では、その長さ自体も検証する。</span></p>
 
 <p class="note" style="margin-top: 14px">C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演であって wire format の定義ではない。</p>
 
 <!--
-想定: 90秒
-役割: Device で18と出るのは正解ではなく偶然。Endpoint は7が8になる。
+本編時間外。
+
+Device で18と出るのは正解ではなく偶然。Endpoint は7が8になる。
 同じUSBの descriptor なのに、合うものと合わないものが混ざる。
-だからポインタを進める基準は C の都合ではなく wire 上の bLength。
--->
 
----
+「bLength を信じろ」は言い過ぎで、untrusted input では bLength 自体が攻撃者の
+制御下にある。実際の走査ループは次のように両方を見る:
 
-<div class="k">LIVE</div>
+  while (remain >= 2) {
+    uint8_t n = p[0];
+    if (n < 2 || n > remain) break;   // ← bLength 自体の検証
+    p += n; remain -= n;
+  }
 
-<h1 class="compact">C が、ブラウザで 18 バイトを読む</h1>
-
-<UsbDescriptorDemo />
-
-<!--
-想定: 165秒
-役割: 18バイトをブラウザの linear memory に書き、C/WASM がそれを読む。
-進行: (1) 解析成功で VID/PID (2) bLength 改竄で -2 (3) 8バイトで -1 (4) Big-endian で 0x6D04。
-(4)が山場: 同じ18バイトなのに意味が変わる。LE を自分で書くか、CPU とコンパイラの都合に
-任せるかが境界面。さっき出した「6D 04 は 0x046D」をここで回収する。
-ポインタ値はただのメモリオフセット。import object は空 = JSグルーもWASI依存もない。
-失敗時: 自動で JS フォールバックに落ちるのでそのまま進行してよい。
--->
-
----
-
-# Cを選ぶ理由は「速いから」だけじゃない
-
-<TechSelection />
-
-<!--
-想定: 60秒
-役割: デモで見た境界面・データ表現の強みを、技術選定で効く条件として整理する。
--->
-
----
-
-# AI時代だからこそのC
-
-<div class="cols" style="grid-template-columns: 1.02fr 0.98fr">
-<div>
-
-<h2>AIに書かせる</h2>
-
-<div class="life">
-<div class="life-code">char *copy(const char *s) {</div>
-<div class="life-span" style="grid-row: 2 / 5">buf</div>
-<div class="life-code">  char buf[256];</div>
-<div class="life-code">  strcpy(buf, s);</div>
-<div class="life-code"><span class="sig">  return buf;</span></div>
-<div class="life-code">}</div>
-<div class="life-end">関数を出た時点で無効</div>
-
-</div>
-
-</div>
-<div>
-
-<h2>人間が見るべきもの</h2>
-
-<div class="qs" style="row-gap: 20px; font-size: 19px">
-<div>そのメモリはいつまで生きる？</div>
-<div>境界チェックはある？</div>
-<div>未定義動作は踏んでない？</div>
-<div>ABI / FFI で壊れない？</div>
-</div>
-
-</div>
-</div>
-
-<p class="punch" style="margin-top: 44px; font-size: 25px">AIがコードを書くほど、「実際に何が起きるか」を読む力が効いてくる。</p>
-
-<!--
-想定: 75秒
-役割: AI生成コードを題材に、Cの実体を読む視点がレビューや境界設計で生きるとタイトルを回収する。
--->
-
----
-class: mid
----
-
-# 次に、この条件を見たら C を思い出す
-
-<div class="k" style="padding-top: 0.5em">if</div>
-
-<div class="stanza">
-<div>デバイス / OS とつながる</div>
-<div>言語をまたぐ共通コアを置く</div>
-<div>ランタイムを薄くして小さく動かす</div>
-<div>既存の C 資産を Web へ運ぶ</div>
-</div>
-
-<div class="k" style="padding-top: 72px">else</div>
-
-<p class="lede branch">このどれにも当てはまらないなら、<br>C を選ばなくてよい。</p>
-
-<!--
-想定: 45秒
-役割: 「Cは万能ではない」を保ったまま、次の技術選定で思い出すトリガーを4つに絞って渡す。
-最後の1行で、Cを常に選ぶべきという主張にならないよう明示的に逆側を置く。
-
-想定質問「それ Rust でよくないですか」への20秒回答:
-多くの場合 Rust はよい答え。ただし既存の C ABI・既存資産・ツールチェーンが C しかない環境では
-C が現実解になる。そこを「古いから」で塗りつぶさないでほしい、というのが今日の主張。
--->
-
----
-class: bleed spread
----
-
-<div>
-
-<h1 class="say">技術選定で、<br>最初からCを候補外にしないでほしい</h1>
-
-<p class="lede" style="margin-top: 26px">USB の 18 バイトから、ブラウザの WASM まで。<br><span class="dim">境界が重要な場面では、C にも席がある。</span></p>
-
-<p class="note" style="margin-top: 26px; font-size: 17px">Thank you!</p>
-
-</div>
-
-<div>
-
-<div class="bytes small">
-<span class="off">12</span>
-<span class="off">01</span>
-<span class="off">00</span>
-<span class="off">02</span>
-<span class="off">00</span>
-<span class="off">00</span>
-<span class="off">00</span>
-<span class="off">08</span>
-<span class="wide">6D</span>
-<span class="wide">04</span>
-<span class="wide">2B</span>
-<span class="wide">C5</span>
-<span class="off">00</span>
-<span class="off">12</span>
-<span class="off">01</span>
-<span class="off">02</span>
-<span class="off">00</span>
-<span class="off">01</span>
-</div>
-
-<div class="ruler ">
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class="twide"></span>
-<span class="twide"></span>
-<span class="twide"></span>
-<span class="twide"></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-<span class=""></span>
-</div>
-
-<p class="note mono" style="margin-top: 20px">https://otonasi-muonn.github.io/c-lang-lt-slidev/</p>
-
-</div>
-
-<!--
-想定: 30秒
-役割: USBからC、WASM、技術選定までの一本線を最後のメッセージとして閉じる。
+生バイト列を (Desc *) にキャストしない理由: エンディアン、アライメント、padding、
+effective type。packed は非標準で、未アラインの member access 問題も残る。
+byte から明示的に組み立てるか、同等に境界・endian・alignment を処理する実装を使う。
 -->
 
 ---
@@ -465,8 +645,7 @@ class: mid
 <BitWidthDemo />
 
 <!--
-想定: 本編時間外
-役割: signed / unsigned の変換規則を、質問があった場合に補足する。
+本編時間外。signed / unsigned の変換規則を、質問があった場合に補足する。
 -->
 
 ---
@@ -480,6 +659,5 @@ class: bleed mid
 <p class="punch mono" style="margin-top: 40px"><span class="faint">C99 </span>restrict<span class="faint">　　C11 </span>_Generic<span class="faint">　　C99 </span>designated initializer</p>
 
 <!--
-想定: 本編時間外
-役割: CとC++の関係について質問があった場合の補足に限定する。
+本編時間外。CとC++の関係について質問があった場合の補足に限定する。
 -->

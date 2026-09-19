@@ -927,7 +927,175 @@ body,
    branch actually separates from the conditions above it. */
 .slidev-layout .branch {
   border-top: 1px solid var(--rule);
-  margin-top: 42px;
-  padding-top: 28px;
+  margin-top: 30px;
+  padding-top: 24px;
   max-width: none;
+}
+
+/* ==========================================================================
+   Second pass: primitives for the slides that now carry one idea each.
+   ========================================================================== */
+
+/* --- who is speaking, and what they answered with ----------------------- */
+
+.who {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+}
+.ask {
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+/* --- field extents drawn under the byte row ----------------------------- */
+
+/* Same 18 columns as .bytes, so a bracket sits exactly under its bytes. */
+.spans {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  column-gap: 0.22em;
+  font-size: 31px;
+  margin-top: 10px;
+}
+.spans > i {
+  height: 9px;
+  border: 1px solid var(--rule-lit);
+  border-top: none;
+}
+.spans > i.on {
+  border-color: var(--wide);
+}
+.span-labels {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  column-gap: 0.22em;
+  font-size: 31px;
+  margin-top: 7px;
+}
+.span-labels > span {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--wide);
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* --- two bytes becoming one value --------------------------------------- */
+
+.swap {
+  display: grid;
+  justify-items: center;
+  row-gap: 0;
+}
+.swap-k {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+.swap-row {
+  display: grid;
+  grid-template-columns: repeat(2, 92px);
+  column-gap: 40px;
+  font-family: var(--mono);
+  font-size: 46px;
+  font-weight: 500;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--ink);
+}
+/* Two strokes that cross: the only thing on the slide that has to be drawn
+   rather than typed, because the swap is the point. */
+.swap-cross {
+  margin: 4px 0;
+}
+.swap-val {
+  font-family: var(--mono);
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--wide);
+}
+.swap-mean {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--sig);
+  margin-top: 4px;
+}
+.swap-down {
+  font-family: var(--mono);
+  font-size: 20px;
+  color: var(--ink-3);
+  line-height: 1.4;
+  margin: 2px 0;
+}
+
+/* --- one payload, two lengths ------------------------------------------- */
+
+.pad {
+  display: grid;
+  grid-template-columns: 124px max-content 44px;
+  column-gap: 22px;
+  row-gap: 22px;
+  align-items: center;
+}
+.pad-k {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.pad-n {
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-align: right;
+}
+.pad-n.sig {
+  color: var(--sig);
+}
+.cellrow.big span {
+  width: 42px;
+  height: 46px;
+}
+
+/* --- a situation and the thing from this talk that proves it ------------- */
+
+.evid-row.two {
+  grid-template-columns: 330px 1fr;
+  padding: 13px 0;
+  line-height: 1.35;
+}
+.evid-row.two .evid-claim {
+  font-size: 22px;
+}
+.evid-row.two .evid-fact {
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+/* --- the demo's primary path -------------------------------------------- */
+
+/* The normal parse is the hero; the three ways to break it are quieter until
+   they are used. */
+.btn.lead {
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+.btn.lead.on {
+  color: var(--sig);
+  border-color: var(--sig);
 }

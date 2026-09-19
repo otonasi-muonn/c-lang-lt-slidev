@@ -39,7 +39,7 @@
         v-for="mode in modes"
         :key="mode.id"
         class="btn"
-        :class="{ on: activeMode === mode.id }"
+        :class="{ on: activeMode === mode.id, lead: mode.lead }"
         @click="runDemo(mode.id)"
       >
         {{ mode.label }}
@@ -124,8 +124,8 @@ const props = withDefaults(defineProps<{ wasmUrl?: string }>(), {
   wasmUrl: () => `${import.meta.env.BASE_URL}wasm/usb_descriptor.wasm`,
 });
 
-const modes: { id: DemoMode; label: string }[] = [
-  { id: "normal", label: "正常に解析" },
+const modes: { id: DemoMode; label: string; lead?: boolean }[] = [
+  { id: "normal", label: "正常に解析", lead: true },
   { id: "bad-length", label: "bLength を 0x14 にする" },
   { id: "short", label: "8 bytes だけ渡す" },
   { id: "big-endian", label: "Big-endian として読む" },
