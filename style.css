@@ -1,0 +1,10 @@
+:root {
+  --slidev-code-font-size: 16px;
+  --slidev-code-line-height: 25px;
+  --slidev-code-padding: 12px;
+}
+
+.slidev-layout {
+  font-size: 1.28rem;
+  line-height: 1.7;
+}
