@@ -34,7 +34,6 @@ fonts:
 -->
 
 ---
-
 layout: center
 class: text-center
 ---
@@ -59,7 +58,6 @@ class: text-center
 -->
 
 ---
-
 layout: center
 ---
 
@@ -84,7 +82,6 @@ PCは「お前は誰で、何ができる？」を<br>小さなバイト列に�
 -->
 
 ---
-
 layout: center
 class: text-center
 ---
@@ -135,7 +132,6 @@ class: text-center
 -->
 
 ---
-
 layout: center
 ---
 
@@ -162,7 +158,6 @@ layout: center
 -->
 
 ---
-
 layout: center
 ---
 
@@ -236,7 +231,6 @@ AIがコードを書くほど、「実際に何が起きるか」を読む力が
 -->
 
 ---
-
 layout: center
 class: text-center
 ---
@@ -258,7 +252,6 @@ Cは万能ではない。<br>
 -->
 
 ---
-
 layout: center
 class: text-center
 ---
@@ -280,7 +273,6 @@ Thank you!
 -->
 
 ---
-
 layout: center
 ---
 
@@ -294,7 +286,6 @@ layout: center
 -->
 
 ---
-
 layout: center
 ---
 
