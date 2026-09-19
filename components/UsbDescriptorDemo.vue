@@ -153,7 +153,9 @@ const fields: Field[] = [
   { offset: 17, name: "bNumConfigurations", outputIndex: 13, width: 2 },
 ];
 
-const wideFields = fields.filter((field) => field.offset === 8 || field.offset === 10);
+const wideFields = fields.filter(
+  (field) => field.offset === 8 || field.offset === 10,
+);
 const restFields = fields.filter((field) =>
   [0, 1, 2, 9, 13].includes(field.outputIndex),
 );
@@ -248,7 +250,7 @@ function rawOf(field: Field) {
 
 function byteClass(index: number) {
   if (index >= inputBytes.value.length) return "off";
-  if (returnCode.value === 18 && (index >= 8 && index <= 11))
+  if (returnCode.value === 18 && index >= 8 && index <= 11)
     return isBigEndian.value ? "sig" : "wide";
   if (activeMode.value === "bad-length" && index === 0) return "sig";
   return "";
@@ -427,7 +429,7 @@ onMounted(loadWasm);
   display: grid;
   grid-template-columns: var(--rail) 1fr;
   column-gap: var(--rail-gap);
-  margin-top: 22px;
+  margin-top: 30px;
   margin-left: calc(-1 * (var(--rail) + var(--rail-gap)));
 }
 .call .cl {
@@ -448,7 +450,7 @@ onMounted(loadWasm);
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 18px;
+  margin-top: 26px;
 }
 .engine {
   margin-left: auto;
@@ -467,7 +469,7 @@ onMounted(loadWasm);
 
 /* Fixed height: the slide must not reflow when a result appears mid-talk. */
 .result {
-  margin-top: 16px;
+  margin-top: 22px;
   min-height: 98px;
 }
 
@@ -525,7 +527,7 @@ onMounted(loadWasm);
 
 .status {
   max-width: none;
-  margin-top: 14px;
+  margin-top: 20px;
   font-size: 13px;
   line-height: 1.6;
   color: var(--ink-3);

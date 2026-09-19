@@ -1,7 +1,8 @@
 <template>
   <div class="bw">
     <div>
-      <pre class="src">int a = -1;
+      <pre class="src">
+int a = -1;
 unsigned int b = 1;
 
 printf("%d\n", a &lt; b);</pre>
@@ -21,9 +22,7 @@ printf("%d\n", a &lt; b);</pre>
           同じランクなので、<code>a</code> は必ず<br />
           <code>unsigned int</code> に変換される
         </div>
-        <div>
-          <code>a &lt; b</code> は必ず <code class="sig">0</code>
-        </div>
+        <div><code>a &lt; b</code> は必ず <code class="sig">0</code></div>
       </div>
     </div>
   </div>

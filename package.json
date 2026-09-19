@@ -7,7 +7,7 @@
     "build": "slidev build --base /c-lang-lt-slidev/ --router-mode hash",
     "build:wasm": "bash wasm/build.sh",
     "export": "slidev export",
-    "format": "prettier --write slides.md components/**/*.vue"
+    "format": "prettier --write components/**/*.vue style.css"
   },
   "dependencies": {
     "@slidev/cli": "53.0.0",
