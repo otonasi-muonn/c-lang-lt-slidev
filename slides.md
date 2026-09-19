@@ -210,7 +210,7 @@ class: bleed mid
 class: bleed mid
 ---
 
-<h1 class="compact"><code>6D 04</code> は、いくつ？</h1>
+<h1 class="compact" style="text-align: center; margin-bottom: 22px"><code>6D 04</code> は、いくつ？</h1>
 
 <div class="swap" style="margin-top: 10px">
 
@@ -230,7 +230,7 @@ class: bleed mid
 
 </div>
 
-<p class="note" style="margin-top: 18px; text-align: center">見えている順と、値としての向きが違う。これを little-endian と呼ぶ。</p>
+<p class="note" v-click style="margin-top: 18px; text-align: center">見えている順と、値としての向きが違う。これを little-endian と呼ぶ。</p>
 
 <!--
 想定: 80秒
@@ -254,9 +254,9 @@ little-endian という語は、絵を見せたあとに初めて出す。
 
 ---
 
-# 7バイトのはずが、Cでは8バイトになる
+# Cの構造体にすると、何バイト？
 
-<h2>USB の Endpoint descriptor — wire 上は 7 バイト</h2>
+<h2>USB には他にも、決まった長さのブロックがある。これは 7 バイト。</h2>
 
 <div class="pad" style="margin-top: 22px">
 
@@ -270,7 +270,7 @@ little-endian という語は、絵を見せたあとに初めて出す。
 
 </div>
 
-<p class="punch" style="margin-top: 34px">型の都合で、末尾に隙間が入る。<br><span class="dim">次のブロックの先頭は、<code>sizeof</code> では計算できない。</span></p>
+<p class="punch" v-click="1" style="margin-top: 34px">型の都合で、末尾に隙間が入る。<br><span class="dim">次のブロックの先頭は、<code>sizeof</code> では計算できない。</span></p>
 
 <!--
 想定: 70秒
@@ -278,6 +278,7 @@ little-endian という語は、絵を見せたあとに初めて出す。
 
 口頭:
 USBには、さっきの18バイト以外にも決まった長さのブロックがある。たとえば7バイトのもの。
+（正式名称は Endpoint Descriptor。画面には出していない。聞かれたら言う。）
 これをCの構造体にすると、8バイトになる。
 荷物そのものは7個でも、棚に置くと棚側の都合で隙間が1つできる。これを padding と言う。
 だから「次のブロックはここから」を sizeof で計算すると1バイトずれて、以降が全部壊れる。
@@ -330,16 +331,17 @@ import object は空。JSグルーもWASI依存もない。
 <div class="life-code">  strcpy(buf, s);</div>
 <div class="life-code"><span class="sig">  return buf;</span></div>
 <div class="life-code">}</div>
-<div class="life-end">関数を出た時点で無効</div>
+<div class="life-end" v-click="1">関数を出た時点で無効</div>
 </div>
 
-<p class="punch" style="margin-top: 40px">返しているのは、もう自分のものではないアドレス。<br><span class="dim">書くのがAIでも、何が起きるかを読むのは人間の仕事。</span></p>
+<p class="punch" v-click="1" style="margin-top: 40px">返しているのは、もう自分のものではないアドレス。<br><span class="dim">書くのがAIでも、何が起きるかを読むのは人間の仕事。</span></p>
 
 <!--
 想定: 75秒
 1枚の move: 「コンパイルが通る = 正しい」→「通るのに、無効なメモリを返している」
 
 口頭:
+まずコードだけ見せて「どこが問題？」と一拍おく。それからクリック。
 ホテルの部屋番号を教えてもらったようなもの。番号は正しい。
 でも関数を出た瞬間にチェックアウト済みで、その部屋はもう自分のものではない。
 これを lifetime、生存期間と言う。
