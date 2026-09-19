@@ -1,36 +1,39 @@
 <template>
+  <!-- The rail carries the data path: bytes go in at one address, C is
+       called, values come out at another. Those are the live pointers, so
+       the path is legible before any of the text is read. -->
   <section class="demo">
-    <!-- What JS put on the wire. The row never wraps: 18 bytes are 18 bytes. -->
-    <div class="bytes">
-      <span
-        v-for="(byte, index) in paddedBytes"
-        :key="`${runId}-${index}`"
-        :class="byteClass(index)"
-        >{{ byte === null ? "··" : hex(byte, 2) }}</span
-      >
+    <div class="k rail-step">
+      <span>in</span><span class="addr">{{ bufferAddress }}</span>
     </div>
-    <div class="ruler">
-      <span v-for="i in 18" :key="i" :class="tickClass(i - 1)">{{
-        tickLabel(i - 1)
-      }}</span>
-    </div>
-
-    <!-- The call, with the pointers C actually handed back. -->
-    <div class="call">
-      <div class="k cl">len={{ requestedLength }}</div>
-      <div class="cl">
-        <span class="s" :class="returnClass"
-          >{{ calledFunction }}<span class="t"> → </span
-          >{{ returnCode === null ? "?" : returnCode }}</span
+    <div>
+      <!-- What JS put on the wire. The row never wraps: 18 bytes are 18. -->
+      <div class="bytes">
+        <span
+          v-for="(byte, index) in paddedBytes"
+          :key="`${runId}-${index}`"
+          :class="byteClass(index)"
+          >{{ byte === null ? "··" : hex(byte, 2) }}</span
         >
-        <span class="g"
-          >buf={{ bufferAddress }}<span class="t">&nbsp;&nbsp;</span>out={{
-            outputAddress
-          }}</span
-        >
+      </div>
+      <div class="ruler">
+        <span v-for="i in 18" :key="i" :class="tickClass(i - 1)">{{
+          tickLabel(i - 1)
+        }}</span>
       </div>
     </div>
 
+    <div class="k rail-step">
+      <span>call</span><span class="addr">len={{ requestedLength }}</span>
+    </div>
+    <div class="call">
+      <span class="callsrc" :class="returnClass"
+        >{{ calledFunction }}<span class="t"> → </span
+        >{{ returnCode === null ? "?" : returnCode }}</span
+      >
+    </div>
+
+    <div class="k"></div>
     <div class="controls">
       <button
         v-for="mode in modes"
@@ -44,6 +47,9 @@
       <span class="engine" :class="engineClass">{{ engineLabel }}</span>
     </div>
 
+    <div class="k rail-step">
+      <span>out</span><span class="addr">{{ outputAddress }}</span>
+    </div>
     <!-- Result. One block, fixed height, so the slide never reflows. -->
     <div class="result">
       <template v-if="returnCode === 18 && output">
@@ -77,6 +83,7 @@
       </template>
     </div>
 
+    <div class="k"></div>
     <p class="status" aria-live="polite">{{ runSummary }}</p>
   </section>
 </template>
@@ -173,8 +180,8 @@ const inputBytes = ref<number[]>(Array.from(descriptor));
 const requestedLength = ref(18);
 const returnCode = ref<number | null>(null);
 const output = ref<number[] | null>(null);
-const bufferAddress = ref("—");
-const outputAddress = ref("—");
+const bufferAddress = ref("");
+const outputAddress = ref("");
 const calledFunction = ref("usb_parse_device_descriptor(len)");
 const activeMode = ref<DemoMode | null>(null);
 const runId = ref(0);
@@ -407,8 +414,8 @@ async function loadWasm() {
     // A click that landed during loading was answered by JavaScript and still
     // says so; the next run will flip the badge back to WASM on its own.
     if (ranWith.value === null) {
-      bufferAddress.value = "—";
-      outputAddress.value = "—";
+      bufferAddress.value = "";
+      outputAddress.value = "";
     }
   } catch (error) {
     fallbackReason.value = error instanceof Error ? `（${error.message}）` : "";
@@ -421,28 +428,45 @@ onMounted(loadWasm);
 </script>
 
 <style scoped>
+/* The component owns the page's two tracks, pulled back over the rail so its
+   own rail marks line up with every other slide's. */
 .demo {
-  font-family: var(--sans);
-}
-
-.call {
   display: grid;
   grid-template-columns: var(--rail) 1fr;
   column-gap: var(--rail-gap);
-  margin-top: 30px;
+  align-items: start;
+  row-gap: 20px;
   margin-left: calc(-1 * (var(--rail) + var(--rail-gap)));
+  font-family: var(--sans);
 }
-.call .cl {
+
+.rail-step {
+  display: grid;
+  row-gap: 3px;
+  padding-top: 0.5em;
+}
+.rail-step .addr {
+  font-size: 10px;
+  color: var(--ink-3);
+}
+
+.call {
+  font-family: var(--mono);
   font-size: 15px;
-  grid-template-columns: 340px 1fr;
+  font-weight: 500;
+  line-height: 1.4;
+  padding-top: 0.2em;
 }
-.call .cl .s.ok {
+.callsrc {
   color: var(--ink);
 }
-.call .cl .s.err {
+.callsrc.ok {
+  color: var(--ink);
+}
+.callsrc.err {
   color: var(--err);
 }
-.call .cl .g {
+.callsrc .t {
   color: var(--ink-3);
 }
 
@@ -450,7 +474,6 @@ onMounted(loadWasm);
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 26px;
 }
 .engine {
   margin-left: auto;
@@ -471,7 +494,6 @@ onMounted(loadWasm);
    The shorter failure state is centred in the reserved space so the gap reads
    as a held frame rather than as something dangling. */
 .result {
-  margin-top: 22px;
   min-height: 98px;
   display: flex;
   flex-direction: column;
@@ -532,7 +554,6 @@ onMounted(loadWasm);
 
 .status {
   max-width: none;
-  margin-top: 20px;
   font-size: 13px;
   line-height: 1.6;
   color: var(--ink-3);

@@ -633,3 +633,302 @@ body,
   line-height: 1.6;
   color: var(--ink-2);
 }
+
+/* ==========================================================================
+   Visual explanation primitives.
+
+   Everything below draws with the material the talk is already about —
+   byte cells, byte counts, offsets, addresses, scope extents — so the shape
+   of each slide is readable before a word of it is. Nothing here is
+   ornament: every rule, bar and cell stands for a quantity or a boundary
+   that the slide states in words anyway.
+   ========================================================================== */
+
+/* --- enumeration as an exchange: what goes out, what comes back ---------- */
+
+.exch {
+  display: grid;
+  grid-template-columns: 14px 11px 1fr;
+  column-gap: 8px;
+  row-gap: 11px;
+  align-items: baseline;
+}
+.exch-n {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  text-align: right;
+}
+.exch-out {
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+.exch-req {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.exch-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 1px;
+}
+.exch-sub {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.exch-sub code {
+  font-family: var(--mono);
+  font-weight: 500;
+}
+/* Bytes coming back from the device. The one the next slide is about is the
+   only thing on this slide wearing the accent. */
+.exch-ret {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+.exch-ret.sig {
+  color: var(--sig);
+}
+
+/* --- hierarchy as nesting, with each descriptor's own length ------------- */
+
+.nest {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  column-gap: 10px;
+  row-gap: 4px;
+  align-items: center;
+}
+.nest-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.nest-len {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+/* Width is the descriptor's bLength, so the four lengths are comparable by
+   eye — the same four numbers the sizeof slide then argues about. */
+.nest-bar {
+  height: 9px;
+  background: var(--ink-3);
+}
+.nest-mul {
+  grid-column: 2;
+  padding-left: 0 !important;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* --- the dump: offset, wire bytes, the C that names them, the value ------ */
+
+.dump-head,
+.dline {
+  display: grid;
+  grid-template-columns: 78px 286px 1fr;
+  column-gap: 18px;
+  align-items: baseline;
+}
+.dump-head {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.dline {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 21px;
+}
+.dline-hex {
+  color: var(--ink);
+  white-space: pre;
+}
+.dline-hex.wide {
+  color: var(--wide);
+}
+.dline-src {
+  color: var(--ink);
+  white-space: pre;
+}
+.dline-src .t {
+  color: var(--ink-3);
+}
+.dline-val {
+  font-size: 13px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.dline-val.wide {
+  color: var(--wide);
+}
+.dline-val .jp {
+  font-family: var(--sans);
+  font-weight: 400;
+}
+
+/* --- wire bytes against the C object's bytes ---------------------------- */
+
+.abi {
+  display: grid;
+  grid-template-columns: 124px 56px max-content 30px 1fr;
+  column-gap: 12px;
+  row-gap: 5px;
+  align-items: center;
+  line-height: 1.25;
+}
+.abi-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.abi-lab {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.abi-num {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-align: right;
+}
+.abi-note {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.abi-note.sig {
+  color: var(--sig);
+}
+.abi-gap {
+  grid-column: 1 / -1;
+  height: 6px;
+}
+
+/* One cell is one byte. The padding byte is the only one that is lit. */
+.cellrow {
+  display: flex;
+  gap: 3px;
+}
+.cellrow span {
+  display: block;
+  width: 14px;
+  height: 15px;
+  background: var(--ink-3);
+}
+.cellrow span.pad {
+  background: var(--sig);
+}
+
+/* --- claim, and the thing from this talk that backs it ------------------- */
+
+.evid-row {
+  display: grid;
+  grid-template-columns: 160px 232px 1fr;
+  column-gap: 16px;
+  padding: 20px 0;
+  border-top: 1px solid var(--rule);
+}
+.evid-row:first-child {
+  border-top: none;
+  padding-top: 4px;
+}
+.evid-claim {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.evid-fact {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.evid-body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* --- how long the memory lives ------------------------------------------ */
+
+.life {
+  display: grid;
+  grid-template-columns: max-content 150px;
+  column-gap: 14px;
+  align-items: baseline;
+}
+.life-code {
+  grid-column: 1;
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 30px;
+  color: var(--ink);
+  white-space: pre;
+}
+/* The extent spans exactly the lines on which buf exists. */
+.life-span {
+  grid-column: 2;
+  align-self: stretch;
+  border-left: 2px solid var(--ink-3);
+  padding-left: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 30px;
+  color: var(--ink-3);
+}
+.life-end {
+  grid-column: 2;
+  padding-left: 12px;
+  font-size: 13px;
+  line-height: 30px;
+  color: var(--sig);
+}
+
+/* --- the branch the slide actually is ----------------------------------- */
+
+/* Scoped past the paragraph reset so the rule spans the measure and the
+   branch actually separates from the conditions above it. */
+.slidev-layout .branch {
+  border-top: 1px solid var(--rule);
+  margin-top: 42px;
+  padding-top: 28px;
+  max-width: none;
+}

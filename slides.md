@@ -82,37 +82,54 @@ class: bleed mid
 <div class="cols">
 <div>
 
-<h2>enumeration（時系列）</h2>
+<h2>enumeration（時系列）<span class="faint">　host ▶ ◀ device</span></h2>
 
-<div class="steps">
-<div class="n">1</div>
-<div class="s">接続検出 → バスリセット<span class="sub">Default / address 0 / EP0 のみ</span></div>
-<div class="n">2</div>
-<div class="s">GET_DESCRIPTOR(Device, 8)<span class="sub">offset 7 の <code>bMaxPacketSize0</code> を知る<br>（必要なら再リセット：ホスト実装依存）</span></div>
-<div class="n">3</div>
-<div class="s">SET_ADDRESS(n)<span class="sub">新 address は Status ステージ完了後に有効</span></div>
-<div class="n">4</div>
-<div class="s">GET_DESCRIPTOR(Device, 18)</div>
-<div class="n">5</div>
-<div class="s">GET_DESCRIPTOR(Configuration, 9)<span class="sub"><code>wTotalLength</code> を読む</span></div>
-<div class="n">6</div>
-<div class="s">GET_DESCRIPTOR(Configuration, wTotalLength)<span class="sub">連結された descriptor 群を一括取得</span></div>
-<div class="n">7</div>
-<div class="s">SET_CONFIGURATION(bConfigurationValue)</div>
+<div class="exch">
+<div class="exch-n">1</div>
+<div class="exch-out"></div>
+<div><div class="exch-req">接続検出 → バスリセット</div><div class="exch-foot"><span class="exch-sub">Default / address 0 / EP0 のみ</span></div></div>
+<div class="exch-n">2</div>
+<div class="exch-out">▶</div>
+<div><div class="exch-req">GET_DESCRIPTOR(Device, 8)</div><div class="exch-foot"><span class="exch-sub">offset 7 の <code>bMaxPacketSize0</code> を知る<br>（必要なら再リセット：ホスト実装依存）</span><span class="exch-ret ">◀ 8 B</span></div></div>
+<div class="exch-n">3</div>
+<div class="exch-out">▶</div>
+<div><div class="exch-req">SET_ADDRESS(n)</div><div class="exch-foot"><span class="exch-sub">新 address は Status ステージ完了後に有効</span></div></div>
+<div class="exch-n">4</div>
+<div class="exch-out">▶</div>
+<div><div class="exch-req">GET_DESCRIPTOR(Device, 18)</div><div class="exch-foot"><span class="exch-sub"></span><span class="exch-ret sig">◀ 18 B</span></div></div>
+<div class="exch-n">5</div>
+<div class="exch-out">▶</div>
+<div><div class="exch-req">GET_DESCRIPTOR(Configuration, 9)</div><div class="exch-foot"><span class="exch-sub"><code>wTotalLength</code> を読む</span><span class="exch-ret ">◀ 9 B</span></div></div>
+<div class="exch-n">6</div>
+<div class="exch-out">▶</div>
+<div><div class="exch-req">GET_DESCRIPTOR(Configuration, wTotalLength)</div><div class="exch-foot"><span class="exch-sub">連結された descriptor 群を一括取得</span><span class="exch-ret ">◀ wTotalLength B</span></div></div>
+<div class="exch-n">7</div>
+<div class="exch-out">▶</div>
+<div><div class="exch-req">SET_CONFIGURATION(bConfigurationValue)</div></div>
 </div>
 
 </div>
 <div>
 
-<h2>descriptor（階層）</h2>
+<h2>descriptor（階層）<span class="faint">　棒の長さ = bLength</span></h2>
 
-<pre class="tree">Device <span class="t">(18B)</span>
-<span class="t">└─</span> Configuration <span class="t">(9B) × bNumConfigurations</span>
-   <span class="t">└─</span> Interface <span class="t">(9B) × bNumInterfaces</span>
-      <span class="t">├─</span> Endpoint <span class="t">(7B) × bNumEndpoints</span>
-      <span class="t">└─</span> クラス固有 <span class="t">(HID / CDC …)</span></pre>
+<div class="nest">
+<div class="nest-name" style="padding-left: 0px">Device</div>
+<div class="nest-len"><span class="nest-bar" style="width: 90px"></span>18B</div>
+<div class="nest-name" style="padding-left: 14px">Configuration</div>
+<div class="nest-len"><span class="nest-bar" style="width: 45px"></span>9B</div>
+<div class="nest-mul" style="padding-left: 14px">× bNumConfigurations</div>
+<div class="nest-name" style="padding-left: 28px">Interface</div>
+<div class="nest-len"><span class="nest-bar" style="width: 45px"></span>9B</div>
+<div class="nest-mul" style="padding-left: 28px">× bNumInterfaces</div>
+<div class="nest-name" style="padding-left: 42px">Endpoint</div>
+<div class="nest-len"><span class="nest-bar" style="width: 35px"></span>7B</div>
+<div class="nest-mul" style="padding-left: 42px">× bNumEndpoints</div>
+<div class="nest-name" style="padding-left: 42px">クラス固有</div>
+<div class="nest-len faint">HID / CDC … <span class="nest-mul">長さは可変</span></div>
+</div>
 
-<div class="qs fine" style="margin-top: 22px">
+<div class="qs fine" style="margin-top: 20px">
 <div>String Descriptor は木の外。各 <code>i*</code> index から横参照する。</div>
 <div>EP0 には Endpoint Descriptor がない。だから <code>bMaxPacketSize0</code> は Device 側にある。</div>
 </div>
@@ -120,7 +137,7 @@ class: bleed mid
 </div>
 </div>
 
-<p class="punch" style="margin-top: 20px; font-size: 18px"><code>GET_DESCRIPTOR</code> はリクエスト種別。木の頂点ではない。</p>
+<p class="punch" style="margin-top: 18px; font-size: 18px"><code>GET_DESCRIPTOR</code> はリクエスト種別。木の頂点ではない。</p>
 
 <!--
 想定: 60秒
@@ -196,63 +213,42 @@ class: bleed mid
 
 # バイト列が構造体になる
 
-<h2>wire format: 18 bytes</h2>
+<div class="k">offset</div>
+
+<div class="dump-head"><span>wire bytes</span><span>C declaration</span><span>value</span></div>
 
 <div class="k cl"></div>
-<div class="cl"><span class="s">typedef struct {</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex "></span><span class="dline-src">typedef struct {</span><span class="dline-val "></span></div>
 <div class="k cl">0</div>
-<div class="cl"><span class="s">  uint8_t  bLength;</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex ">12</span><span class="dline-src">  uint8_t  bLength;</span><span class="dline-val "></span></div>
 <div class="k cl">1</div>
-<div class="cl"><span class="s">  uint8_t  bDescriptorType;</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex ">01</span><span class="dline-src">  uint8_t  bDescriptorType;</span><span class="dline-val "></span></div>
 <div class="k cl">2</div>
-<div class="cl"><span class="s">  uint16_t bcdUSB;</span><span class="g wide">00 02 → 0x0200</span></div>
+<div class="dline"><span class="dline-hex wide">00 02</span><span class="dline-src">  uint16_t bcdUSB;</span><span class="dline-val wide">0x0200</span></div>
 <div class="k cl">4</div>
-<div class="cl"><span class="s">  uint8_t  bDeviceClass;</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex ">00</span><span class="dline-src">  uint8_t  bDeviceClass;</span><span class="dline-val "></span></div>
 <div class="k cl">5</div>
-<div class="cl"><span class="s">  uint8_t  bDeviceSubClass;</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex ">00</span><span class="dline-src">  uint8_t  bDeviceSubClass;</span><span class="dline-val "></span></div>
 <div class="k cl">6</div>
-<div class="cl"><span class="s">  uint8_t  bDeviceProtocol;</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex ">00</span><span class="dline-src">  uint8_t  bDeviceProtocol;</span><span class="dline-val "></span></div>
 <div class="k cl">7</div>
-<div class="cl"><span class="s">  uint8_t  bMaxPacketSize0;</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex ">08</span><span class="dline-src">  uint8_t  bMaxPacketSize0;</span><span class="dline-val "></span></div>
 <div class="k cl">8</div>
-<div class="cl"><span class="s">  uint16_t idVendor;</span><span class="g wide">6D 04 → 0x046D<span class="jp">　wire は little-endian</span></span></div>
+<div class="dline"><span class="dline-hex wide">6D 04</span><span class="dline-src">  uint16_t idVendor;</span><span class="dline-val wide">0x046D<span class="jp">　wire は little-endian</span></span></div>
 <div class="k cl">10</div>
-<div class="cl"><span class="s">  uint16_t idProduct;</span><span class="g wide">2B C5 → 0xC52B</span></div>
+<div class="dline"><span class="dline-hex wide">2B C5</span><span class="dline-src">  uint16_t idProduct;</span><span class="dline-val wide">0xC52B</span></div>
 <div class="k cl">12</div>
-<div class="cl"><span class="s">  uint16_t bcdDevice;</span><span class="g wide">00 12 → 0x1200</span></div>
+<div class="dline"><span class="dline-hex wide">00 12</span><span class="dline-src">  uint16_t bcdDevice;</span><span class="dline-val wide">0x1200</span></div>
 <div class="k cl">14</div>
-<div class="cl"><span class="s">  uint8_t  iManufacturer;</span><span class="g "><span class="jp">String Descriptor への index</span></span></div>
+<div class="dline"><span class="dline-hex ">01</span><span class="dline-src">  uint8_t  iManufacturer;</span><span class="dline-val "><span class="jp">String Descriptor への index</span></span></div>
 <div class="k cl">15</div>
-<div class="cl"><span class="s">  uint8_t  iProduct;</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex ">02</span><span class="dline-src">  uint8_t  iProduct;</span><span class="dline-val "></span></div>
 <div class="k cl">16</div>
-<div class="cl"><span class="s">  uint8_t  iSerialNumber;</span><span class="g"></span></div>
+<div class="dline"><span class="dline-hex ">00</span><span class="dline-src">  uint8_t  iSerialNumber;</span><span class="dline-val "></span></div>
 <div class="k cl">17</div>
-<div class="cl"><span class="s">  uint8_t  bNumConfigurations;</span><span class="g "><span class="jp">Configuration は複数あり得る</span></span></div>
+<div class="dline"><span class="dline-hex ">01</span><span class="dline-src">  uint8_t  bNumConfigurations;</span><span class="dline-val "><span class="jp">Configuration は複数あり得る</span></span></div>
 <div class="k cl end">18</div>
-<div class="cl"><span class="s">} UsbDeviceDescriptor;</span><span class="g"></span></div>
-
-<div class="k" style="padding-top: 22px">wire</div>
-
-<div class="bytes small" style="margin-top: 18px">
-<span class="off">12</span>
-<span class="off">01</span>
-<span class="off">00</span>
-<span class="off">02</span>
-<span class="off">00</span>
-<span class="off">00</span>
-<span class="off">00</span>
-<span class="off">08</span>
-<span class="wide">6D</span>
-<span class="wide">04</span>
-<span class="off">2B</span>
-<span class="off">C5</span>
-<span class="off">00</span>
-<span class="off">12</span>
-<span class="off">01</span>
-<span class="off">02</span>
-<span class="off">00</span>
-<span class="off">01</span>
-</div>
+<div class="dline"><span class="dline-hex "></span><span class="dline-src">} UsbDeviceDescriptor;</span><span class="dline-val "></span></div>
 
 <!--
 想定: 75秒
@@ -266,19 +262,23 @@ class: bleed mid
 
 # <code>bLength</code> を信じろ。<code>sizeof</code> を信じるな。
 
-<table class="data" style="margin-top: 4px">
-<thead><tr><th>Descriptor</th><th>wire 上の bLength</th><th>よくある ABI での sizeof</th><th></th></tr></thead>
-<tbody>
-<tr><td>Device</td><td class="num">18</td><td class="num faint">18</td><td class="faint" style="font-size:14px">たまたま一致</td></tr>
-<tr><td>Configuration</td><td class="num">9</td><td class="num sig">10</td><td class="sig" style="font-size:14px">末尾 padding 1</td></tr>
-<tr><td>Interface</td><td class="num">9</td><td class="num faint">9</td><td class="faint" style="font-size:14px">たまたま一致</td></tr>
-<tr><td>Endpoint</td><td class="num">7</td><td class="num sig">8</td><td class="sig" style="font-size:14px">末尾 padding 1</td></tr>
-</tbody>
-</table>
+<div class="abi" style="margin-top: 8px">
+<div class="abi-name">Device</div><div class="abi-lab">bLength</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">18</div><div></div>
+<div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">18</div><div class="abi-note ">たまたま一致</div>
+<div class="abi-gap"></div>
+<div class="abi-name">Configuration</div><div class="abi-lab">bLength</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
+<div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div><div class="abi-num">10</div><div class="abi-note sig">末尾 padding 1</div>
+<div class="abi-gap"></div>
+<div class="abi-name">Interface</div><div class="abi-lab">bLength</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
+<div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div class="abi-note ">たまたま一致</div>
+<div class="abi-gap"></div>
+<div class="abi-name">Endpoint</div><div class="abi-lab">bLength</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">7</div><div></div>
+<div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div><div class="abi-num">8</div><div class="abi-note sig">末尾 padding 1</div>
+</div>
 
-<p class="punch" style="margin-top: 26px">Configuration は <code>wTotalLength</code> bytes の連結ブロブ。<br><code>p += sizeof(*desc)</code> で 1 バイトずれると、以降が全部壊れる。</p>
+<p class="punch" style="margin-top: 22px; font-size: 20px">Configuration は <code>wTotalLength</code> bytes の連結ブロブ。<br><code>p += sizeof(*desc)</code> で 1 バイトずれると、以降が全部壊れる。</p>
 
-<p class="note" style="margin-top: 18px">C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演であって wire format の定義ではない。</p>
+<p class="note" style="margin-top: 14px">C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演であって wire format の定義ではない。</p>
 
 <!--
 想定: 90秒
@@ -320,23 +320,28 @@ class: bleed mid
 
 # AI時代だからこそのC
 
-<div class="cols code-left">
+<div class="cols" style="grid-template-columns: 1.02fr 0.98fr">
 <div>
 
 <h2>AIに書かせる</h2>
 
-<pre class="src" style="font-size: 18px; line-height: 1.95">char *copy(const char *s) {
-  char buf[256];
-  strcpy(buf, s);
-  <span class="sig">return buf;</span>
-}</pre>
+<div class="life">
+<div class="life-code">char *copy(const char *s) {</div>
+<div class="life-span" style="grid-row: 2 / 5">buf</div>
+<div class="life-code">  char buf[256];</div>
+<div class="life-code">  strcpy(buf, s);</div>
+<div class="life-code"><span class="sig">  return buf;</span></div>
+<div class="life-code">}</div>
+<div class="life-end">関数を出た時点で無効</div>
+
+</div>
 
 </div>
 <div>
 
 <h2>人間が見るべきもの</h2>
 
-<div class="qs" style="row-gap: 20px; font-size: 20px">
+<div class="qs" style="row-gap: 20px; font-size: 19px">
 <div>そのメモリはいつまで生きる？</div>
 <div>境界チェックはある？</div>
 <div>未定義動作は踏んでない？</div>
@@ -346,7 +351,7 @@ class: bleed mid
 </div>
 </div>
 
-<p class="punch" style="margin-top: 60px; font-size: 25px">AIがコードを書くほど、「実際に何が起きるか」を読む力が効いてくる。</p>
+<p class="punch" style="margin-top: 44px; font-size: 25px">AIがコードを書くほど、「実際に何が起きるか」を読む力が効いてくる。</p>
 
 <!--
 想定: 75秒
@@ -354,19 +359,23 @@ class: bleed mid
 -->
 
 ---
-class: bleed mid
+class: mid
 ---
 
 # 次に、この条件を見たら C を思い出す
 
-<div class="stanza" style="margin-top: 12px">
+<div class="k" style="padding-top: 0.5em">if</div>
+
+<div class="stanza">
 <div>デバイス / OS とつながる</div>
 <div>言語をまたぐ共通コアを置く</div>
 <div>ランタイムを薄くして小さく動かす</div>
 <div>既存の C 資産を Web へ運ぶ</div>
 </div>
 
-<p class="note" style="margin-top: 46px; font-size: 17px">このどれにも当てはまらないなら、C を選ばなくてよい。</p>
+<div class="k" style="padding-top: 72px">else</div>
+
+<p class="lede branch">このどれにも当てはまらないなら、<br>C を選ばなくてよい。</p>
 
 <!--
 想定: 45秒
