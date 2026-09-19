@@ -11,7 +11,7 @@ USB、WASM、型変換などを入口に、C言語を「古い低級言語」で
 ## 開発
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -25,10 +25,12 @@ npm run dev
 
 ## デプロイ
 
-`package.json` の `build` の `--base` は、公開リポジトリ名に合わせて変更してください。
+このリポジトリの公開先は `https://otonasi-muonn.github.io/c-lang-lt-slidev/`。`package.json` の `build` は GitHub Pages のサブパスに合わせて `--base /c-lang-lt-slidev/` を指定している。フォークなどで公開リポジトリ名を変える場合は、この `--base` も変更してください。
+
+スライド番号付きURLを共有しても GitHub Pages の深いパスで 404 にならないよう、ビルド時は hash ルーティングを使う（例: `#/7`）。
 
 ```bash
 npm run build
 ```
 
-GitHub Pagesを使う場合は `.github/workflows/deploy.yml` を利用できます。
+GitHub Pages の公開元を GitHub Actions に設定すると、main への push で `.github/workflows/deploy.yml` が `npm ci`、ビルド、デプロイを実行する。
