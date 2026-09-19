@@ -1,168 +1,83 @@
 <template>
-  <section class="mt-4 text-left text-base leading-relaxed">
-    <div class="flex flex-wrap items-baseline justify-between gap-3">
-      <div>
-        <div class="text-2xl font-bold">18 bytes を C/WASM へ渡す</div>
-        <div class="mt-1 opacity-70">
-          実在 VID/PID を使った構成例。実機の生ダンプではない。
-        </div>
-      </div>
-      <div
-        class="rounded-full border px-3 py-1 font-mono text-sm"
-        :class="
-          engine === 'wasm'
-            ? 'border-green-300/50 bg-green-300/10 text-green-200'
-            : 'border-yellow-300/50 bg-yellow-300/10 text-yellow-100'
-        "
+  <section class="demo">
+    <!-- What JS put on the wire. The row never wraps: 18 bytes are 18 bytes. -->
+    <div class="bytes">
+      <span
+        v-for="(byte, index) in paddedBytes"
+        :key="`${runId}-${index}`"
+        :class="byteClass(index)"
+        >{{ byte === null ? "··" : hex(byte, 2) }}</span
       >
-        {{ engineLabel }}
-      </div>
+    </div>
+    <div class="ruler">
+      <span v-for="i in 18" :key="i" :class="tickClass(i - 1)">{{
+        tickLabel(i - 1)
+      }}</span>
     </div>
 
-    <div
-      v-if="engine === 'fallback'"
-      class="mt-3 rounded-lg border border-yellow-300/30 bg-yellow-300/10 px-3 py-2 text-sm text-yellow-50"
-      role="status"
-    >
-      WASM のロードまたは実行に失敗。純JSで同じ結果を表示中。{{
-        fallbackReason
-      }}
-    </div>
-
-    <div
-      class="mt-4 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-stretch gap-2 text-center text-sm"
-    >
-      <div class="rounded-lg border border-blue-300/30 bg-blue-300/10 p-3">
-        <div class="font-bold text-blue-100">1. JS</div>
-        <code class="mt-1 block text-base">Uint8Array(18)</code>
-      </div>
-      <div class="self-center text-xl opacity-60">→</div>
-      <div class="rounded-lg border border-yellow-300/30 bg-yellow-300/10 p-3">
-        <div class="font-bold text-yellow-100">2. linear memory</div>
-        <code class="mt-1 block text-base">{{ bufferAddress }}</code>
-      </div>
-      <div class="self-center text-xl opacity-60">→</div>
-      <div class="rounded-lg border border-green-300/30 bg-green-300/10 p-3">
-        <div class="font-bold text-green-100">3. C function</div>
-        <code class="mt-1 block text-base">{{ calledFunction }}</code>
-      </div>
-    </div>
-
-    <div class="mt-4 rounded-xl border border-white/15 bg-black/30 p-4">
-      <div
-        class="flex flex-wrap gap-2 font-mono text-xl"
-        aria-label="USB Device Descriptor の入力バイト列"
-      >
-        <span
-          v-for="(byte, index) in inputBytes"
-          :key="`${runId}-${index}`"
-          class="rounded px-1.5 py-0.5"
-          :class="byteClass(index)"
-          :title="`byte ${index}`"
-          >{{ hex(byte, 2) }}</span
+    <!-- The call, with the pointers C actually handed back. -->
+    <div class="call">
+      <div class="k cl">len={{ requestedLength }}</div>
+      <div class="cl">
+        <span class="s" :class="returnClass"
+          >{{ calledFunction }}<span class="t"> → </span
+          >{{ returnCode === null ? "?" : returnCode }}</span
         >
-      </div>
-      <div
-        class="mt-2 flex flex-wrap gap-x-5 gap-y-1 font-mono text-sm opacity-65"
-      >
-        <span
-          ><code>len = {{ requestedLength }}</code></span
-        >
-        <span
-          ><code>buf = {{ bufferAddress }}</code></span
-        >
-        <span
-          ><code>out = {{ outputAddress }}</code></span
-        >
-        <span
-          ><code
-            >return {{ returnCode === null ? "—" : returnCode }}</code
-          ></span
+        <span class="g"
+          >buf={{ bufferAddress }}<span class="t">&nbsp;&nbsp;</span>out={{
+            outputAddress
+          }}</span
         >
       </div>
     </div>
 
-    <div
-      class="mt-4 flex flex-wrap gap-2"
-      aria-label="USB descriptor デモの操作"
-    >
+    <div class="controls">
       <button
-        class="demo-button border-green-300/50 bg-green-300/15 hover:bg-green-300/25"
-        @click="runDemo('normal')"
+        v-for="mode in modes"
+        :key="mode.id"
+        class="btn"
+        :class="{ on: activeMode === mode.id }"
+        @click="runDemo(mode.id)"
       >
-        正常に解析
+        {{ mode.label }}
       </button>
-      <button
-        class="demo-button border-red-300/50 bg-red-300/10 hover:bg-red-300/20"
-        @click="runDemo('bad-length')"
-      >
-        bLength を 0x14 にする
-      </button>
-      <button
-        class="demo-button border-orange-300/50 bg-orange-300/10 hover:bg-orange-300/20"
-        @click="runDemo('short')"
-      >
-        8 bytes だけ渡す
-      </button>
-      <button
-        class="demo-button border-blue-300/50 bg-blue-300/10 hover:bg-blue-300/20"
-        @click="runDemo('big-endian')"
-      >
-        Big-endian として読む
-      </button>
+      <span class="engine" :class="engineClass">{{ engineLabel }}</span>
     </div>
 
-    <template v-if="returnCode === 18 && output">
-      <div class="mt-4 grid grid-cols-2 gap-3">
-        <div
-          v-for="field in highlightedFields"
-          :key="field.name"
-          class="rounded-xl border border-green-300/30 bg-green-300/10 p-3 font-mono text-base"
-        >
-          <div class="opacity-65">{{ field.bytes }} → {{ field.name }}</div>
-          <strong class="text-xl text-green-200">{{
+    <!-- Result. One block, fixed height, so the slide never reflows. -->
+    <div class="result">
+      <template v-if="returnCode === 18 && output">
+        <div v-for="field in wideFields" :key="field.name" class="rline">
+          <span class="rname">{{ field.name }}</span>
+          <span class="rraw">{{ rawOf(field) }}</span>
+          <span class="rarrow">→</span>
+          <span class="rval" :class="isBigEndian ? 'sig' : 'wide'">{{
             formatField(field, output[field.outputIndex])
-          }}</strong>
-          <span
-            v-if="!isBigEndian"
-            class="ml-2 font-sans text-sm opacity-70"
-            >{{ field.note }}</span
-          >
-          <span v-else class="ml-2 font-sans text-sm text-red-200 opacity-80"
-            >逆に読むと別物</span
+          }}</span>
+          <span class="rnote">{{
+            isBigEndian ? "逆に読むと別物" : field.note
+          }}</span>
+        </div>
+        <div class="rrest">
+          <span v-for="field in restFields" :key="field.name"
+            >{{ field.name }}<span class="t">=</span
+            >{{ formatField(field, output[field.outputIndex]) }}</span
           >
         </div>
-      </div>
-      <div class="mt-3 grid grid-cols-3 gap-x-3 gap-y-1 font-mono text-base">
-        <div v-for="field in displayedFields" :key="field.name" class="min-w-0">
-          <span class="opacity-55">{{ field.bytes }}</span>
-          <code class="ml-1">{{ field.name }}</code>
-          <span class="mx-1 opacity-45">=</span>
-          <strong :class="field.emphasis ? 'text-green-200' : ''">{{
-            formatField(field, output[field.outputIndex])
-          }}</strong>
+      </template>
+      <template v-else-if="returnCode !== null">
+        <div class="rfail">
+          <span class="err mono">return {{ returnCode }}</span>
+          <span class="err">{{ resultMessage }}</span>
         </div>
-      </div>
-    </template>
-    <div
-      v-else
-      class="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 rounded-xl border border-white/10 bg-white/5 p-4 font-mono text-base"
-    >
-      <template v-if="returnCode !== null">
-        <span class="text-red-200">C の戻り値</span>
-        <strong class="text-red-200"
-          ><code>{{ returnCode }}</code> — {{ resultMessage }}</strong
-        >
+        <p class="note">C の境界チェックが、不正な入力を戻り値で止めた。</p>
       </template>
       <template v-else>
-        <span class="opacity-60">結果</span>
-        <span class="opacity-60">ボタンを押して C/WASM を呼ぶ</span>
+        <p class="note">ボタンを押すと、JS が生バイトを書き、C が読む。</p>
       </template>
     </div>
 
-    <div class="mt-3 text-sm opacity-65" aria-live="polite">
-      {{ runSummary }}
-    </div>
+    <p class="status" aria-live="polite">{{ runSummary }}</p>
   </section>
 </template>
 
@@ -181,11 +96,10 @@ type UsbWasmExports = {
 };
 
 type Field = {
-  bytes: string;
+  offset: number;
   name: string;
   outputIndex: number;
   width: 2 | 4;
-  emphasis?: boolean;
   note?: string;
 };
 
@@ -203,39 +117,44 @@ const props = withDefaults(defineProps<{ wasmUrl?: string }>(), {
   wasmUrl: () => `${import.meta.env.BASE_URL}wasm/usb_descriptor.wasm`,
 });
 
+const modes: { id: DemoMode; label: string }[] = [
+  { id: "normal", label: "正常に解析" },
+  { id: "bad-length", label: "bLength を 0x14 にする" },
+  { id: "short", label: "8 bytes だけ渡す" },
+  { id: "big-endian", label: "Big-endian として読む" },
+];
+
 const fields: Field[] = [
-  { bytes: "[0]", name: "bLength", outputIndex: 0, width: 2 },
-  { bytes: "[1]", name: "bDescriptorType", outputIndex: 1, width: 2 },
-  { bytes: "[2–3]", name: "bcdUSB", outputIndex: 2, width: 4 },
-  { bytes: "[4]", name: "bDeviceClass", outputIndex: 3, width: 2 },
-  { bytes: "[5]", name: "bDeviceSubClass", outputIndex: 4, width: 2 },
-  { bytes: "[6]", name: "bDeviceProtocol", outputIndex: 5, width: 2 },
-  { bytes: "[7]", name: "bMaxPacketSize0", outputIndex: 6, width: 2 },
+  { offset: 0, name: "bLength", outputIndex: 0, width: 2 },
+  { offset: 1, name: "bDescriptorType", outputIndex: 1, width: 2 },
+  { offset: 2, name: "bcdUSB", outputIndex: 2, width: 4 },
+  { offset: 4, name: "bDeviceClass", outputIndex: 3, width: 2 },
+  { offset: 5, name: "bDeviceSubClass", outputIndex: 4, width: 2 },
+  { offset: 6, name: "bDeviceProtocol", outputIndex: 5, width: 2 },
+  { offset: 7, name: "bMaxPacketSize0", outputIndex: 6, width: 2 },
   {
-    bytes: "[8–9]",
+    offset: 8,
     name: "idVendor",
     outputIndex: 7,
     width: 4,
-    emphasis: true,
     note: "Logitech",
   },
   {
-    bytes: "[10–11]",
+    offset: 10,
     name: "idProduct",
     outputIndex: 8,
     width: 4,
-    emphasis: true,
     note: "Unifying Receiver",
   },
-  { bytes: "[12–13]", name: "bcdDevice", outputIndex: 9, width: 4 },
-  { bytes: "[14]", name: "iManufacturer", outputIndex: 10, width: 2 },
-  { bytes: "[15]", name: "iProduct", outputIndex: 11, width: 2 },
-  { bytes: "[16]", name: "iSerialNumber", outputIndex: 12, width: 2 },
-  { bytes: "[17]", name: "bNumConfigurations", outputIndex: 13, width: 2 },
+  { offset: 12, name: "bcdDevice", outputIndex: 9, width: 4 },
+  { offset: 14, name: "iManufacturer", outputIndex: 10, width: 2 },
+  { offset: 15, name: "iProduct", outputIndex: 11, width: 2 },
+  { offset: 16, name: "iSerialNumber", outputIndex: 12, width: 2 },
+  { offset: 17, name: "bNumConfigurations", outputIndex: 13, width: 2 },
 ];
 
-const highlightedFields = fields.filter((field) => field.emphasis);
-const displayedFields = fields.filter((field) =>
+const wideFields = fields.filter((field) => field.offset === 8 || field.offset === 10);
+const restFields = fields.filter((field) =>
   [0, 1, 2, 9, 13].includes(field.outputIndex),
 );
 
@@ -246,19 +165,38 @@ const inputBytes = ref<number[]>(Array.from(descriptor));
 const requestedLength = ref(18);
 const returnCode = ref<number | null>(null);
 const output = ref<number[] | null>(null);
-const bufferAddress = ref("ロード中");
-const outputAddress = ref("ロード中");
-const calledFunction = ref("待機中");
+const bufferAddress = ref("—");
+const outputAddress = ref("—");
+const calledFunction = ref("usb_parse_device_descriptor(len)");
+const activeMode = ref<DemoMode | null>(null);
 const runId = ref(0);
 
-const isBigEndian = computed(
-  () => calledFunction.value === "usb_parse_as_big_endian()",
+const isBigEndian = computed(() =>
+  calledFunction.value.startsWith("usb_parse_as_big_endian"),
 );
+
+// 18 cells always, so the row and the ruler stay aligned when C is handed
+// a short buffer: the missing bytes read as absent, not as zero.
+const paddedBytes = computed<(number | null)[]>(() => {
+  const cells: (number | null)[] = Array.from(inputBytes.value);
+  while (cells.length < 18) cells.push(null);
+  return cells.slice(0, 18);
+});
 
 const engineLabel = computed(() => {
   if (engine.value === "wasm") return "WASM 実行中";
   if (engine.value === "fallback") return "JS フォールバック";
   return "WASM をロード中";
+});
+
+const engineClass = computed(() => ({
+  "engine-wasm": engine.value === "wasm",
+  "engine-fallback": engine.value === "fallback",
+}));
+
+const returnClass = computed(() => {
+  if (returnCode.value === null) return "";
+  return returnCode.value === 18 ? "ok" : "err";
 });
 
 const resultMessage = computed(() => {
@@ -269,14 +207,17 @@ const resultMessage = computed(() => {
 });
 
 const runSummary = computed(() => {
-  if (returnCode.value === null)
-    return "JS が生バイトを書き、C が linear memory を読んで結果を書く。";
-  if (returnCode.value === 18) {
-    return engine.value === "wasm"
-      ? "JS → linear memory → C/WASM → Uint16Array。グルーもWASI依存もない。"
-      : "JS の同等ロジックで結果を表示中。発表はこのまま続けられる。";
+  if (engine.value === "fallback") {
+    return `WASM のロードまたは実行に失敗。純 JS の同等ロジックで表示中${fallbackReason.value}`;
   }
-  return "C の境界チェックが不正な入力を戻り値で止めた。";
+  if (returnCode.value === null)
+    return "JS が生バイトを linear memory へ書き、C がそれを読んで結果を書き戻す。";
+  if (returnCode.value === 18) {
+    return isBigEndian.value
+      ? "同じ 18 バイト。読み方を変えただけで、別のデバイスになる。"
+      : "JS → linear memory → C/WASM → Uint16Array。JS グルーも WASI 依存もない。";
+  }
+  return "戻り値だけで止まっている。壊れたバイト列は構造体にならない。";
 });
 
 function hex(value: number, width: number) {
@@ -287,12 +228,32 @@ function formatField(field: Field, value: number) {
   return `0x${hex(value, field.width)}`;
 }
 
+function rawOf(field: Field) {
+  const bytes = inputBytes.value;
+  if (field.width === 2) return hex(bytes[field.offset], 2);
+  return `${hex(bytes[field.offset], 2)} ${hex(bytes[field.offset + 1], 2)}`;
+}
+
 function byteClass(index: number) {
-  if (index === 8 || index === 9 || index === 10 || index === 11)
-    return "bg-green-300/25 text-green-100";
-  if (index === 2 || index === 3 || index === 12 || index === 13)
-    return "bg-blue-300/20 text-blue-100";
-  return "bg-white/10";
+  if (index >= inputBytes.value.length) return "off";
+  if (returnCode.value === 18 && (index >= 8 && index <= 11))
+    return isBigEndian.value ? "sig" : "wide";
+  if (activeMode.value === "bad-length" && index === 0) return "sig";
+  return "";
+}
+
+function tickLabel(index: number) {
+  return index === 0 || index === 8 || index === 10 || index === 17
+    ? String(index)
+    : "";
+}
+
+function tickClass(index: number) {
+  // A byte C was never handed carries no field marking.
+  if (index >= inputBytes.value.length) return "";
+  if (index >= 8 && index <= 11)
+    return returnCode.value === 18 && isBigEndian.value ? "tsig" : "twide";
+  return tickLabel(index) ? "t" : "";
 }
 
 function littleEndian16(bytes: Uint8Array, offset: number) {
@@ -358,23 +319,35 @@ function applyResult(result: ParseResult) {
   output.value = result.output;
 }
 
+// The engine badge must never claim WASM for a run JavaScript performed.
+// Anything that is not a live WASM instance is reported as the fallback,
+// including a click that lands while the module is still loading.
+function runWithJavaScript(request: ReturnType<typeof requestFor>) {
+  engine.value = "fallback";
+  bufferAddress.value = "JS";
+  outputAddress.value = "JS";
+  applyResult(
+    parseWithJavaScript(request.bytes, request.length, request.bigEndian),
+  );
+}
+
 function runDemo(mode: DemoMode) {
   const request = requestFor(mode);
   inputBytes.value = Array.from(request.bytes);
   requestedLength.value = request.length;
   output.value = null;
   returnCode.value = null;
+  activeMode.value = mode;
   calledFunction.value = request.bigEndian
-    ? "usb_parse_as_big_endian()"
-    : "usb_parse_device_descriptor()";
+    ? "usb_parse_as_big_endian(len)"
+    : "usb_parse_device_descriptor(len)";
   runId.value += 1;
 
   if (engine.value !== "wasm" || !wasm.value) {
-    bufferAddress.value = "JS fallback";
-    outputAddress.value = "JS fallback";
-    applyResult(
-      parseWithJavaScript(request.bytes, request.length, request.bigEndian),
-    );
+    if (engine.value === "loading" && !fallbackReason.value) {
+      fallbackReason.value = " (WASM のロード完了前に実行)";
+    }
+    runWithJavaScript(request);
     return;
   }
 
@@ -398,13 +371,8 @@ function runDemo(mode: DemoMode) {
     applyResult({ returnCode: code, output: values });
   } catch (error) {
     wasm.value = null;
-    engine.value = "fallback";
     fallbackReason.value = error instanceof Error ? ` (${error.message})` : "";
-    bufferAddress.value = "JS fallback";
-    outputAddress.value = "JS fallback";
-    applyResult(
-      parseWithJavaScript(request.bytes, request.length, request.bigEndian),
-    );
+    runWithJavaScript(request);
   }
 }
 
@@ -418,12 +386,16 @@ async function loadWasm() {
     if (!isUsbWasmExports(instance.exports))
       throw new Error("required WASM exports are missing");
     wasm.value = instance.exports;
-    engine.value = "wasm";
-    bufferAddress.value = "未実行";
-    outputAddress.value = "未実行";
+    // A click during loading already answered with JS and said so; leave that
+    // verdict standing rather than silently relabelling the visible result.
+    if (engine.value === "loading") {
+      engine.value = "wasm";
+      bufferAddress.value = "—";
+      outputAddress.value = "—";
+    }
   } catch (error) {
-    engine.value = "fallback";
     fallbackReason.value = error instanceof Error ? ` (${error.message})` : "";
+    engine.value = "fallback";
     runDemo("normal");
   }
 }
@@ -432,17 +404,115 @@ onMounted(loadWasm);
 </script>
 
 <style scoped>
-.demo-button {
-  border-width: 1px;
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  transition: background-color 150ms ease;
+.demo {
+  font-family: var(--sans);
 }
 
-.demo-button:disabled {
-  cursor: wait;
-  opacity: 0.5;
+.call {
+  display: grid;
+  grid-template-columns: var(--rail) 1fr;
+  column-gap: var(--rail-gap);
+  margin-top: 22px;
+  margin-left: calc(-1 * (var(--rail) + var(--rail-gap)));
+}
+.call .cl {
+  font-size: 15px;
+  grid-template-columns: 340px 1fr;
+}
+.call .cl .s.ok {
+  color: var(--ink);
+}
+.call .cl .s.err {
+  color: var(--err);
+}
+.call .cl .g {
+  color: var(--ink-3);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.engine {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--ink-3);
+}
+.engine-wasm {
+  color: var(--ink-2);
+}
+.engine-fallback {
+  color: var(--sig);
+}
+
+/* Fixed height: the slide must not reflow when a result appears mid-talk. */
+.result {
+  margin-top: 16px;
+  min-height: 98px;
+}
+
+.rline {
+  display: grid;
+  grid-template-columns: 158px 62px 16px 86px 1fr;
+  align-items: baseline;
+  column-gap: 12px;
+  font-family: var(--mono);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.62;
+}
+.rname {
+  color: var(--ink-2);
+  font-size: 15px;
+}
+.rraw {
+  color: var(--ink);
+}
+.rarrow {
+  color: var(--ink-3);
+  font-size: 13px;
+}
+.rnote {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.rrest {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 22px;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.rrest .t {
+  color: var(--ink-3);
+  opacity: 0.6;
+}
+
+.rfail {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.status {
+  max-width: none;
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-3);
 }
 </style>

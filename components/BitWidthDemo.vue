@@ -1,43 +1,60 @@
 <template>
-  <div class="grid grid-cols-[1.1fr_0.9fr] gap-6 mt-4 items-start">
-    <div>
-      <pre
-        class="rounded-xl bg-black/60 p-5 text-base leading-relaxed"
-      ><code>int a = -1;
+  <div class="bw">
+    <pre class="src">int a = -1;
 unsigned int b = 1;
 
-printf("%d\n", a &lt; b);</code></pre>
-      <button
-        class="mt-4 rounded-lg bg-green-400/20 border border-green-300/40 px-4 py-2 hover:bg-green-400/30"
-        @click="show = !show"
-      >
-        {{ show ? '隠す' : 'どうなる？' }}
-      </button>
-    </div>
+printf("%d\n", a &lt; b);</pre>
 
-    <div class="rounded-xl border border-white/10 bg-white/5 p-5 min-h-72">
-      <div class="text-lg font-bold">ポイント</div>
-      <div class="mt-3 opacity-80 leading-relaxed">
+    <div class="answer">
+      <button class="btn" :class="{ on: show }" @click="show = !show">
+        {{ show ? "隠す" : "どうなる？" }}
+      </button>
+
+      <div v-if="show" class="lines">
+        <div>
+          同じランクなので、<code>a</code> は必ず
+          <code>unsigned int</code> に変換される
+        </div>
+        <div>
+          <code>a &lt; b</code> は必ず <code class="sig">0</code>
+        </div>
+      </div>
+      <p v-else class="note">
         Cでは「値」だけでなく、符号・幅・変換規則が結果に出てくる。
-      </div>
-      <div v-if="show" class="mt-5 space-y-3">
-        <div
-          class="rounded-lg bg-yellow-300/10 border border-yellow-300/30 p-3"
-        >
-          同じランクなので、<code>a</code> は必ず unsigned int に変換される
-        </div>
-        <div class="rounded-lg bg-red-300/10 border border-red-300/30 p-3">
-          <code>a &lt; b</code> は必ず <code>0</code>
-        </div>
-        <div class="rounded-lg bg-green-300/10 border border-green-300/30 p-3">
-          ここが「コンピュータの実体が見える」おもしろさ
-        </div>
-      </div>
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-const show = ref(false)
+import { ref } from "vue";
+const show = ref(false);
 </script>
+
+<style scoped>
+.bw {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  column-gap: 40px;
+  align-items: start;
+  margin-top: 10px;
+}
+.bw .src {
+  font-size: 19px;
+  line-height: 1.85;
+}
+.answer {
+  min-height: 150px;
+}
+.lines {
+  display: grid;
+  row-gap: 14px;
+  margin-top: 24px;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.answer .note {
+  margin-top: 20px;
+}
+</style>

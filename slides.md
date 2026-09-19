@@ -3,13 +3,14 @@ theme: default
 title: AI時代に、なぜ今さらC言語なのか
 info: |
   ハックツコミュ「自分の推し技術について語りたいよねの会」15分セッション用 Slidev 資料。
-class: text-center
+class: bleed spread
 highlighter: shiki
 lineNumbers: false
 drawings:
   persist: false
 transition: slide-left
 mdc: true
+layout: default
 colorSchema: dark
 canvasWidth: 900
 favicon: /favicon.svg
@@ -18,14 +19,40 @@ fonts:
   mono: JetBrains Mono
 ---
 
-# AI時代に、なぜ今さらC言語なのか
 
-<div class="mt-6 text-xl opacity-80">
-「候補から最初にCを消さないでほしい」
+<div>
+
+<h1 class="say">AI時代に、<br>なぜ今さらC言語なのか</h1>
+
+<p class="lede">「候補から最初にCを消さないでほしい」</p>
+
 </div>
 
-<div class="mt-16 text-base opacity-60">
-ハックツコミュ / 推し技術LT / 15min
+<div>
+
+<div class="bytes small faint">
+<span>12</span>
+<span>01</span>
+<span>00</span>
+<span>02</span>
+<span>00</span>
+<span>00</span>
+<span>00</span>
+<span>08</span>
+<span>6D</span>
+<span>04</span>
+<span>2B</span>
+<span>C5</span>
+<span>00</span>
+<span>12</span>
+<span>01</span>
+<span>02</span>
+<span>00</span>
+<span>01</span>
+</div>
+
+<p class="note" style="margin-top: 22px">ハックツコミュ「推し技術LT」15min</p>
+
 </div>
 
 <!--
@@ -34,23 +61,12 @@ fonts:
 -->
 
 ---
-layout: center
-class: text-center
+class: bleed mid
 ---
 
-# 古い・危ない・書きやすくない・最速でもない
+<p class="note" style="font-size: 20px; line-height: 1.6">古い。危ない。書きやすくはない。常に最速でもない。</p>
 
-<div class="grid grid-cols-2 gap-4 mt-8 text-left">
-  <div class="rounded-xl border border-red-400/30 p-5 bg-red-500/10">古い</div>
-  <div class="rounded-xl border border-red-400/30 p-5 bg-red-500/10">危ない</div>
-  <div class="rounded-xl border border-red-400/30 p-5 bg-red-500/10">書きやすくはない</div>
-  <div class="rounded-xl border border-red-400/30 p-5 bg-red-500/10">常に最速でもない</div>
-</div>
-
-<div class="mt-8 text-2xl">
-それでも、Cはまだ面白い。<br>
-<span class="text-green-300">コンピュータの境界面に立てるから。</span>
-</div>
+<h1 class="say" style="margin-top: 26px; margin-bottom: 0">それでも、Cはまだ面白い。<br>コンピュータの境界面に立てるから。</h1>
 
 <!--
 想定: 45秒
@@ -58,44 +74,53 @@ class: text-center
 -->
 
 ---
-layout: two-cols
----
 
-# USBを挿すと何が起きているか
+<div class="k">USB 2.0</div>
 
-::left::
+<h1 class="compact">USBを挿すと、何が起きているか</h1>
 
-## enumeration（時系列）
+<div class="cols">
+<div>
 
-<div class="text-sm leading-relaxed space-y-2 mt-3">
-  <div>接続検出 → バスリセット<br><span class="opacity-65">Default / address 0 / EP0 のみ</span></div>
-  <div><code>GET_DESCRIPTOR(Device, 8)</code><br><span class="opacity-65">offset 7 の <code>bMaxPacketSize0</code> を知る</span></div>
-  <div class="opacity-65">（必要なら再リセット：ホスト実装依存）</div>
-  <div><code>SET_ADDRESS(n)</code><br><span class="opacity-65">新 address は Status ステージ完了後に有効</span></div>
-  <div><code>GET_DESCRIPTOR(Device, 18)</code></div>
-  <div><code>GET_DESCRIPTOR(Configuration, 9)</code><br><span class="opacity-65"><code>wTotalLength</code> を読む</span></div>
-  <div><code>GET_DESCRIPTOR(Configuration, wTotalLength)</code><br><span class="opacity-65">連結された descriptor 群を一括取得</span></div>
-  <div><code>SET_CONFIGURATION(bConfigurationValue)</code></div>
+<h2>enumeration（時系列）</h2>
+
+<div class="steps">
+<div class="n">1</div>
+<div class="s">接続検出 → バスリセット<span class="sub">Default / address 0 / EP0 のみ</span></div>
+<div class="n">2</div>
+<div class="s">GET_DESCRIPTOR(Device, 8)<span class="sub">offset 7 の <code>bMaxPacketSize0</code> を知る<br>（必要なら再リセット：ホスト実装依存）</span></div>
+<div class="n">3</div>
+<div class="s">SET_ADDRESS(n)<span class="sub">新 address は Status ステージ完了後に有効</span></div>
+<div class="n">4</div>
+<div class="s">GET_DESCRIPTOR(Device, 18)</div>
+<div class="n">5</div>
+<div class="s">GET_DESCRIPTOR(Configuration, 9)<span class="sub"><code>wTotalLength</code> を読む</span></div>
+<div class="n">6</div>
+<div class="s">GET_DESCRIPTOR(Configuration, wTotalLength)<span class="sub">連結された descriptor 群を一括取得</span></div>
+<div class="n">7</div>
+<div class="s">SET_CONFIGURATION(bConfigurationValue)</div>
 </div>
 
-::right::
+</div>
+<div>
 
-## descriptor（階層）
+<h2>descriptor（階層）</h2>
 
-<pre class="text-sm leading-relaxed mt-3"><code>Device (18B)
-└─ Configuration (9B) × bNumConfigurations
-   └─ Interface (9B) × bNumInterfaces
-      ├─ Endpoint (7B) × bNumEndpoints
-      └─ クラス固有 (HID / CDC …)</code></pre>
+<pre class="tree">Device <span class="t">(18B)</span>
+<span class="t">└─</span> Configuration <span class="t">(9B) × bNumConfigurations</span>
+   <span class="t">└─</span> Interface <span class="t">(9B) × bNumInterfaces</span>
+      <span class="t">├─</span> Endpoint <span class="t">(7B) × bNumEndpoints</span>
+      <span class="t">└─</span> クラス固有 <span class="t">(HID / CDC …)</span></pre>
 
-<div class="mt-4 text-sm leading-relaxed opacity-80">
-String Descriptor は木の外。各 <code>i*</code> index から横参照する。<br>
-EP0 には Endpoint Descriptor がない。だから <code>bMaxPacketSize0</code> は Device 側にある。
+<div class="qs fine" style="margin-top: 22px">
+<div>String Descriptor は木の外。各 <code>i*</code> index から横参照する。</div>
+<div>EP0 には Endpoint Descriptor がない。だから <code>bMaxPacketSize0</code> は Device 側にある。</div>
 </div>
 
-<div class="mt-5 rounded-xl bg-yellow-300/10 border border-yellow-300/30 p-3 text-sm">
-<code>GET_DESCRIPTOR</code> はリクエスト種別。木の頂点ではない。
 </div>
+</div>
+
+<p class="punch" style="margin-top: 20px; font-size: 18px"><code>GET_DESCRIPTOR</code> はリクエスト種別。木の頂点ではない。</p>
 
 <!--
 想定: 60秒
@@ -111,29 +136,56 @@ alternate setting の分だけ Interface Descriptor は増える。
 -->
 
 ---
-layout: center
-class: text-center
+class: bleed mid
 ---
 
 # その答えは、18バイト
 
-<div class="mt-10 rounded-xl bg-black/60 border border-white/10 p-6 font-mono text-xl leading-relaxed text-left">
-12 01 00 02 00 00 00 08<br>
-6D 04 2B C5 00 12 01 02<br>
-00 01
+<div class="bytes hero" style="margin-top: 26px">
+<span>12</span>
+<span>01</span>
+<span>00</span>
+<span>02</span>
+<span>00</span>
+<span>00</span>
+<span>00</span>
+<span>08</span>
+<span>6D</span>
+<span>04</span>
+<span>2B</span>
+<span>C5</span>
+<span>00</span>
+<span>12</span>
+<span>01</span>
+<span>02</span>
+<span>00</span>
+<span>01</span>
 </div>
 
-<div class="mt-8 text-2xl">
-この時点では、ただの 18 バイト。
+<div class="ruler">
+<span class="t">0</span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class="t">8</span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class="t">17</span>
 </div>
 
-<div class="mt-4 opacity-70">
-意味を与えるのは、次の一手。
-</div>
+<p class="lede" style="margin-top: 40px">この時点では、ただの 18 バイト。<br><span class="dim">意味を与えるのは、次の一手。</span></p>
 
-<div class="mt-6 text-sm opacity-60">
-実機の生ダンプではなく、実在する VID / PID で組んだ説明用の例。
-</div>
+<p class="note" style="margin-top: 26px">実機の生ダンプではなく、実在する VID / PID で組んだ説明用の例。</p>
 
 <!--
 想定: 45秒
@@ -144,27 +196,62 @@ class: text-center
 
 # バイト列が構造体になる
 
-<pre class="mt-5 rounded-xl bg-black/60 border border-white/10 p-5 text-base leading-relaxed"><code>typedef struct {
-  uint8_t  bLength;             <span class="opacity-50">// offset 0</span>
-  uint8_t  bDescriptorType;     <span class="opacity-50">// 1</span>
-  uint16_t bcdUSB;              <span class="opacity-50">// 2</span>
-  uint8_t  bDeviceClass;        <span class="opacity-50">// 4</span>
-  uint8_t  bDeviceSubClass;     <span class="opacity-50">// 5</span>
-  uint8_t  bDeviceProtocol;     <span class="opacity-50">// 6</span>
-  uint8_t  bMaxPacketSize0;     <span class="opacity-50">// 7</span>
-  uint16_t idVendor;            <span class="opacity-50">// 8</span>
-  uint16_t idProduct;           <span class="opacity-50">// 10</span>
-  uint16_t bcdDevice;           <span class="opacity-50">// 12</span>
-  uint8_t  iManufacturer;       <span class="opacity-50">// 14</span>
-  uint8_t  iProduct;            <span class="opacity-50">// 15</span>
-  uint8_t  iSerialNumber;       <span class="opacity-50">// 16</span>
-  uint8_t  bNumConfigurations;  <span class="opacity-50">// 17</span>
-} UsbDeviceDescriptor;          <span class="opacity-50">// wire format: 18 bytes</span></code></pre>
+<h2>wire format: 18 bytes</h2>
 
-<div class="mt-4 text-base opacity-80 leading-snug">
-<code>iManufacturer</code> / <code>iProduct</code> / <code>iSerialNumber</code> は String Descriptor への index。
-末尾の <code>bNumConfigurations</code> が、Configuration が複数あり得る入口になる。<br>
-<span class="text-yellow-200">8–9 バイトは <code>6D 04</code>。値は <code>0x046D</code>。wire は little-endian。</span>
+<div class="k cl"></div>
+<div class="cl"><span class="s">typedef struct {</span><span class="g"></span></div>
+<div class="k cl">0</div>
+<div class="cl"><span class="s">  uint8_t  bLength;</span><span class="g"></span></div>
+<div class="k cl">1</div>
+<div class="cl"><span class="s">  uint8_t  bDescriptorType;</span><span class="g"></span></div>
+<div class="k cl">2</div>
+<div class="cl"><span class="s">  uint16_t bcdUSB;</span><span class="g wide">00 02 → 0x0200</span></div>
+<div class="k cl">4</div>
+<div class="cl"><span class="s">  uint8_t  bDeviceClass;</span><span class="g"></span></div>
+<div class="k cl">5</div>
+<div class="cl"><span class="s">  uint8_t  bDeviceSubClass;</span><span class="g"></span></div>
+<div class="k cl">6</div>
+<div class="cl"><span class="s">  uint8_t  bDeviceProtocol;</span><span class="g"></span></div>
+<div class="k cl">7</div>
+<div class="cl"><span class="s">  uint8_t  bMaxPacketSize0;</span><span class="g"></span></div>
+<div class="k cl">8</div>
+<div class="cl"><span class="s">  uint16_t idVendor;</span><span class="g wide">6D 04 → 0x046D<span class="jp">　wire は little-endian</span></span></div>
+<div class="k cl">10</div>
+<div class="cl"><span class="s">  uint16_t idProduct;</span><span class="g wide">2B C5 → 0xC52B</span></div>
+<div class="k cl">12</div>
+<div class="cl"><span class="s">  uint16_t bcdDevice;</span><span class="g wide">00 12 → 0x1200</span></div>
+<div class="k cl">14</div>
+<div class="cl"><span class="s">  uint8_t  iManufacturer;</span><span class="g "><span class="jp">String Descriptor への index</span></span></div>
+<div class="k cl">15</div>
+<div class="cl"><span class="s">  uint8_t  iProduct;</span><span class="g"></span></div>
+<div class="k cl">16</div>
+<div class="cl"><span class="s">  uint8_t  iSerialNumber;</span><span class="g"></span></div>
+<div class="k cl">17</div>
+<div class="cl"><span class="s">  uint8_t  bNumConfigurations;</span><span class="g "><span class="jp">Configuration は複数あり得る</span></span></div>
+<div class="k cl end">18</div>
+<div class="cl"><span class="s">} UsbDeviceDescriptor;</span><span class="g"></span></div>
+
+<div class="k" style="padding-top: 22px">wire</div>
+
+<div class="bytes small" style="margin-top: 18px">
+<span class="off">12</span>
+<span class="off">01</span>
+<span class="off">00</span>
+<span class="off">02</span>
+<span class="off">00</span>
+<span class="off">00</span>
+<span class="off">00</span>
+<span class="off">08</span>
+<span class="wide">6D</span>
+<span class="wide">04</span>
+<span class="off">2B</span>
+<span class="off">C5</span>
+<span class="off">00</span>
+<span class="off">12</span>
+<span class="off">01</span>
+<span class="off">02</span>
+<span class="off">00</span>
+<span class="off">01</span>
 </div>
 
 <!--
@@ -175,26 +262,23 @@ class: text-center
 
 ---
 
+<div class="k">ABI</div>
+
 # <code>bLength</code> を信じろ。<code>sizeof</code> を信じるな。
 
-<table class="mt-6 w-full text-left text-base">
-  <thead><tr class="border-b border-white/20"><th class="pb-2">Descriptor</th><th class="pb-2">wire 上の <code>bLength</code></th><th class="pb-2">よくある ABI での <code>sizeof</code></th></tr></thead>
-  <tbody>
-    <tr><td class="py-1">Device</td><td>18</td><td class="text-green-300">18 — たまたま一致</td></tr>
-    <tr><td class="py-1">Configuration</td><td>9</td><td class="text-red-300">10 — 末尾 padding 1</td></tr>
-    <tr><td class="py-1">Interface</td><td>9</td><td class="text-green-300">9 — たまたま一致</td></tr>
-    <tr><td class="py-1">Endpoint</td><td>7</td><td class="text-red-300">8 — 末尾 padding 1</td></tr>
-  </tbody>
+<table class="data" style="margin-top: 4px">
+<thead><tr><th>Descriptor</th><th>wire 上の bLength</th><th>よくある ABI での sizeof</th><th></th></tr></thead>
+<tbody>
+<tr><td>Device</td><td class="num">18</td><td class="num faint">18</td><td class="faint" style="font-size:14px">たまたま一致</td></tr>
+<tr><td>Configuration</td><td class="num">9</td><td class="num sig">10</td><td class="sig" style="font-size:14px">末尾 padding 1</td></tr>
+<tr><td>Interface</td><td class="num">9</td><td class="num faint">9</td><td class="faint" style="font-size:14px">たまたま一致</td></tr>
+<tr><td>Endpoint</td><td class="num">7</td><td class="num sig">8</td><td class="sig" style="font-size:14px">末尾 padding 1</td></tr>
+</tbody>
 </table>
 
-<div class="mt-6 text-xl">
-Configuration は <code>wTotalLength</code> bytes の連結ブロブ。<br>
-<code>p += sizeof(*desc)</code> で 1 バイトずれると、以降が全部壊れる。
-</div>
+<p class="punch" style="margin-top: 26px">Configuration は <code>wTotalLength</code> bytes の連結ブロブ。<br><code>p += sizeof(*desc)</code> で 1 バイトずれると、以降が全部壊れる。</p>
 
-<div class="mt-4 text-sm opacity-60">
-C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演であって wire format の定義ではない。
-</div>
+<p class="note" style="margin-top: 18px">C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演であって wire format の定義ではない。</p>
 
 <!--
 想定: 90秒
@@ -205,7 +289,9 @@ C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演�
 
 ---
 
-# LIVE DEMO: C → WASM
+<div class="k">LIVE</div>
+
+<h1 class="compact">C が、ブラウザで 18 バイトを読む</h1>
 
 <UsbDescriptorDemo />
 
@@ -234,33 +320,33 @@ C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演�
 
 # AI時代だからこそのC
 
-<div class="grid grid-cols-2 gap-6 mt-8">
+<div class="cols code-left">
 <div>
 
-## AIに書かせる
+<h2>AIに書かせる</h2>
 
-<pre class="rounded-xl bg-black/60 border border-white/10 p-5 text-base leading-relaxed text-left"><code>char *copy(const char *s) {
+<pre class="src" style="font-size: 18px; line-height: 1.95">char *copy(const char *s) {
   char buf[256];
   strcpy(buf, s);
-  return buf;
-}</code></pre>
+  <span class="sig">return buf;</span>
+}</pre>
 
 </div>
 <div>
 
-## 人間が見るべきもの
+<h2>人間が見るべきもの</h2>
 
-- そのメモリはいつまで生きる？
-- 境界チェックはある？
-- 未定義動作は踏んでない？
-- ABI / FFI で壊れない？
+<div class="qs" style="row-gap: 20px; font-size: 20px">
+<div>そのメモリはいつまで生きる？</div>
+<div>境界チェックはある？</div>
+<div>未定義動作は踏んでない？</div>
+<div>ABI / FFI で壊れない？</div>
+</div>
 
 </div>
 </div>
 
-<div class="mt-8 text-xl">
-AIがコードを書くほど、「実際に何が起きるか」を読む力が効いてくる。
-</div>
+<p class="punch" style="margin-top: 60px; font-size: 25px">AIがコードを書くほど、「実際に何が起きるか」を読む力が効いてくる。</p>
 
 <!--
 想定: 75秒
@@ -268,21 +354,19 @@ AIがコードを書くほど、「実際に何が起きるか」を読む力が
 -->
 
 ---
-layout: center
+class: bleed mid
 ---
 
 # 次に、この条件を見たら C を思い出す
 
-<div class="grid grid-cols-2 gap-4 mt-8 text-left text-xl">
-  <div class="rounded-xl border border-white/10 bg-white/5 p-5">デバイス / OS とつながる</div>
-  <div class="rounded-xl border border-white/10 bg-white/5 p-5">言語をまたぐ共通コアを置く</div>
-  <div class="rounded-xl border border-white/10 bg-white/5 p-5">ランタイムを薄くして小さく動かす</div>
-  <div class="rounded-xl border border-white/10 bg-white/5 p-5">既存の C 資産を Web へ運ぶ</div>
+<div class="stanza" style="margin-top: 12px">
+<div>デバイス / OS とつながる</div>
+<div>言語をまたぐ共通コアを置く</div>
+<div>ランタイムを薄くして小さく動かす</div>
+<div>既存の C 資産を Web へ運ぶ</div>
 </div>
 
-<div class="mt-10 text-xl opacity-80">
-このどれにも当てはまらないなら、C を選ばなくてよい。
-</div>
+<p class="note" style="margin-top: 46px; font-size: 17px">このどれにも当てはまらないなら、C を選ばなくてよい。</p>
 
 <!--
 想定: 45秒
@@ -295,23 +379,65 @@ C が現実解になる。そこを「古いから」で塗りつぶさないで
 -->
 
 ---
-layout: center
-class: text-center
+class: bleed spread
 ---
 
-# 技術選定で、最初からCを候補外にしないでほしい
+<div>
 
-<div class="mt-10 text-2xl opacity-80">
-USB の 18 バイトから、ブラウザの WASM まで。<br>
-境界が重要な場面では、C にも席がある。
+<h1 class="say">技術選定で、<br>最初からCを候補外にしないでほしい</h1>
+
+<p class="lede" style="margin-top: 26px">USB の 18 バイトから、ブラウザの WASM まで。<br><span class="dim">境界が重要な場面では、C にも席がある。</span></p>
+
+<p class="note" style="margin-top: 26px; font-size: 17px">Thank you!</p>
+
 </div>
 
-<div class="mt-10 text-lg opacity-75 font-mono">
-https://otonasi-muonn.github.io/c-lang-lt-slidev/
+<div>
+
+<div class="bytes small">
+<span class="off">12</span>
+<span class="off">01</span>
+<span class="off">00</span>
+<span class="off">02</span>
+<span class="off">00</span>
+<span class="off">00</span>
+<span class="off">00</span>
+<span class="off">08</span>
+<span class="wide">6D</span>
+<span class="wide">04</span>
+<span class="wide">2B</span>
+<span class="wide">C5</span>
+<span class="off">00</span>
+<span class="off">12</span>
+<span class="off">01</span>
+<span class="off">02</span>
+<span class="off">00</span>
+<span class="off">01</span>
 </div>
 
-<div class="mt-6 text-xl opacity-70">
-Thank you!
+<div class="ruler">
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class="twide"></span>
+<span class="twide"></span>
+<span class="twide"></span>
+<span class="twide"></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+<span class=""></span>
+</div>
+
+<p class="note mono" style="margin-top: 20px">https://otonasi-muonn.github.io/c-lang-lt-slidev/</p>
+
 </div>
 
 <!--
@@ -320,10 +446,12 @@ Thank you!
 -->
 
 ---
-layout: center
+class: mid
 ---
 
-# Appendix: 型は、ただの名前じゃない
+<div class="k">§6.3.1.8</div>
+
+<h1 class="compact">Appendix: 型は、ただの名前じゃない</h1>
 
 <BitWidthDemo />
 
@@ -333,21 +461,14 @@ layout: center
 -->
 
 ---
-layout: center
+class: bleed mid
 ---
 
-# Appendix: C++の下位互換？
+<h1 class="say">Cは「C++から機能を減らした言語」<br>ではない。</h1>
 
-<div class="text-2xl leading-relaxed">
-Cは「C++から機能を減らした言語」ではない。<br>
-CにはCの都合、Cの設計、Cの進化がある。
-</div>
+<p class="lede">CにはCの都合、Cの設計、Cの進化がある。</p>
 
-<div class="mt-8 grid grid-cols-3 gap-4 text-center">
-  <div class="rounded-xl bg-white/10 p-4"><code>restrict</code></div>
-  <div class="rounded-xl bg-white/10 p-4"><code>_Generic</code></div>
-  <div class="rounded-xl bg-white/10 p-4">designated initializer</div>
-</div>
+<p class="punch mono" style="margin-top: 40px"><span class="faint">C99 </span>restrict<span class="faint">　　C11 </span>_Generic<span class="faint">　　C99 </span>designated initializer</p>
 
 <!--
 想定: 本編時間外
