@@ -467,10 +467,15 @@ onMounted(loadWasm);
   color: var(--sig);
 }
 
-/* Fixed height: the slide must not reflow when a result appears mid-talk. */
+/* Fixed height: the slide must not reflow when a result appears mid-talk.
+   The shorter failure state is centred in the reserved space so the gap reads
+   as a held frame rather than as something dangling. */
 .result {
   margin-top: 22px;
   min-height: 98px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .rline {
