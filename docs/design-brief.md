@@ -27,14 +27,20 @@ and:
 
 ## Core story
 
-USB
-→ raw bytes
-→ C exposes representation and boundaries
-→ C compiled to WASM
-→ browser
-→ when C is worth considering
+見える → 持っていける → つながる → when C is worth considering
 
-USB is an accessible example, not the actual subject of the talk.
+Open from the speaker's usual choice: TypeScript for a hackathon.
+Use bytes, object layout, and lifetime to make representation visible;
+run the small C parser as WASM in a browser; show bindings to existing C libraries.
+AI changes the cost of writing code, but not the meaning of memory or the choice of runtime and interfaces.
+
+The main deck has 13 slides, paced for 13:30 plus 1:30 of operating and speaking margin.
+Enumeration, complete field listings, size comparisons, integer conversions,
+and C++ compatibility stay in the appendix.
+
+USB is one case study, not the subject or roadmap. The 18-byte sequence is an
+illustrative fixture with real VID/PID values, not a captured device dump.
+The TypeScript comparison demonstrates abstraction level, not capability or speed.
 
 ## Desired personality
 
@@ -80,7 +86,9 @@ Spend the most design effort on:
 
 1. The raw 18-byte USB descriptor.
 2. The transition from bytes to C interpretation.
-3. The C/WASM live demo.
-4. The final technology-selection takeaway.
+3. Lifetime as a visual sequence and its connection to the AI title.
+4. The C/WASM live demo: normal run first, optional details collapsed.
+5. Bindings / C ABI / existing libraries, with runtime limitations explicit.
+6. The final technology-selection takeaway, recalling all three themes.
 
 Other slides should support these rather than compete with them.

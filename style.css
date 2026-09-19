@@ -1,11 +1,8 @@
 /* ==========================================================================
-   c-lang-lt-slidev — visual system: OFFSET
+   c-lang-lt-slidev — bytes / memory / execution / interfaces
 
-   The deck is laid out on the grammar of a hex dump:
-   a narrow annotation rail on the left (offsets, counts, machine-side marks)
-   and a single content measure on the right. Nothing is put in a box;
-   things are hung off the rail instead. Alignment does the work that
-   borders used to do.
+   The main deck gives each technical object its own composition.
+   The annotation rail is reserved for reference material in the appendix.
 
    Colour carries exactly three meanings and nothing else:
      --sig   amber   the byte / value currently under discussion
@@ -1046,23 +1043,26 @@ body,
 
 .pad {
   display: grid;
-  grid-template-columns: 124px max-content 44px;
+  grid-template-columns: 124px max-content 140px;
   column-gap: 22px;
   row-gap: 22px;
   align-items: center;
 }
 .pad-k {
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   color: var(--ink-3);
 }
 .pad-n {
   font-family: var(--mono);
-  font-size: 26px;
+  font-size: 38px;
   font-weight: 500;
   color: var(--ink-2);
-  text-align: right;
+  text-align: left;
+}
+.pad-n small {
+  font-size: 18px;
 }
 .pad-n.sig {
   color: var(--sig);
@@ -1070,6 +1070,11 @@ body,
 .cellrow.big span {
   width: 42px;
   height: 46px;
+}
+.cellrow.big span.pad {
+  color: var(--bg);
+  text-align: center;
+  font-size: 27px;
 }
 
 /* --- a situation and the thing from this talk that proves it ------------- */
@@ -1108,7 +1113,7 @@ body,
 /* A chapter is a two-word mark on the slide that opens it, not a divider. */
 .chap {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.08em;
   color: var(--sig);
@@ -1119,19 +1124,14 @@ body,
 
 .road {
   display: grid;
-  grid-template-columns: 26px max-content 1fr;
-  column-gap: 30px;
+  grid-template-columns: max-content 1fr;
+  column-gap: 64px;
   row-gap: 0;
-  align-items: baseline;
-}
-.road-n {
-  font-family: var(--mono);
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink-3);
-  padding: 22px 0;
+  align-items: stretch;
 }
 .road-w {
+  display: flex;
+  align-items: center;
   font-size: 40px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -1140,8 +1140,11 @@ body,
   white-space: nowrap;
 }
 .road-x {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--mono);
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 500;
   color: var(--ink-2);
   padding: 22px 0;
@@ -1149,7 +1152,7 @@ body,
 .road > * {
   border-top: 1px solid var(--rule);
 }
-.road > :nth-child(-n + 3) {
+.road > :nth-child(-n + 2) {
   border-top: none;
 }
 
@@ -1162,18 +1165,18 @@ body,
 }
 .zoom-val {
   font-family: var(--mono);
-  font-size: 46px;
+  font-size: 78px;
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: 0.04em;
   color: var(--ink);
 }
 .zoom-name {
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 15px;
   font-weight: 500;
   color: var(--ink-3);
-  margin-top: 4px;
+  margin-top: 12px;
 }
 
 /* --- the same two bytes, read at two abstraction levels ------------------ */
@@ -1182,25 +1185,35 @@ body,
    the difference is what you can see, not what you can do. */
 .vs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 36px;
+  grid-template-columns: 1fr 1.1fr;
+  column-gap: 42px;
   row-gap: 10px;
   align-items: start;
 }
 .vs-k {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.03em;
   color: var(--ink-3);
 }
-.vs-code {
+.slidev-layout .vs-code {
   font-family: var(--mono);
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 500;
   line-height: 1.5;
   color: var(--ink);
   white-space: pre;
+  padding: 0;
+  margin: 18px 0 14px;
+  min-height: 64px;
+}
+.slidev-layout .vs-code code {
+  font-size: inherit;
+}
+.vs-hint {
+  font-size: 16px;
+  color: var(--ink-2);
 }
 .vs-same {
   grid-column: 1 / -1;
@@ -1213,7 +1226,7 @@ body,
   border-top: 1px solid var(--rule);
 }
 .vs-same .lab {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--ink-3);
 }
 .vs-same .val {
@@ -1266,27 +1279,30 @@ body,
 .stack-row {
   display: flex;
   gap: 40px;
-  font-size: 21px;
+  font-size: 25px;
   font-weight: 700;
+  line-height: 1.25;
   color: var(--ink);
 }
 .stack-row.lib {
   font-family: var(--mono);
-  font-size: 19px;
+  font-size: 25px;
   font-weight: 500;
 }
 .stack-how {
-  font-size: 13px;
+  font-size: 17px;
   color: var(--ink-3);
-  padding: 12px 0;
+  line-height: 1.2;
+  padding: 6px 0;
 }
 .stack-abi {
-  width: 100%;
-  padding: 14px 0;
+  width: 65%;
+  padding: 8px 0;
   border-top: 1px solid var(--rule-lit);
   border-bottom: 1px solid var(--rule-lit);
   font-family: var(--mono);
-  font-size: 28px;
+  font-size: 35px;
+  line-height: 1.2;
   font-weight: 500;
   letter-spacing: 0.02em;
   color: var(--sig);
@@ -1296,25 +1312,27 @@ body,
 
 .recall {
   display: grid;
-  grid-template-columns: 116px 1fr max-content;
-  column-gap: 24px;
-  align-items: baseline;
+  grid-template-columns: 145px 1fr;
+  column-gap: 34px;
+  align-items: stretch;
 }
 .recall > * {
-  padding: 17px 0;
+  padding: 14px 0;
   border-top: 1px solid var(--rule);
 }
-.recall > :nth-child(-n + 3) {
+.recall > :nth-child(-n + 2) {
   border-top: none;
   padding-top: 4px;
 }
 .recall-w {
-  font-size: 15px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
   font-weight: 700;
   color: var(--sig);
 }
 .recall-s {
-  font-size: 22px;
+  font-size: 25px;
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -1338,4 +1356,176 @@ body,
 }
 .three span {
   color: var(--sig);
+}
+
+/* A field becomes a value, then a recognizable name. One reveal only. */
+.decode {
+  display: grid;
+  justify-items: center;
+}
+.decode-input {
+  display: grid;
+  grid-template-columns: 110px 110px;
+  gap: 0 40px;
+  text-align: center;
+  font: 500 68px/1.2 var(--mono);
+}
+.decode-input small {
+  font: 400 15px/1.8 var(--sans);
+  color: var(--ink-2);
+}
+.decode-cross {
+  margin: 8px 0;
+}
+.decode-value {
+  font: 500 64px/1.15 var(--mono);
+  color: var(--wide);
+}
+.decode-caption {
+  font-size: 16px;
+  color: var(--ink-2);
+  margin-top: 12px;
+}
+.decode-payoff {
+  display: grid;
+  justify-items: center;
+  line-height: 1.35;
+  margin-top: 8px;
+}
+.decode-payoff > span {
+  font-size: 22px;
+  color: var(--ink-3);
+}
+.decode-payoff strong {
+  font-size: 43px;
+  color: var(--sig);
+}
+
+/* Lifetime is a temporal boundary, not a quiz about a function. */
+.lifetime {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 38px;
+  margin-top: 18px;
+  align-items: center;
+}
+.slidev-layout .lifetime-code {
+  font: 500 20px/1.85 var(--mono);
+  padding: 0;
+  margin: 0;
+}
+.slidev-layout .lifetime-code code {
+  font-size: inherit;
+}
+.lifetime-flow {
+  font-size: 17px;
+}
+.lifetime-flow > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.life-label {
+  white-space: nowrap;
+}
+.life-memory {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font: 500 17px var(--mono);
+}
+.life-memory b {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--wide);
+  font-weight: 500;
+}
+.life-memory b:first-of-type {
+  margin-left: 8px;
+}
+.life-exit {
+  padding: 16px 0;
+  color: var(--ink-2);
+}
+.life-memory.expired {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+.life-memory.expired b {
+  border: 1px dashed var(--err);
+}
+.lifetime-flow .life-pointer {
+  display: block;
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+/* Two compilation destinations. The browser path is the demonstrated one. */
+.portability {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 10px;
+  column-gap: 48px;
+}
+.port-source {
+  grid-column: 1;
+  font: 500 34px var(--mono);
+}
+.port-source small,
+.port-native small {
+  display: block;
+  font: 400 16px/1.6 var(--sans);
+  color: var(--ink-2);
+  margin-top: 8px;
+}
+.port-native {
+  grid-column: 2;
+  font: 500 27px var(--mono);
+  color: var(--ink-2);
+  padding-top: 5px;
+}
+.port-native > span {
+  margin-right: 18px;
+}
+.port-browser {
+  grid-column: 1;
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+}
+.port-browser > span {
+  font-size: 24px;
+  color: var(--ink-3);
+  padding-left: 14px;
+}
+.port-browser > strong {
+  font: 500 34px var(--mono);
+}
+.port-browser > strong:last-child {
+  color: var(--sig);
+}
+.stack-row small {
+  display: block;
+  font: 400 15px/1.5 var(--sans);
+  color: var(--ink-2);
+  margin-top: 5px;
+}
+.recall-s small {
+  display: block;
+  font: 400 15px/1.5 var(--sans);
+  color: var(--ink-2);
+  margin-top: 5px;
+}
+.slidev-layout h1.closing-title {
+  font-size: 48px;
+  margin-bottom: 22px;
+}
+.slidev-layout.demo-slide {
+  padding-top: 26px;
+}
+.demo-slide .chap {
+  margin-bottom: 8px;
 }
