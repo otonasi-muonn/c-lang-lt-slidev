@@ -17,3 +17,8 @@ dist/
 # Local verification tooling leftovers
 .playwright-cli/
 wasm/node_modules/
+
+# Locally vendored Anthropic skills
+.claude/skills/frontend-design/
+.claude/skills/webapp-testing/
+.claude/skills/skill-creator/
