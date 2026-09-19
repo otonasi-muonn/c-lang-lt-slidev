@@ -1006,10 +1006,10 @@ body,
 }
 .swap-row {
   display: grid;
-  grid-template-columns: repeat(2, 92px);
-  column-gap: 40px;
+  grid-template-columns: repeat(2, 98px);
+  column-gap: 42px;
   font-family: var(--mono);
-  font-size: 46px;
+  font-size: 50px;
   font-weight: 500;
   line-height: 1.1;
   text-align: center;
@@ -1022,7 +1022,7 @@ body,
 }
 .swap-val {
   font-family: var(--mono);
-  font-size: 48px;
+  font-size: 50px;
   font-weight: 500;
   line-height: 1.2;
   color: var(--wide);
@@ -1098,4 +1098,244 @@ body,
 .btn.lead.on {
   color: var(--sig);
   border-color: var(--sig);
+}
+
+/* ==========================================================================
+   Third pass: the deck is now about C, with USB as one case study.
+   Primitives for the three chapters — 見える / 持っていける / つながる.
+   ========================================================================== */
+
+/* A chapter is a two-word mark on the slide that opens it, not a divider. */
+.chap {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--sig);
+  margin-bottom: 12px;
+}
+
+/* --- the only roadmap: three words, each with the artifact it becomes ---- */
+
+.road {
+  display: grid;
+  grid-template-columns: 26px max-content 1fr;
+  column-gap: 30px;
+  row-gap: 0;
+  align-items: baseline;
+}
+.road-n {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-3);
+  padding: 22px 0;
+}
+.road-w {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  padding: 20px 0;
+  white-space: nowrap;
+}
+.road-x {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-2);
+  padding: 22px 0;
+}
+.road > * {
+  border-top: 1px solid var(--rule);
+}
+.road > :nth-child(-n + 3) {
+  border-top: none;
+}
+
+/* --- pulling two bytes out of eighteen ---------------------------------- */
+
+.zoom {
+  display: grid;
+  justify-items: center;
+  margin-top: 18px;
+}
+.zoom-val {
+  font-family: var(--mono);
+  font-size: 46px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.zoom-name {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+/* --- the same two bytes, read at two abstraction levels ------------------ */
+
+/* Both columns get identical weight and the answer is a single shared row:
+   the difference is what you can see, not what you can do. */
+.vs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 36px;
+  row-gap: 10px;
+  align-items: start;
+}
+.vs-k {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--ink-3);
+}
+.vs-code {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: pre;
+}
+.vs-same {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.vs-same .lab {
+  font-size: 15px;
+  color: var(--ink-3);
+}
+.vs-same .val {
+  font-family: var(--mono);
+  font-size: 34px;
+  font-weight: 500;
+  color: var(--wide);
+}
+
+/* --- one core, moved to another environment ----------------------------- */
+
+.chain {
+  display: grid;
+  justify-items: start;
+  row-gap: 0;
+}
+.chain-node {
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.chain-node .sz {
+  font-size: 16px;
+  color: var(--ink-3);
+  margin-left: 14px;
+}
+.chain-arrow {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0 10px 8px;
+  font-family: var(--mono);
+  font-size: 20px;
+  color: var(--ink-3);
+}
+.chain-arrow .how {
+  font-size: 13px;
+}
+
+/* --- other languages reaching a C library ------------------------------- */
+
+.stack {
+  display: grid;
+  justify-items: center;
+  row-gap: 0;
+  text-align: center;
+}
+.stack-row {
+  display: flex;
+  gap: 40px;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.stack-row.lib {
+  font-family: var(--mono);
+  font-size: 19px;
+  font-weight: 500;
+}
+.stack-how {
+  font-size: 13px;
+  color: var(--ink-3);
+  padding: 12px 0;
+}
+.stack-abi {
+  width: 100%;
+  padding: 14px 0;
+  border-top: 1px solid var(--rule-lit);
+  border-bottom: 1px solid var(--rule-lit);
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--sig);
+}
+
+/* --- the three, coming back as conditions ------------------------------- */
+
+.recall {
+  display: grid;
+  grid-template-columns: 116px 1fr max-content;
+  column-gap: 24px;
+  align-items: baseline;
+}
+.recall > * {
+  padding: 17px 0;
+  border-top: 1px solid var(--rule);
+}
+.recall > :nth-child(-n + 3) {
+  border-top: none;
+  padding-top: 4px;
+}
+.recall-w {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sig);
+}
+.recall-s {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.recall-t {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* --- the three, coming back once more at the close ---------------------- */
+
+.three {
+  display: flex;
+  gap: 26px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.three span {
+  color: var(--sig);
 }

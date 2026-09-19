@@ -23,10 +23,10 @@
       </div>
     </div>
 
-    <div class="k rail-step">
+    <div class="k rail-step" :class="{ idle: returnCode === null }">
       <span>call</span><span class="addr">len={{ requestedLength }}</span>
     </div>
-    <div class="call">
+    <div class="call" :class="{ idle: returnCode === null }">
       <span class="callsrc" :class="returnClass"
         >{{ calledFunction }}<span class="t"> → </span
         >{{ returnCode === null ? "?" : returnCode }}</span
@@ -47,7 +47,7 @@
       <span class="engine" :class="engineClass">{{ engineLabel }}</span>
     </div>
 
-    <div class="k rail-step">
+    <div class="k rail-step" :class="{ idle: returnCode === null }">
       <span>out</span><span class="addr">{{ outputAddress }}</span>
     </div>
     <!-- Result. One block, fixed height, so the slide never reflows. -->
@@ -231,8 +231,7 @@ const runSummary = computed(() => {
   if (ranWith.value === "js") {
     return `WASM で実行できず、純 JS の同等ロジックで表示中${fallbackReason.value}`;
   }
-  if (returnCode.value === null)
-    return "JS が生バイトを linear memory へ書き、C がそれを読んで結果を書き戻す。";
+  if (returnCode.value === null) return "";
   if (returnCode.value === 18) {
     return isBigEndian.value
       ? "同じ 18 バイト。読み方を変えただけで、別のデバイスになる。"
@@ -450,6 +449,11 @@ onMounted(loadWasm);
   color: var(--ink-3);
 }
 
+/* Reserved, not shown: the slide must not reflow on the first click, and the
+   first thing to understand is "the C ran", not the pointers. */
+.idle {
+  visibility: hidden;
+}
 .call {
   font-family: var(--mono);
   font-size: 15px;
