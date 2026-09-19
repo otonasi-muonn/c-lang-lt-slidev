@@ -1,10 +1,611 @@
+/* ==========================================================================
+   c-lang-lt-slidev — visual system: OFFSET
+
+   The deck is laid out on the grammar of a hex dump:
+   a narrow annotation rail on the left (offsets, counts, machine-side marks)
+   and a single content measure on the right. Nothing is put in a box;
+   things are hung off the rail instead. Alignment does the work that
+   borders used to do.
+
+   Colour carries exactly three meanings and nothing else:
+     --sig   amber   the byte / value currently under discussion
+     --wide  cyan    a multi-byte field, i.e. endianness applies here
+     --err   red     C returned an error
+   Everything not covered by those three is neutral ink.
+
+   Radius is 0 everywhere. Memory is not rounded.
+   Design canvas is 900x506 (see canvasWidth in slides.md); all px below are
+   canvas px and are scaled by 1.42 at the 1280x720 presentation size.
+   ========================================================================== */
+
 :root {
-  --slidev-code-font-size: 16px;
-  --slidev-code-line-height: 25px;
-  --slidev-code-padding: 12px;
+  --bg: #05080e;
+  --bg-lift: #0b111b;
+  --ink: #e9edf3;
+  --ink-2: #98a2b2;
+  --ink-3: #6b7585;
+  --rule: #1a212c;
+  --rule-lit: #2c384a;
+  --sig: #ffb000;
+  --wide: #58c4f0;
+  --err: #ff6b5a;
+
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --sans: "Noto Sans JP", system-ui, sans-serif;
+
+  --rail: 52px;
+  --rail-gap: 16px;
+
+  --slidev-code-font-size: 15px;
+  --slidev-code-line-height: 1.62;
+  --slidev-code-padding: 0;
 }
 
+html,
+body,
+#app,
+.slidev-page {
+  background: var(--bg);
+}
+
+/* --------------------------------------------------------------- the page */
+
 .slidev-layout {
-  font-size: 1.28rem;
+  height: 100%;
+  padding: 32px 40px 28px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.72;
+  font-feature-settings: "palt" 1;
+
+  display: grid;
+  grid-template-columns: var(--rail) 1fr;
+  column-gap: var(--rail-gap);
+  align-content: start;
+  row-gap: 0;
+}
+
+/* Content lives in the measure; only .k hangs in the rail. */
+.slidev-layout > * {
+  grid-column: 2;
+}
+.slidev-layout > .k {
+  grid-column: 1;
+}
+
+/* Full-bleed register: title, the 18 bytes, the closing. The rail is
+   dropped rather than left empty, so the breakout reads as a change. */
+.slidev-layout.bleed {
+  grid-template-columns: 1fr;
+  padding: 42px 40px 38px;
+}
+.slidev-layout.bleed > *,
+.slidev-layout.bleed > .k {
+  grid-column: 1;
+}
+
+/* --------------------------------------------------------------- headings */
+
+.slidev-layout h1 {
+  margin: 0 0 18px;
+  padding: 0;
+  font-family: var(--sans);
+  font-size: 33px;
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* A statement beat: the heading is the whole slide, so it is set to carry it. */
+.slidev-layout h1.say {
+  font-size: 46px;
+  line-height: 1.34;
+  letter-spacing: -0.03em;
+  margin-bottom: 30px;
+}
+
+.slidev-layout h2 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+}
+
+.slidev-layout h1 code,
+.slidev-layout h2 code {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.92em;
+  letter-spacing: -0.01em;
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.slidev-layout p {
+  margin: 0 0 14px;
+  max-width: 34em;
+}
+.slidev-layout p:last-child {
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------- inline code */
+
+/* The typography preset wraps every inline code span in a grey pill. This
+   deck has no pills: code is set in the code face and left on the page. */
+.slidev-layout code,
+.slidev-layout :not(pre) > code {
+  font-family: var(--mono);
+  font-size: 0.94em;
+  font-weight: 500;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  color: inherit;
+}
+.slidev-layout pre {
+  background: none !important;
+  border-radius: 0 !important;
+}
+
+/* -------------------------------------------------------------- rail marks */
+
+.k {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  text-align: right;
+  white-space: nowrap;
+  padding-top: 0.42em;
+}
+.k.sig {
+  color: var(--sig);
+}
+.k.big {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  padding-top: 0.06em;
+}
+
+/* --------------------------------------------------------------- utilities */
+
+.dim {
+  color: var(--ink-2);
+}
+.faint {
+  color: var(--ink-3);
+}
+.sig {
+  color: var(--sig);
+}
+.wide {
+  color: var(--wide);
+}
+.err {
+  color: var(--err);
+}
+.mono {
+  font-family: var(--mono);
+  font-weight: 500;
+}
+.slidev-layout .note {
+  font-size: 13px;
   line-height: 1.7;
+  color: var(--ink-3);
+  max-width: 44em;
+}
+.slidev-layout .lede {
+  font-size: 21px;
+  line-height: 1.62;
+  color: var(--ink);
+  max-width: 30em;
+}
+.gap-s {
+  height: 12px;
+}
+.gap-m {
+  height: 22px;
+}
+.gap-l {
+  height: 36px;
+}
+
+/* ------------------------------------------------------------- byte fields */
+
+/* 18 equal columns, so any ruler placed under the row aligns exactly. */
+.bytes {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  column-gap: 0.3em;
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.24;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: var(--ink);
+}
+.bytes > span {
+  padding: 0.1em 0;
+}
+.bytes.hero {
+  font-size: 30px;
+}
+.bytes.small {
+  font-size: 17px;
+}
+.bytes .off {
+  color: var(--ink-3);
+}
+.bytes .sig {
+  color: var(--sig);
+}
+.bytes .wide {
+  color: var(--wide);
+}
+
+/* The ruler is a measuring instrument, not a divider: a hairline baseline
+   under every byte, with real offsets called out where they matter. */
+.ruler {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  column-gap: 0.3em;
+  margin-top: 9px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--ink-3);
+}
+.ruler > span {
+  border-top: 1px solid var(--rule);
+  padding-top: 6px;
+  min-height: 1.5em;
+}
+.ruler > span.t {
+  border-top-color: var(--rule-lit);
+  color: var(--ink-2);
+}
+.ruler > span.tsig {
+  border-top-color: var(--sig);
+  color: var(--sig);
+}
+.ruler > span.twide {
+  border-top-color: var(--wide);
+  color: var(--wide);
+}
+
+/* ---------------------------------------------------------------- C source */
+
+/* Code sits on the page. No box, and no shiki rainbow: only the tokens that
+   are actually load-bearing in the talk get colour. */
+.src {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.66;
+  color: var(--ink);
+  white-space: pre;
+  overflow: visible;
+}
+.src .t {
+  color: var(--ink-3);
+}
+.src .sig {
+  color: var(--sig);
+}
+.src .wide {
+  color: var(--wide);
+}
+
+/* ----------------------------------------------------------- listed things */
+
+/* A stanza: several statements that are siblings, not a card grid. */
+.stanza {
+  display: grid;
+  row-gap: 18px;
+  font-size: 28px;
+  line-height: 1.42;
+  letter-spacing: -0.01em;
+}
+.stanza.tight {
+  row-gap: 9px;
+  font-size: 21px;
+}
+.stanza > li,
+.stanza > div {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* A two-track list: the rail names the thing, the measure explains it.
+   Replaces every "title + body inside a bordered card" in the deck. */
+.pairs {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 26px;
+  row-gap: 16px;
+  align-items: baseline;
+}
+.pairs > dt {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.pairs > dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.66;
+  color: var(--ink-2);
+  max-width: 30em;
+}
+
+/* --------------------------------------------------------------- data grid */
+
+/* Tables are alignment plus one hairline under the header. Nothing else. */
+.slidev-layout .data,
+.slidev-layout .data tr,
+.slidev-layout .data th,
+.slidev-layout .data td {
+  border-color: var(--rule);
+}
+.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.data th {
+  padding: 0 0 7px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--rule);
+}
+.data td {
+  padding: 9px 0;
+  vertical-align: baseline;
+  border-bottom: 1px solid var(--rule);
+}
+.data tr:last-child td {
+  border-bottom: none;
+}
+.data td + td,
+.data th + th {
+  padding-left: 22px;
+}
+.data .num {
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------- the demo shell */
+
+/* The demo is the one slide that genuinely represents an interface, so it is
+   the one place in the deck allowed a surface. */
+.shell {
+  background: var(--bg-lift);
+  border: 1px solid var(--rule);
+  padding: 14px 16px;
+}
+.btn {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink-2);
+  background: none;
+  border: 1px solid var(--rule-lit);
+  border-radius: 0;
+  padding: 9px 13px;
+  cursor: pointer;
+  transition:
+    color 120ms ease,
+    border-color 120ms ease;
+}
+.btn:hover {
+  color: var(--ink);
+  border-color: var(--ink-3);
+}
+.btn.on {
+  color: var(--sig);
+  border-color: var(--sig);
+}
+
+/* ---------------------------------------------------------------- presence */
+
+.slidev-layout a {
+  color: var(--ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-lit);
+}
+
+::selection {
+  background: var(--sig);
+  color: var(--bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------- vertical placement modes */
+
+.slidev-layout.mid {
+  align-content: center;
+}
+.slidev-layout.spread {
+  align-content: space-between;
+}
+
+/* ------------------------------------------------------- annotated C source */
+
+/* One grid row per line of C, so the byte offset can hang in the rail beside
+   the field it belongs to and the gloss can sit out to the right: the same
+   three columns a hex dump has. */
+.slidev-layout .cl {
+  display: grid;
+  grid-template-columns: 268px 1fr;
+  column-gap: 24px;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19px;
+  color: var(--ink);
+}
+.slidev-layout .cl > .s {
+  white-space: pre;
+}
+.slidev-layout .cl > .s .t {
+  color: var(--ink-3);
+}
+.slidev-layout .cl > .g {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.slidev-layout .cl > .g.wide {
+  color: var(--wide);
+}
+.slidev-layout .cl > .g.sig {
+  color: var(--sig);
+}
+.slidev-layout .cl > .g .jp {
+  font-family: var(--sans);
+  font-weight: 400;
+}
+
+/* Rail marks that sit beside a line of code share its baseline grid. */
+.k.cl {
+  display: block;
+  padding-top: 0;
+  font-size: 12px;
+  line-height: 19px;
+  color: var(--ink-3);
+}
+.k.cl.end {
+  color: var(--ink-2);
+}
+
+/* A compact heading for slides whose body needs the height. */
+.slidev-layout h1.compact {
+  font-size: 26px;
+  margin-bottom: 14px;
+}
+
+/* ------------------------------------------------------- multi-track slides */
+
+.slidev-layout .cols {
+  display: grid;
+  grid-template-columns: 1.06fr 0.94fr;
+  column-gap: 34px;
+  align-items: start;
+}
+.slidev-layout .cols.code-left {
+  grid-template-columns: 0.94fr 1.06fr;
+}
+
+/* enumeration is an actual time sequence, so it is actually numbered. */
+.steps {
+  display: grid;
+  grid-template-columns: 15px 1fr;
+  column-gap: 11px;
+  row-gap: 10px;
+  align-items: baseline;
+}
+.steps > .n {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  text-align: right;
+}
+.steps > .s {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.42;
+  color: var(--ink);
+}
+.steps > .s .sub {
+  display: block;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+.steps > .s .sub code {
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+.tree {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.74;
+  color: var(--ink);
+  white-space: pre;
+  margin: 0;
+}
+.tree .t {
+  color: var(--ink-3);
+}
+
+/* The one line a slide exists to leave behind. */
+.slidev-layout .punch {
+  font-size: 22px;
+  line-height: 1.52;
+  color: var(--ink);
+  max-width: none;
+}
+.slidev-layout .punch code {
+  font-size: 0.9em;
+}
+
+.qs {
+  display: grid;
+  row-gap: 14px;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+/* Fine print that belongs beside a diagram, not a list the audience reads. */
+.qs.fine {
+  row-gap: 7px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
 }
