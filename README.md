@@ -60,6 +60,8 @@ python output/playwright/qa_deck.py
 ```
 
 スクリーンショットと `qa-results.json` は `output/playwright/` に出る。
+このディレクトリはローカルの `.git/info/exclude` で除外されているため、
+QAハーネス自体はコミットされていない。
 
 ## オンライン発表メモ
 

@@ -79,7 +79,7 @@ clicks: 1
 </div>
 
 <!--
-想定: 30秒
+想定: 28秒
 このframeで言いたいこと:
 実装コストが下がったぶん、技術選定のほうが面白くなった、という発表者の立場。
 
@@ -105,7 +105,7 @@ clicks: 1
 <p class="punch" v-click="1">assemblyより書きやすく、<br>それでいて機械に近い操作も書ける。<span class="dim">そこが出発点。</span></p>
 
 <!--
-想定: 40秒
+想定: 35秒
 このframeで言いたいこと:
 「古い」「危険」「組み込み」という評判から入らない。まずCが何のために作られたか。
 
@@ -136,7 +136,7 @@ class: bleed mid
 <p class="note" style="margin-top: 16px">同じレポートで、AI関連リポジトリではPythonが引き続き優勢。</p>
 
 <!--
-想定: 35秒
+想定: 30秒
 このframeで言いたいこと:
 TypeScriptを知らない人がいる前提で、一言だけ紹介する。
 そして「ハッカソンのWeb開発で現代的な高水準言語を選ぶ例」として置く。
@@ -203,7 +203,7 @@ printf(<span class="str">"%02X %02X %02X %02X\n"</span>, p[0], p[1], p[2], p[3])
 </div>
 
 <!--
-想定: 60秒
+想定: 55秒
 このframeで言いたいこと:
 値そのものと、memory上の表現は別だ、ということ。
 0x12345678 は「どの言語でも同じ値」。並び方は環境が決めている。
@@ -270,7 +270,7 @@ clicks: 2
 <p class="note" style="margin-top: 20px">実機のダンプではなく、Device Descriptorの形式に沿って実在するVID / PIDで構成した例。</p>
 
 <!--
-想定: 50秒
+想定: 48秒
 このframeで言いたいこと:
 USBを教えるのではない。「さっき覚えたことだけで、本物の仕様に沿ったbyte列が読めた」という成功体験。
 
@@ -314,7 +314,7 @@ class: bleed mid
 <p class="punch" style="margin-top: 26px">能力の差ではなく、<br>自分が触っている抽象度の差。</p>
 
 <!--
-想定: 35秒
+想定: 32秒
 このframeで言いたいこと:
 Cにしかできない、とは言わない。むしろ「これだけならTSの方が楽」と自分から言う。
 
@@ -349,13 +349,13 @@ clicks: 1
 
 <div class="evidence" v-click="1">
 <div class="evidence-out"><span>wire   : 7</span><span>sizeof : 8</span></div>
-<div class="evidence-src">USB Endpoint Descriptorと、対応する構造体。gcc 13.3.0 / x86_64-linux-gnu</div>
+<div class="evidence-src">USB Endpoint Descriptorと、対応する構造体。gcc 13.3.0 / x86_64-linux-gnu。<br>サイズもpaddingもABI依存で、いつも8になるわけではない。</div>
 </div>
 
 <p class="punch" v-click="1" style="margin-top: 22px">線の上の長さと、memory上の大きさは<br>同じとは限らない。</p>
 
 <!--
-想定: 35秒
+想定: 32秒
 このframeで言いたいこと:
 「線の上とmemory上は同じとは限らない」。それ一つだけ。
 
@@ -394,7 +394,7 @@ clicks: 1
 <p class="punch" v-click="1" style="margin-top: 20px">AIがCを書けるようになっても、<br>memory・lifetime・境界の意味は消えない。</p>
 
 <!--
-想定: 55秒
+想定: 50秒
 このframeで言いたいこと:
 クイズにしない。最初から全部見せて、時間の流れとして案内する。
 buf は関数の中だけの入れ物。出た瞬間にその範囲は終わる。なのに返しているのは住所だけ。
@@ -435,7 +435,7 @@ CISAなども、memory-safe languagesへの移行ロードマップを公開す�
 <p class="punch">だから「これからは何でもCで書こう」<br>とは、言いません。</p>
 
 <!--
-想定: 40秒
+想定: 38秒
 このframeで言いたいこと:
 Cのmemory unsafetyを「難しいけど楽しい」で終わらせない。重大なリスクとして正面から置く。
 さっきの lifetime が、そのまま use-after-free の話につながっている。
@@ -459,7 +459,7 @@ class: bleed mid
 <p class="lede">ここまでは「Cって面白いね」の話。<br>ここからが今日の本題です。</p>
 
 <!--
-想定: 25秒
+想定: 20秒
 このframeで言いたいこと:
 問いを切り替える。「面白い」で終わらせない、という宣言。
 
@@ -494,7 +494,7 @@ clicks: 2
 <p class="punch" v-click="2">この二つは、全然ちがう話。<br><span class="dim">混ぜると「Cを使う」がいきなり重く見える。</span></p>
 
 <!--
-想定: 40秒
+想定: 35秒
 このframeで言いたいこと:
 今日の構造。ここを混ぜないことが、最後の「候補外にしないで」を成立させる。
 
@@ -514,7 +514,7 @@ class: bleed demo-slide
 <ToyWasmDemo />
 
 <!--
-想定: 50秒
+想定: 45秒
 このframeで言いたいこと:
 目的はただ一つ。「CからコンパイルしたWASM functionを、BrowserのJavaScript側から呼べる」
 というmental modelを作ること。それ以上のことは言わない。
@@ -544,7 +544,7 @@ class: bleed demo-slide
 <UsbDescriptorDemo />
 
 <!--
-想定: 55秒（正常系を主役に。追加操作は最大1つまで）
+想定: 50秒（正常系を主役に。追加操作は最大1つまで）
 このframeで言いたいこと:
 前半で人間が読んだ 6D 04 → 0x046D を、今度は C から compile した WASM が返す。
 USBの新しい説明は一切足さない。伏線回収だけ。
@@ -589,7 +589,7 @@ clicks: 1
 <p class="note" v-click="1" style="margin-top: 18px">これはSQLite自身による説明であって、「Cが全言語より優れている」証明ではない。<br>同じページには、条件が揃えばRustへの書き換えも検討しうる、とも書かれている。</p>
 
 <!--
-想定: 50秒
+想定: 45秒
 このframeで言いたいこと:
 単なる有名Cライブラリ一覧にしない。一つのケースを追う。
 「長寿命libraryがなぜCを選び続けているか」というcase study。
@@ -604,6 +604,9 @@ Stability: 「old and boring」であること自体を利点として挙げて�
 「no other language claims to be faster than C」という強い書き方があるが、
 今日はそれを自分の主張として借りない。
 出典: sqlite.org/whyc.html
+
+2例目を聞かれたら口頭で: zlib も C。Python の zlib モジュールも Node の zlib も、
+その下は同じ C の実装。ただし画面には出さない。有名Cライブラリ一覧にはしない。
 -->
 
 ---
@@ -624,7 +627,7 @@ class: bleed mid
 <p class="punch">「CだけでブラウザのSQLiteが完結している」<br>わけではない。</p>
 
 <!--
-想定: 40秒
+想定: 35秒
 このframeで言いたいこと:
 CのcoreがWebへ運ばれている、という事実。ただし正確に。
 sqlite3.c をそのままブラウザへ放り込んでいるわけではない。
@@ -666,7 +669,7 @@ clicks: 1
 <p class="punch" v-click="1">「全部C ABI」ではない。<br><span class="dim">Cは共通の接点になりやすい、くらいの話。</span></p>
 
 <!--
-想定: 45秒
+想定: 40秒
 このframeで言いたいこと:
 Native interop と WASM を「全部C ABI」の一語で統一しない。仕組みは別々。
 
@@ -692,7 +695,7 @@ class: bleed mid
 <p class="lede">SQLiteを使うPythonのコードに、Cは1行も出てこない。<br>それでも、動いているのはCで書かれたcoreです。</p>
 
 <!--
-想定: 25秒
+想定: 20秒
 このframeで言いたいこと:
 「1: 既存C資産を利用する」側の結論。ここで一区切り。
 
@@ -724,7 +727,7 @@ clicks: 1
 <p class="punch" v-click="1">条件が揃えば候補になる、というだけ。<br><span class="dim">Rust・C++・Goが適切な場面も当然ある。</span></p>
 
 <!--
-想定: 40秒
+想定: 38秒
 このframeで言いたいこと:
 「既存資産を使う理由」と「新しく書く理由」は別、ということを最後まで分けきる。
 
@@ -752,7 +755,7 @@ clicks: 2
 </div>
 
 <!--
-想定: 40秒
+想定: 38秒
 このframeで言いたいこと:
 最初に分類を配らなかったのは、ここで初めて名前を付けるため。
 体験したものを、あとから整理する。
@@ -778,7 +781,7 @@ class: bleed mid
 <p class="punch">それでも、機械・OS・device・protocolに近づくとき、<br>既存のC資産につながるとき、<br>小さいcoreを複数の環境へ持っていくとき。</p>
 
 <!--
-想定: 30秒
+想定: 28秒
 このframeで言いたいこと:
 最後の主張を成立させるために、先に譲るところを全部譲る。
 ここを飛ばすと「Cで全部書け」に聞こえる。
@@ -852,7 +855,7 @@ class: bleed spread
 </div>
 
 <!--
-想定: 35秒
+想定: 33秒
 このframeで言いたいこと:
 冒頭と同じ18バイト。今度は offset 8-9 だけに色がついている。
 冒頭に置いたAIの立場を、ここで閉じる。
@@ -861,8 +864,10 @@ class: bleed spread
 「実装の障壁が変化しても、どの抽象度・どの既存資産を採用するかは技術選定として残る」。
 だから、必要なときはCも選択肢へ戻してほしい。ありがとうございました。
 
-本編の想定は約14分。残りは操作・間・質疑用。Appendixは含めない。
-押していたら削る候補: スライド14の追加操作、スライド19のコスト行の読み上げ。
+通しの想定は 13分40秒。15分枠に対して約1分20秒の余裕。Appendixは含めない。
+追加操作（スライド15の「追加で試す」を全部やる、スライド14で値を変えて2回押す）を
+入れると 14分40秒まで伸びる。押していたらそこから削る。
+それでも足りないときの削り順: スライド19 → スライド22の3行目 → スライド20のコスト行。
 -->
 
 ---
