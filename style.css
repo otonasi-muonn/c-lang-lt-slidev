@@ -197,7 +197,7 @@ body,
   font-weight: 500;
 }
 .slidev-layout .note {
-  font-size: 13px;
+  font-size: 20px;
   line-height: 1.7;
   color: var(--ink-3);
   max-width: 44em;
@@ -209,7 +209,7 @@ body,
   color: var(--ink-2);
 }
 .slidev-layout .lede {
-  font-size: 21px;
+  font-size: 24px;
   line-height: 1.62;
   color: var(--ink);
   max-width: 30em;
@@ -980,9 +980,9 @@ body,
   padding-right: 30px;
   padding-top: 25px;
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 24px;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.0em;
   color: var(--ink-3);
   white-space: nowrap;
 }
