@@ -97,7 +97,7 @@ clicks: 1
 # そもそも、C言語とは
 
 <div class="facts">
-<div class="facts-k">成立</div><div class="facts-v">1969 – 1973　<span class="dim">Dennis M. Ritchie</span><span class="facts-s">Bell Labs。最も創造的だったのは1972年ごろ</span></div>
+<div class="facts-k">成立</div><div class="facts-v">1969 – 1973　<span class="dim">Dennis M. Ritchie</span><span class="facts-s">Bell Labs。最も創造的だったのは1972年</span></div>
 <div class="facts-k">用途</div><div class="facts-v">初期Unixのための <span class="wide">system implementation language</span><span class="facts-s">OSそのものを書くための言語として発展した</span></div>
 <div class="facts-k">実行</div><div class="facts-v">コンパイルして、そのまま動く<span class="facts-s">間にGCも仮想マシンも入らない</span></div>
 </div>
@@ -145,7 +145,7 @@ TypeScriptを知らない人がいる前提で、一言だけ紹介する。
 
 C vs TS の宗教戦争にしない。速度比較もしない。
 「自分もWebアプリならTSを使う」を必ず言う。ここで立場を明示しておくと最後が効く。
-出典: GitHub Octoverse 2025 (2025-10-30公開)
+出典: GitHub Octoverse 2025 (2025-10-28公開、対象期間 2024-09-01〜2025-08-31)
 -->
 
 ---
@@ -287,7 +287,13 @@ USBを教えるのではない。「さっき覚えたことだけで、本物�
 - 14フィールドの一覧
 どれも Appendix にある。聞かれたときだけ開く。
 画面のbyte列は実機dumpではない。誤って「実機から取得したデータ」と言わない。
-出典: torvalds/linux drivers/hid/hid-ids.h (USB_VENDOR_ID_LOGITECH 0x046d)
+出典: torvalds/linux drivers/hid/hid-ids.h
+  USB_VENDOR_ID_LOGITECH 0x046d / USB_DEVICE_ID_LOGITECH_UNIFYING_RECEIVER 0xc52b
+
+聞かれたら: offset 7 の bMaxPacketSize0 が 8 なのは full-speed 動作の値。
+high-speed で動くデバイスは §9.6.1 により 64 でなければならない。
+実機の 046d:c52b は 32 を返す。だからこれは実機ダンプではなく、
+仕様に沿って組んだ説明用の例。
 -->
 
 ---
@@ -335,6 +341,8 @@ class: bleed mid
 clicks: 1
 ---
 
+<div class="chap">近いことの代償</div>
+
 # 近いと、こういうものも見えてしまう
 
 <div class="pad" style="margin-top: 20px">
@@ -351,7 +359,7 @@ clicks: 1
 
 <div class="evidence" v-click="1">
 <div class="evidence-out"><span>wire   : 7</span><span>sizeof : 8</span></div>
-<div class="evidence-src">USB Endpoint Descriptorと、対応する構造体。gcc 13.3.0 / x86_64-linux-gnu。<br>サイズもpaddingもABI依存で、いつも8になるわけではない。</div>
+<div class="evidence-src">USB Endpoint Descriptorの6フィールドをそのまま並べた構造体。gcc 13.3.0 / x86_64-linux-gnu。<br>サイズもpaddingもABI依存で、いつも8になるわけではない。</div>
 </div>
 
 <p class="punch" v-click="1" style="margin-top: 22px">wire 上の長さと、memory 上の大きさは<br>同じとは限らない。</p>
@@ -428,11 +436,12 @@ class: bleed mid
 <div>
 <div class="risk-txt">Chromeの高深刻度セキュリティバグのうち、<br>C/C++のmemory unsafetyが原因のもの。</div>
 <div class="risk-note">その半分が use-after-free<span>さっき見た、あの寿命の話</span></div>
+<div class="risk-scope">2015年以降の高・重大深刻度912件を対象にした、Chromium 自身の集計</div>
 </div>
 </div>
 
 <div class="risk-2">
-CISAなども、memory-safe languagesへの移行ロードマップを公開するよう推奨している。
+CISAをはじめとする各国機関は、memory safetyの脆弱性をどう無くすかを示すロードマップの公開を推奨している。
 </div>
 
 <p class="punch">だから「これからは何でもCで書こう」<br>とは、言いません。</p>
@@ -625,8 +634,8 @@ class: bleed mid
 # ブラウザで動くSQLiteの中身
 
 <div class="arch">
-<div class="arch-row"><span class="arch-a">sqlite3.c</span><span class="arch-g">canonicalなC実装（amalgamation）</span></div>
-<div class="arch-row"><span class="arch-a">+ sqlite3-wasm.c</span><span class="arch-g">WASM固有のサポートを足すC</span></div>
+<div class="arch-row"><span class="arch-a">sqlite3-wasm.c</span><span class="arch-g">WASM固有のサポートを足す、唯一コンパイルされるCファイル</span></div>
+<div class="arch-row sub"><span class="arch-a">└ #include "sqlite3.c"</span><span class="arch-g">canonicalなC実装（amalgamation）</span></div>
 <div class="arch-ar">↓　<span class="arch-g">Emscripten</span></div>
 <div class="arch-row lit"><span class="arch-a">WebAssembly module</span></div>
 <div class="arch-ar">↕　<span class="arch-g">JavaScript glue / binding</span></div>
@@ -643,9 +652,10 @@ sqlite3.c をそのままブラウザへ放り込んでいるわけではない�
 
 次への橋: 「ここで一個、混ぜちゃいけない話があります」
 
-公式WASM buildでは sqlite3-wasm.c だけを直接コンパイルし、
-その中で sqlite3.c を include している。JS側は複数のJSファイルを連結した
-glue / binding 層（whwasmutil.js、jaccwabyt.js、sqlite3-api-glue.js など）。
+公式WASM buildでは sqlite3-wasm.c だけを直接コンパイルする。sqlite3.c の
+internal-use-only な state に触る必要があるため、その中で include している。
+JS側は複数のJSファイルを連結した glue / binding 層
+（whwasmutil.js、jaccwabyt.js、sqlite3-api-glue.js など）。
 出典: sqlite.org/wasm/doc/trunk/building.md
 -->
 
@@ -721,15 +731,13 @@ class: bleed mid
 clicks: 1
 ---
 
-<div class="chap">2 — 新しくCで書く</div>
-
 # 新しくC coreを書くのは、別の判断
 
 <div class="conds">
-<span>OS / device / protocol の境界に触る</span>
-<span>C APIを要求するSDKや既存環境につなぐ</span>
-<span>runtime dependency を非常に薄くしたい</span>
-<span>nativeとWASMなど、複数targetへ持っていきたい</span>
+<span>OS / device / protocol の境界に触る<small>USB機器、シリアル通信、自作プロトコル</small></span>
+<span>C APIを要求するSDKや既存環境につなぐ<small>マイコンのSDK、既存アプリのプラグイン</small></span>
+<span>runtime dependency を非常に薄くしたい<small>配布物を小さく、依存を増やさず</small></span>
+<span>nativeとWASMなど、複数targetへ持っていきたい<small>CLIとブラウザで同じ処理を動かす</small></span>
 </div>
 
 <div class="cost" v-click="1">
@@ -737,7 +745,9 @@ clicks: 1
 <div class="cost-v">memory safety　/　FFI　/　build　/　ownership　/　deployment　/　debugging</div>
 </div>
 
-<p class="punch" v-click="1">条件が揃えば候補になる、というだけ。<br><span class="dim">Rust・C++・Goが適切な場面も当然ある。</span></p>
+<p class="punch" v-click="1">条件が揃えば候補になる、というだけ。</p>
+
+<p class="note lit" v-click="1" style="margin-top: 12px">Rust・C++・Goが適切な場面も当然ある。</p>
 
 <!--
 想定: 38秒
@@ -815,7 +825,7 @@ class: bleed spread
 
 <h1 class="say closing-title">技術選定で、<br>最初からCを<br>候補外にしないでほしい</h1>
 
-<p class="lede closing-sub">使うのは、既にあるCでいい。書くのは、小さなcoreだけでいい。<br>AIで実装の障壁が下がっても、どの抽象度で見るか・どの資産につなぐかは残ります。</p>
+<p class="lede closing-sub">使うのは、既にあるCでいい。書くのは、小さなcoreだけでいい。<br>AIで実装のコストが下がっても、どの抽象度を選ぶかは残ります。</p>
 
 </div>
 
@@ -863,7 +873,7 @@ class: bleed spread
 <span class=""></span>
 </div>
 
-<p class="note mono" style="margin-top: 20px">https://otonasi-muonn.github.io/c-lang-lt-slidev/</p>
+<p class="note lit" style="margin-top: 20px">このスライドは、あとから自分で触れます。デモもそのまま動きます。<br><span class="mono">https://otonasi-muonn.github.io/c-lang-lt-slidev/</span></p>
 
 </div>
 
@@ -955,8 +965,10 @@ class: bleed spread
 左は起きた順、右は返ってきたデータの形。混ぜると GET_DESCRIPTOR が親に見えてしまう。
 Configuration 以下は順番に別々に取るのではなく、長さを読んでから一つの連結ブロブとして取る。
 
-先頭8バイトを読んでから再リセットする流れは代表的なホスト実装であって、
-全ホストへ強制される手順ではない (USB 2.0 §9.1.2 は複数の初期化順を許す)。
+先頭8バイトを読んでから再リセットする流れは代表的なホスト実装の慣習であって、
+仕様が強制する手順ではない。USB 2.0 §9.1.2 は step 5 でアドレスを割り当てた直後の
+step 6 に「アドレス割り当て前は default address でアクセスできる」と書いており、
+順序の記述自体が噛み合っていない。8バイト読みと再リセットには一切言及がない。
 
 聞かれたら: bNumInterfaces は interface 番号の数であって Interface Descriptor の
 総数ではない。alternate setting の分だけ Interface Descriptor は増える。

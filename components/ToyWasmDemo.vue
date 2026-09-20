@@ -3,10 +3,16 @@
     <div>
       <pre
         class="toy-src"
-      ><code><span class="dim">int</span> double_it(<span class="dim">int</span> n) {
+      ><code><span class="toy-attr">__attribute__((export_name(<span
+          class="wide"
+        >"double_it"</span>)))</span>
+<span class="dim">int</span> double_it(<span class="dim">int</span> n) {
   <span class="dim">return</span> n * <span class="wide">2</span>;
 }</code></pre>
       <p class="toy-file">wasm/double_it.c　→　double_it.wasm　77 B</p>
+      <p class="toy-note">
+        1行目が、JavaScript側から呼べる名前を出しておく指定。
+      </p>
     </div>
 
     <div class="toy-run">
@@ -122,11 +128,23 @@ onMounted(async () => {
   margin: 0;
   color: var(--ink);
 }
+.toy-attr {
+  display: block;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--ink-3);
+}
 .toy-file {
-  margin: 20px 0 0;
+  margin: 18px 0 0;
   max-width: none;
   font: 500 13px var(--mono);
   color: var(--ink-3);
+}
+.toy-note {
+  margin: 6px 0 0;
+  max-width: none;
+  font-size: 14px;
+  color: var(--ink-2);
 }
 
 .toy-run {

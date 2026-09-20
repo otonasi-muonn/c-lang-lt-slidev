@@ -1209,6 +1209,13 @@ body,
   font: 400 14px/1.5 var(--sans);
   color: var(--ink-3);
 }
+/* The figure is a cumulative analysis, so the slide says over what. */
+.risk-scope {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
 .risk-2 {
   margin-top: 26px;
   font-size: 16px;
@@ -1301,6 +1308,14 @@ body,
 .arch-row.lit .arch-a {
   color: var(--wide);
 }
+/* sqlite3.c is not a second translation unit; it is included by the first. */
+.arch-row.sub {
+  padding-left: 22px;
+}
+.arch-row.sub .arch-a {
+  font-size: 19px;
+  color: var(--ink-2);
+}
 .arch-g {
   font-size: 13px;
   color: var(--ink-3);
@@ -1371,22 +1386,31 @@ body,
   margin-top: 4px;
 }
 .conds > span {
-  padding: 11px 0;
+  padding: 9px 0;
   border-top: 1px solid var(--rule);
-  font-size: 20px;
-  line-height: 1.5;
+  font-size: 19px;
+  line-height: 1.45;
   color: var(--ink);
 }
 .conds > span:first-child {
   border-top: none;
   padding-top: 2px;
 }
+/* Each condition carries something the audience could actually run into,
+   otherwise none of the four fires for a room building web apps. */
+.conds > span > small {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
 .cost {
   display: grid;
   grid-template-columns: max-content 1fr;
   column-gap: 22px;
   align-items: baseline;
-  margin-top: 26px;
+  margin-top: 20px;
 }
 .cost-k {
   font: 500 13px var(--mono);
@@ -1432,11 +1456,11 @@ body,
 /* --- the close ---------------------------------------------------------- */
 
 .slidev-layout .closing-sub {
-  margin-top: 24px;
+  margin-top: 22px;
   font-size: 17px;
   line-height: 1.7;
   color: var(--ink-2);
-  max-width: 30em;
+  max-width: none;
 }
 
 /* The naming slide arrives last, so each of the three carries the thing the
