@@ -15,7 +15,7 @@
     <div class="controls">
       <button
         class="btn lead"
-        :class="{ on: activeMode === 'normal' }"
+        :class="{ on: activeMode === null || activeMode === 'normal' }"
         @click="runDemo('normal')"
       >
         正常に解析
@@ -425,8 +425,6 @@ onMounted(loadWasm);
 .controls .lead {
   font-size: 18px;
   padding: 11px 18px;
-  border-color: var(--sig);
-  color: var(--sig);
 }
 .engine {
   font-size: 15px;
@@ -439,10 +437,6 @@ onMounted(loadWasm);
   min-height: 76px;
   display: flex;
   align-items: center;
-}
-/* The full field output replaces the large vendor result in the debug view. */
-.demo:has(.debug[open]) .result {
-  display: none;
 }
 .hero-result {
   display: flex;
@@ -480,6 +474,18 @@ onMounted(loadWasm);
 }
 .rfail .mono {
   font-size: 29px;
+}
+.demo:has(.debug[open]) .result {
+  min-height: 0;
+}
+.demo:has(.debug[open]) .hero-raw {
+  font-size: 22px;
+}
+.demo:has(.debug[open]) .hero-value {
+  font-size: 32px;
+}
+.demo:has(.debug[open]) .hero-vendor {
+  font-size: 21px;
 }
 .demo .status {
   min-height: 24px;

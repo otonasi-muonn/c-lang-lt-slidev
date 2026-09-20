@@ -202,6 +202,12 @@ body,
   color: var(--ink-3);
   max-width: 44em;
 }
+/* A note the audience is meant to read, not one they may skip: the
+   disclaimers and the one-line glosses the talk depends on. */
+.slidev-layout .note.lit {
+  font-size: 15px;
+  color: var(--ink-2);
+}
 .slidev-layout .lede {
   font-size: 21px;
   line-height: 1.62;
@@ -716,6 +722,9 @@ body,
 .pad-n.sig {
   color: var(--sig);
 }
+.cellrow.big {
+  gap: 6px;
+}
 .cellrow.big span {
   width: 42px;
   height: 46px;
@@ -925,6 +934,9 @@ body,
 .demo-slide .chap {
   margin-bottom: 8px;
 }
+.slidev-layout .demo-lede {
+  margin: -6px 0 0;
+}
 
 /* --- the opening pivot: a position, then what follows from it ------------ */
 
@@ -1106,9 +1118,6 @@ body,
   font: 500 38px var(--mono);
   color: var(--ink);
 }
-.lift-x {
-  flex: none;
-}
 .lift-val {
   font: 500 44px var(--mono);
 }
@@ -1263,6 +1272,13 @@ body,
   margin-top: 9px;
   font-size: 19px;
   color: var(--ink-2);
+}
+/* One case is followed properly; the others are named in a sentence so the
+   slide does not become a logo wall. */
+.sqlite-more {
+  margin-top: 10px;
+  font-size: 15px;
+  color: var(--ink-3);
 }
 
 /* --- what is actually stacked up to run SQLite in a browser ------------- */

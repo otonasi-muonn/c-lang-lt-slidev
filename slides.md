@@ -97,9 +97,9 @@ clicks: 1
 # そもそも、C言語とは
 
 <div class="facts">
-<div class="facts-k">成立</div><div class="facts-v">1969 – 1973<span class="facts-s">最も創造的だったのは1972年ごろ</span></div>
-<div class="facts-k">作者</div><div class="facts-v">Dennis M. Ritchie<span class="facts-s">Bell Labs</span></div>
+<div class="facts-k">成立</div><div class="facts-v">1969 – 1973　<span class="dim">Dennis M. Ritchie</span><span class="facts-s">Bell Labs。最も創造的だったのは1972年ごろ</span></div>
 <div class="facts-k">用途</div><div class="facts-v">初期Unixのための <span class="wide">system implementation language</span><span class="facts-s">OSそのものを書くための言語として発展した</span></div>
+<div class="facts-k">実行</div><div class="facts-v">コンパイルして、そのまま動く<span class="facts-s">間にGCも仮想マシンも入らない</span></div>
 </div>
 
 <p class="punch" v-click="1">assemblyより書きやすく、<br>それでいて機械に近い操作も書ける。<span class="dim">そこが出発点。</span></p>
@@ -156,9 +156,9 @@ class: bleed mid
 
 <div class="surface">
 <span>値が何byteか</span>
-<span>memory上でどう表現されるか</span>
-<span>address</span>
-<span>lifetime</span>
+<span>memory上でどう並ぶか</span>
+<span>どのaddressにあるか</span>
+<span>いつまで生きているか</span>
 </div>
 
 <p class="punch">普段はruntimeやlibraryが隠してくれるものが、<br>自分のコードの側に出てくる。<span class="dim">面倒だし、危険でもある。</span></p>
@@ -198,7 +198,7 @@ printf(<span class="str">"%02X %02X %02X %02X\n"</span>, p[0], p[1], p[2], p[3])
 
 <div class="obs-name" v-click="3">下位のbyteから並んだ　<strong class="wide">little-endian</strong></div>
 
-<p class="note obs-env" v-click="2">gcc 13.3.0 / x86_64-linux-gnu で実行。C言語がこの並び順を決めているのではない。</p>
+<p class="note obs-env" v-click="2">gcc 13.3.0 / x86_64-linux-gnu で実行。C言語がこの並び順を決めているのではなく、Cが隠していないだけ。</p>
 
 </div>
 
@@ -257,17 +257,17 @@ clicks: 2
 <p class="lede" style="margin-top: 14px">USB Device Descriptor <span class="dim">— デバイスが返す18 bytesの自己紹介</span></p>
 
 <div class="lift" v-click="1">
-<div class="lift-k">offset 8–9　メーカーを表す欄</div>
+<div class="lift-k">offset 8–9　メーカーを表す欄　—　下位のbyteが先</div>
 <div class="lift-chain">
 <span class="lift-raw">6D 04</span>
-<svg class="lift-x" width="54" height="26" viewBox="0 0 54 26" fill="none" aria-hidden="true"><path d="M6 3 L48 23 M48 3 L6 23" stroke="#58c4f0" stroke-width="1.6"/></svg>
+<span class="lift-arrow">→</span>
 <span class="lift-val wide">0x046D</span>
 <span class="lift-arrow" v-click="2">→</span>
 <strong class="lift-name" v-click="2">Logitech</strong>
 </div>
 </div>
 
-<p class="note" style="margin-top: 20px">実機のダンプではなく、Device Descriptorの形式に沿って実在するVID / PIDで構成した例。</p>
+<p class="note lit" style="margin-top: 20px">実機のダンプではなく、Device Descriptorの形式に沿って実在するVID / PIDで構成した例。</p>
 
 <!--
 想定: 48秒
@@ -299,8 +299,10 @@ class: bleed mid
 <div class="vs" style="margin-top: 24px">
 <div>
 <div class="vs-k">TypeScript / JavaScript</div>
-<pre class="vs-code"><code>view.getUint16(<span class="wide">8</span>, <span class="sig">true</span>)</code></pre>
-<div class="vs-hint">「little-endianで読む」を指定するだけ</div>
+<pre class="vs-code"><code>const view = new DataView(buf);
+const vid: number =
+    view.getUint16(<span class="wide">8</span>, <span class="sig">true</span>);</code></pre>
+<div class="vs-hint">第2引数の <span class="sig">true</span> が「little-endianで読む」</div>
 </div>
 <div>
 <div class="vs-k">C</div>
@@ -341,7 +343,7 @@ clicks: 1
 <div class="cellrow big"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 <div class="pad-n">7 <small>bytes</small></div>
 
-<div class="pad-k" v-click="1">C object</div>
+<div class="pad-k" v-click="1">構造体</div>
 <div class="cellrow big" v-click="1"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad" aria-label="padding">＋</span></div>
 <div class="pad-n sig" v-click="1">8 <small>bytes</small></div>
 
@@ -352,7 +354,7 @@ clicks: 1
 <div class="evidence-src">USB Endpoint Descriptorと、対応する構造体。gcc 13.3.0 / x86_64-linux-gnu。<br>サイズもpaddingもABI依存で、いつも8になるわけではない。</div>
 </div>
 
-<p class="punch" v-click="1" style="margin-top: 22px">線の上の長さと、memory上の大きさは<br>同じとは限らない。</p>
+<p class="punch" v-click="1" style="margin-top: 22px">wire 上の長さと、memory 上の大きさは<br>同じとは限らない。</p>
 
 <!--
 想定: 32秒
@@ -388,10 +390,11 @@ clicks: 1
 </div>
 
 <div class="evidence">
-<div class="evidence-out">warning: function returns address of local variable [-Wreturn-local-addr]</div>
+<div class="evidence-out"><span>warning: function returns address of local variable [-Wreturn-local-addr]</span></div>
+<div class="evidence-src">この形なら、黙っていてもコンパイラが教えてくれる。ただし警告が出ない書き方もいくらでもある。</div>
 </div>
 
-<p class="punch" v-click="1" style="margin-top: 20px">AIがCを書けるようになっても、<br>memory・lifetime・境界の意味は消えない。</p>
+<p class="punch" v-click="1" style="margin-top: 20px">AIがCを書けるようになっても、<br>memoryとlifetimeの意味は消えない。</p>
 
 <!--
 想定: 50秒
@@ -478,20 +481,22 @@ clicks: 2
 <div class="paths">
 
 <div class="paths-n">1</div>
-<div class="paths-b" v-click="1">
-<div class="paths-t">既にある、価値あるC資産を利用する</div>
-<div class="paths-s">自分でCを書かなくても成立する。むしろ普段からやっている。</div>
+<div class="paths-b">
+<div class="paths-t" v-click="1">既にある、価値あるC資産を利用する</div>
+<div class="paths-s" v-click="1">自分でCを書かなくても成立する。むしろ普段からやっている。</div>
 </div>
 
 <div class="paths-n">2</div>
-<div class="paths-b" v-click="2">
-<div class="paths-t">条件が合う小さなcoreだけ、新しくCで書く</div>
-<div class="paths-s">こちらは判断が別。コストも別。</div>
+<div class="paths-b">
+<div class="paths-t" v-click="2">条件が合う小さなcoreだけ、新しくCで書く</div>
+<div class="paths-s" v-click="2">こちらは判断が別。コストも別。</div>
 </div>
 
 </div>
 
 <p class="punch" v-click="2">この二つは、全然ちがう話。<br><span class="dim">混ぜると「Cを使う」がいきなり重く見える。</span></p>
+
+<p class="note lit" v-click="2" style="margin-top: 16px">AIに書かせる部分が増えるほど、「どっちをやるか」の判断だけが自分に残る。</p>
 
 <!--
 想定: 35秒
@@ -508,8 +513,9 @@ clicks: 2
 class: bleed demo-slide
 ---
 
-<div class="chap">いちばん小さいC</div>
+<div class="chap">2 — 小さいcoreを書く、のいちばん小さい版</div>
 <h1 class="compact">これをブラウザで呼ぶ</h1>
+<p class="note lit demo-lede">WebAssembly＝ブラウザがJavaScript以外のコードも実行できる形式。</p>
 
 <ToyWasmDemo />
 
@@ -539,7 +545,7 @@ class: bleed demo-slide
 ---
 
 <div class="chap">中身を入れ替えると</div>
-<h1 class="compact">さっき人間が読んだ18 bytesを、Cに読ませる</h1>
+<h1 class="compact">さっき自分たちで読んだ18 bytesを、Cに読ませる</h1>
 
 <UsbDescriptorDemo />
 
@@ -569,11 +575,14 @@ class: bleed mid
 clicks: 1
 ---
 
+<div class="chap">1 — 既にあるC資産を使う</div>
+
 # 自分が書いていないCなら、もう使っている
 
 <div class="sqlite">
 <div class="sqlite-name">SQLite</div>
 <div class="sqlite-s">Cで実装されたデータベースエンジン</div>
+<div class="sqlite-more">zlibも、libpngも、CPython自体もCで書かれている。</div>
 </div>
 
 <div class="cite" v-click="1">
@@ -586,7 +595,7 @@ clicks: 1
 </div>
 </div>
 
-<p class="note" v-click="1" style="margin-top: 18px">これはSQLite自身による説明であって、「Cが全言語より優れている」証明ではない。<br>同じページには、条件が揃えばRustへの書き換えも検討しうる、とも書かれている。</p>
+<p class="note" v-click="1" style="margin-top: 18px">これはSQLite自身による説明であって、「Cが全言語より優れている」証明ではない。<br>同じページには、条件が揃えばRustへの書き換えを検討する余地がある、とも書かれている。</p>
 
 <!--
 想定: 45秒
@@ -666,7 +675,9 @@ clicks: 1
 
 </div>
 
-<p class="punch" v-click="1">「全部C ABI」ではない。<br><span class="dim">Cは共通の接点になりやすい、くらいの話。</span></p>
+<p class="punch" v-click="1">つなぎ方は、相手ごとに別々。<br><span class="dim">Cは共通の接点になりやすい、くらいの話です。</span></p>
+
+<p class="note" style="margin-top: 16px">C言語そのものが世界共通のABIを保証しているわけではない。ABIはOS・CPU・toolchainごとに違う。</p>
 
 <!--
 想定: 40秒
@@ -709,6 +720,8 @@ class: bleed mid
 class: bleed mid
 clicks: 1
 ---
+
+<div class="chap">2 — 新しくCで書く</div>
 
 # 新しくC coreを書くのは、別の判断
 
@@ -775,7 +788,7 @@ class: bleed mid
 <div class="alt">
 <div class="alt-k">Webアプリ</div><div class="alt-v">TypeScriptでいい場面が多い</div>
 <div class="alt-k">AI / データ</div><div class="alt-v">Pythonでいい場面が多い</div>
-<div class="alt-k">新規のsystems code</div><div class="alt-v">memory safetyが重要ならRust等を検討する理由は強い</div>
+<div class="alt-k">新規のsystems code</div><div class="alt-v">memory safetyが重要なら、Rust等を選ぶ理由は十分にある</div>
 </div>
 
 <p class="punch">それでも、機械・OS・device・protocolに近づくとき、<br>既存のC資産につながるとき、<br>小さいcoreを複数の環境へ持っていくとき。</p>
@@ -802,7 +815,7 @@ class: bleed spread
 
 <h1 class="say closing-title">技術選定で、<br>最初からCを<br>候補外にしないでほしい</h1>
 
-<p class="lede closing-sub">AIで実装の障壁が変わっても、<br>どの抽象度で見るか、どの資産につなぐかは残ります。</p>
+<p class="lede closing-sub">使うのは、既にあるCでいい。書くのは、小さなcoreだけでいい。<br>AIで実装の障壁が下がっても、どの抽象度で見るか・どの資産につなぐかは残ります。</p>
 
 </div>
 
