@@ -128,7 +128,7 @@ class: bleed mid
 
 <div class="facts">
 <div class="facts-k">何</div><div class="facts-v">JavaScriptを基盤に、型のための構文などを加えた言語</div>
-<div class="facts-k">現在</div><div class="facts-v">2025年8月、GitHubの<span class="wide">月間contributor数で1位</span><span class="facts-s">Pythonを約42,000人上回った (GitHub Octoverse 2025)</span></div>
+<div class="facts-k">現在</div><div class="facts-v">2025年8月、GitHubの<span class="wide">月間コントリビューター数で1位</span><span class="facts-s">Pythonを約42,000人上回った (GitHub Octoverse 2025)</span></div>
 </div>
 
 <p class="punch">Webアプリを作るなら、<br>僕も普通にTypeScriptを使います。</p>
@@ -155,13 +155,13 @@ class: bleed mid
 <h1 class="say">Cは、機械側の都合が<br>表面に出てきやすい</h1>
 
 <div class="surface">
-<span>値が何byteか</span>
-<span>memory上でどう並ぶか</span>
-<span>どのaddressにあるか</span>
+<span>値が何バイトか</span>
+<span>メモリ上でどう並ぶか</span>
+<span>どのアドレスにあるか</span>
 <span>いつまで生きているか</span>
 </div>
 
-<p class="punch">普段はruntimeやlibraryが隠してくれるものが、<br>自分のコードの側に出てくる。<span class="dim">面倒だし、危険でもある。</span></p>
+<p class="punch">普段はランタイムやライブラリが隠してくれるものが、<br>自分のコードの側に出てくる。<span class="dim">面倒だし、危険でもある。</span></p>
 
 <!--
 想定: 25秒
@@ -196,7 +196,7 @@ printf(<span class="str">"%02X %02X %02X %02X\n"</span>, p[0], p[1], p[2], p[3])
 <div class="bytes four"><span class="sig">78</span><span class="sig">56</span><span class="sig">34</span><span class="sig">12</span></div>
 </div>
 
-<div class="obs-name" v-click="3">下位のbyteから並んだ　<strong class="wide">little-endian</strong></div>
+<div class="obs-name" v-click="3">下位のバイトから並んだ　<strong class="wide">little-endian</strong></div>
 
 <p class="note obs-env" v-click="2">gcc 13.3.0 / x86_64-linux-gnu で実行。C言語がこの並び順を決めているのではなく、Cが隠していないだけ。</p>
 
@@ -205,12 +205,12 @@ printf(<span class="str">"%02X %02X %02X %02X\n"</span>, p[0], p[1], p[2], p[3])
 <!--
 想定: 55秒
 このframeで言いたいこと:
-値そのものと、memory上の表現は別だ、ということ。
+値そのものと、メモリ上の表現は別だ、ということ。
 0x12345678 は「どの言語でも同じ値」。並び方は環境が決めている。
 
 進行:
 (1) 値だけ見せる。ここまでは何も不思議じゃない。
-(2) 1byteずつ覗くコードを足す。「じゃあ、memoryの上ではどう並んでる？」
+(2) 1バイトずつ覗くコードを足す。「じゃあ、メモリの上ではどう並んでる？」
 (3) 実際の出力。逆から出てくる。ここで一度止まる。
 (4) 名前を付ける: little-endian
 
@@ -254,10 +254,10 @@ clicks: 2
 <i class="on" style="grid-column: 9 / span 2" v-click="1"></i>
 </div>
 
-<p class="lede" style="margin-top: 14px">USB Device Descriptor <span class="dim">— デバイスが返す18 bytesの自己紹介</span></p>
+<p class="lede" style="margin-top: 14px">USB Device Descriptor <span class="dim">— デバイスが返す18バイトの自己紹介</span></p>
 
 <div class="lift" v-click="1">
-<div class="lift-k">offset 8–9　メーカーを表す欄　—　下位のbyteが先</div>
+<div class="lift-k">offset 8–9　メーカーを表す欄　—　下位のバイトが先</div>
 <div class="lift-chain">
 <span class="lift-raw">6D 04</span>
 <span class="lift-arrow">→</span>
@@ -272,7 +272,7 @@ clicks: 2
 <!--
 想定: 48秒
 このframeで言いたいこと:
-USBを教えるのではない。「さっき覚えたことだけで、本物の仕様に沿ったbyte列が読めた」という成功体験。
+USBを教えるのではない。「さっき覚えたことだけで、本物の仕様に沿ったバイト列が読めた」という成功体験。
 
 進行:
 (1) 18バイトを出す。USBを挿したときにデバイスが返す自己紹介です、とだけ。
@@ -286,7 +286,7 @@ USBを教えるのではない。「さっき覚えたことだけで、本物�
 - descriptor hierarchy の説明
 - 14フィールドの一覧
 どれも Appendix にある。聞かれたときだけ開く。
-画面のbyte列は実機dumpではない。誤って「実機から取得したデータ」と言わない。
+画面のバイト列は実機のダンプではない。誤って「実機から取得したデータ」と言わない。
 出典: torvalds/linux drivers/hid/hid-ids.h
   USB_VENDOR_ID_LOGITECH 0x046d / USB_DEVICE_ID_LOGITECH_UNIFYING_RECEIVER 0xc52b
 
@@ -314,7 +314,7 @@ const vid: number =
 <div class="vs-k">C</div>
 <pre class="vs-code"><code>(uint16_t)p[<span class="wide">8</span>]
   | ((uint16_t)p[<span class="wide">9</span>] <span class="sig">&lt;&lt; 8</span>)</code></pre>
-<div class="vs-hint">2 bytesの組み立てが自分のコードに出る</div>
+<div class="vs-hint">2バイトの組み立てが自分のコードに出る</div>
 </div>
 <div class="vs-same"><span class="lab">同じ入力 → どちらも</span><span class="val">0x046D</span></div>
 </div>
@@ -329,7 +329,7 @@ Cにしかできない、とは言わない。むしろ「これだけならTS�
 次への橋: 「じゃあ近いと何が嬉しいのか。その前に、近いことの代償を先に」
 
 絶対に言わないこと:
-- 「TypeScriptではbytesを扱えない」── 扱える。画面にも「どちらも0x046D」と出す。
+- 「TypeScriptではバイト列を扱えない」── 扱える。画面にも「どちらも0x046D」と出す。
 - 速度の比較。今日の主題ではない。
 TSでもビット演算は書けるし、Cでもhelperに隠せる。言語固有の能力差ではない。
 Cのキャストは16-bit int環境での符号付きシフトを避けるため。聞かれたら説明。
@@ -347,34 +347,34 @@ clicks: 1
 
 <div class="pad" style="margin-top: 20px">
 
-<div class="pad-k">wire</div>
+<div class="pad-k">通信上</div>
 <div class="cellrow big"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-<div class="pad-n">7 <small>bytes</small></div>
+<div class="pad-n">7 <small>バイト</small></div>
 
 <div class="pad-k" v-click="1">構造体</div>
-<div class="cellrow big" v-click="1"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad" aria-label="padding">＋</span></div>
-<div class="pad-n sig" v-click="1">8 <small>bytes</small></div>
+<div class="cellrow big" v-click="1"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad" aria-label="パディング">＋</span></div>
+<div class="pad-n sig" v-click="1">8 <small>バイト</small></div>
 
 </div>
 
 <div class="evidence" v-click="1">
 <div class="evidence-out"><span>wire   : 7</span><span>sizeof : 8</span></div>
-<div class="evidence-src">USB Endpoint Descriptorの6フィールドをそのまま並べた構造体。gcc 13.3.0 / x86_64-linux-gnu。<br>サイズもpaddingもABI依存で、いつも8になるわけではない。</div>
+<div class="evidence-src">USB Endpoint Descriptorの6フィールドをそのまま並べた構造体。gcc 13.3.0 / x86_64-linux-gnu。<br>サイズもパディングもABI依存で、いつも8になるわけではない。</div>
 </div>
 
-<p class="punch" v-click="1" style="margin-top: 22px">wire 上の長さと、memory 上の大きさは<br>同じとは限らない。</p>
+<p class="punch" v-click="1" style="margin-top: 22px">通信上の長さと、メモリ上の大きさは<br>同じとは限らない。</p>
 
 <!--
 想定: 32秒
 このframeで言いたいこと:
-「線の上とmemory上は同じとは限らない」。それ一つだけ。
+「通信上とメモリ上は同じとは限らない」。それ一つだけ。
 
 次への橋: 「もう一つ、もっと危ないほうも見せます」
 
 caveat (重要):
-- 「Cでは必ずpaddingが入る」とは言わない。「必ず8になる」とも言わない。
+- 「Cでは必ずパディングが入る」とは言わない。「必ず8になる」とも言わない。
 - サイズもalignmentもABI依存。これは特定のABIでの実演。
-padding の講義にしない。4種類の比較は Appendix。
+パディングの講義にしない。4種類の比較は Appendix。
 -->
 
 ---
@@ -402,7 +402,7 @@ clicks: 1
 <div class="evidence-src">この形なら、黙っていてもコンパイラが教えてくれる。ただし警告が出ない書き方もいくらでもある。</div>
 </div>
 
-<p class="punch" v-click="1" style="margin-top: 20px">AIがCを書けるようになっても、<br>memoryとlifetimeの意味は消えない。</p>
+<p class="punch" v-click="1" style="margin-top: 20px">AIがCを書けるようになっても、<br>メモリと寿命の意味は消えない。</p>
 
 <!--
 想定: 50秒
@@ -418,11 +418,11 @@ buf は関数の中だけの入れ物。出た瞬間にその範囲は終わる�
 次への橋: 「これ、現実にどのくらい起きているのか」
 
 caveat (重要):
-- memory が消去されるわけではない。objectの寿命が終わる。
-- 参照先objectのlifetime終了に伴い、そのobjectを指していたpointer value自体も
+- メモリが消去されるわけではない。オブジェクトの寿命が終わる。
+- 参照先オブジェクトの寿命終了に伴い、そのオブジェクトを指していたポインタの値自体も
   indeterminate になる (C11 6.2.4p2)。だから運悪く「動いてしまう」ことがある。
 AI回収では「AIがあるからC不要」とも「AI時代だからCが最強」とも言わない。
-消えないのは memory / lifetime / ownership / ABI / byte representation / protocol rules。
+消えないのは メモリ / 寿命 / 所有権 / ABI / バイト表現 / プロトコルの規則。
 -->
 
 ---
@@ -434,14 +434,14 @@ class: bleed mid
 <div class="risk">
 <div class="risk-big"><span class="err">約70%</span></div>
 <div>
-<div class="risk-txt">Chromeの高深刻度セキュリティバグのうち、<br>C/C++のmemory unsafetyが原因のもの。</div>
+<div class="risk-txt">Chromeの高深刻度セキュリティバグのうち、<br>C/C++のメモリ安全性の問題が原因のもの。</div>
 <div class="risk-note">その半分が use-after-free<span>さっき見た、あの寿命の話</span></div>
 <div class="risk-scope">2015年以降の高・重大深刻度912件を対象にした、Chromium 自身の集計</div>
 </div>
 </div>
 
 <div class="risk-2">
-CISAをはじめとする各国機関は、memory safetyの脆弱性をどう無くすかを示すロードマップの公開を推奨している。
+CISAをはじめとする各国機関は、メモリ安全性の脆弱性をどう無くすかを示すロードマップの公開を推奨している。
 </div>
 
 <p class="punch">だから「これからは何でもCで書こう」<br>とは、言いません。</p>
@@ -449,13 +449,13 @@ CISAをはじめとする各国機関は、memory safetyの脆弱性をどう無
 <!--
 想定: 38秒
 このframeで言いたいこと:
-Cのmemory unsafetyを「難しいけど楽しい」で終わらせない。重大なリスクとして正面から置く。
-さっきの lifetime が、そのまま use-after-free の話につながっている。
+Cのメモリ安全性の問題を「難しいけど楽しい」で終わらせない。重大なリスクとして正面から置く。
+さっきの寿命の話が、そのまま use-after-free につながっている。
 
 次への橋: 「じゃあ今日は何を主張したいのか。問いを変えます」
 
 caveat:
-- Rust等のmemory-safe systems languageが適切な場面は当然ある。ここで否定しない。
+- Rust等のメモリ安全なシステム言語が適切な場面は当然ある。ここで否定しない。
 - 「Cは危険だから使うな」でもない。ゴールはCの万能化ではなく「条件が揃えば候補」。
 出典: chromium.org/Home/chromium-security/memory-safety/
   「Around 70% of our high severity security bugs are memory unsafety problems」
@@ -497,7 +497,7 @@ clicks: 2
 
 <div class="paths-n">2</div>
 <div class="paths-b">
-<div class="paths-t" v-click="2">条件が合う小さなcoreだけ、新しくCで書く</div>
+<div class="paths-t" v-click="2">条件が合う小さなコアだけ、新しくCで書く</div>
 <div class="paths-s" v-click="2">こちらは判断が別。コストも別。</div>
 </div>
 
@@ -522,7 +522,7 @@ clicks: 2
 class: bleed demo-slide
 ---
 
-<div class="chap">2 — 小さいcoreを書く、のいちばん小さい版</div>
+<div class="chap">2 — 小さいコアを書く、のいちばん小さい版</div>
 <h1 class="compact">これをブラウザで呼ぶ</h1>
 <p class="note lit demo-lede">WebAssembly＝ブラウザがJavaScript以外のコードも実行できる形式。</p>
 
@@ -531,7 +531,7 @@ class: bleed demo-slide
 <!--
 想定: 45秒
 このframeで言いたいこと:
-目的はただ一つ。「CからコンパイルしたWASM functionを、BrowserのJavaScript側から呼べる」
+目的はただ一つ。「CからコンパイルしたWASMの関数を、ブラウザのJavaScript側から呼べる」
 というmental modelを作ること。それ以上のことは言わない。
 
 進行:
@@ -554,14 +554,14 @@ class: bleed demo-slide
 ---
 
 <div class="chap">中身を入れ替えると</div>
-<h1 class="compact">さっき自分たちで読んだ18 bytesを、Cに読ませる</h1>
+<h1 class="compact">さっき自分たちで読んだ18バイトを、Cに読ませる</h1>
 
 <UsbDescriptorDemo />
 
 <!--
 想定: 50秒（正常系を主役に。追加操作は最大1つまで）
 このframeで言いたいこと:
-前半で人間が読んだ 6D 04 → 0x046D を、今度は C から compile した WASM が返す。
+前半で自分たちが読んだ 6D 04 → 0x046D を、今度は C からコンパイルした WASM が返す。
 USBの新しい説明は一切足さない。伏線回収だけ。
 
 進行:
@@ -610,7 +610,7 @@ clicks: 1
 想定: 45秒
 このframeで言いたいこと:
 単なる有名Cライブラリ一覧にしない。一つのケースを追う。
-「長寿命libraryがなぜCを選び続けているか」というcase study。
+「長く生きているライブラリがなぜCを選び続けているか」というケーススタディ。
 
 次への橋: 「で、このSQLite、ブラウザでも動きます」
 
@@ -635,11 +635,11 @@ class: bleed mid
 
 <div class="arch">
 <div class="arch-row"><span class="arch-a">sqlite3-wasm.c</span><span class="arch-g">WASM固有のサポートを足す、唯一コンパイルされるCファイル</span></div>
-<div class="arch-row sub"><span class="arch-a">└ #include "sqlite3.c"</span><span class="arch-g">canonicalなC実装（amalgamation）</span></div>
+<div class="arch-row sub"><span class="arch-a">└ #include "sqlite3.c"</span><span class="arch-g">SQLite本体のC実装（amalgamation）</span></div>
 <div class="arch-ar">↓　<span class="arch-g">Emscripten</span></div>
-<div class="arch-row lit"><span class="arch-a">WebAssembly module</span></div>
-<div class="arch-ar">↕　<span class="arch-g">JavaScript glue / binding</span></div>
-<div class="arch-row"><span class="arch-a">Browser</span></div>
+<div class="arch-row lit"><span class="arch-a">WebAssembly モジュール</span></div>
+<div class="arch-ar">↕　<span class="arch-g">JavaScript のグルー / バインディング</span></div>
+<div class="arch-row"><span class="arch-a">ブラウザ</span></div>
 </div>
 
 <p class="punch">「CだけでブラウザのSQLiteが完結している」<br>わけではない。</p>
@@ -647,14 +647,14 @@ class: bleed mid
 <!--
 想定: 35秒
 このframeで言いたいこと:
-CのcoreがWebへ運ばれている、という事実。ただし正確に。
+CのコアがWebへ運ばれている、という事実。ただし正確に。
 sqlite3.c をそのままブラウザへ放り込んでいるわけではない。
 
 次への橋: 「ここで一個、混ぜちゃいけない話があります」
 
 公式WASM buildでは sqlite3-wasm.c だけを直接コンパイルする。sqlite3.c の
 internal-use-only な state に触る必要があるため、その中で include している。
-JS側は複数のJSファイルを連結した glue / binding 層
+JS側は複数のJSファイルを連結したグルー / バインディング層
 （whwasmutil.js、jaccwabyt.js、sqlite3-api-glue.js など）。
 出典: sqlite.org/wasm/doc/trunk/building.md
 -->
@@ -669,40 +669,40 @@ clicks: 1
 <div class="worlds">
 
 <div class="worlds-h">Web</div>
-<div class="worlds-h">Native</div>
+<div class="worlds-h">ネイティブ</div>
 
 <div class="worlds-c">
 <div class="w-node">JavaScript</div>
-<div class="w-ar">↓　<span class="w-how">WebAssembly interface / glue</span></div>
-<div class="w-node lit">Cからcompileしたmodule</div>
+<div class="w-ar">↓　<span class="w-how">WebAssembly のインターフェース / グルー</span></div>
+<div class="w-node lit">Cからコンパイルしたモジュール</div>
 </div>
 
 <div class="worlds-c">
 <div class="w-tri"><span>Python</span><span>Node.js</span><span>Rust</span></div>
 <div class="w-ar">↓　<span class="w-how">Python/C API・ctypes　/　Node-API　/　extern "C"</span></div>
-<div class="w-node lit">C library</div>
+<div class="w-node lit">Cライブラリ</div>
 </div>
 
 </div>
 
 <p class="punch" v-click="1">つなぎ方は、相手ごとに別々。<br><span class="dim">Cは共通の接点になりやすい、くらいの話です。</span></p>
 
-<p class="note" style="margin-top: 16px">C言語そのものが世界共通のABIを保証しているわけではない。ABIはOS・CPU・toolchainごとに違う。</p>
+<p class="note" style="margin-top: 16px">ABIはOS・CPU・ツールチェーンごとに違う。<br>C言語そのものが、世界共通のABIを保証しているわけではない。</p>
 
 <!--
 想定: 40秒
 このframeで言いたいこと:
-Native interop と WASM を「全部C ABI」の一語で統一しない。仕組みは別々。
+ネイティブ側の連携と WASM を「全部C ABI」の一語で統一しない。仕組みは別々。
 
 次への橋: 「つまり、Cを書かなくてもCは使っている」
 
 正確性 (ここは間違えない):
 - Node-API は Node.js が提供する stable な C API で、Node.jsのversionをまたぐ
   ABI stability を明示的に提供している。これは Node.js 側の約束。
-- Rust の extern "C" は「そのtargetでdominantなC compilerが使うdefault ABI」に
+- Rust の extern "C" は「そのターゲットで主流のCコンパイラが使う既定のABI」に
   合わせるためのもの。C言語仕様がABIを定義しているわけではない。
 - Python には Python/C API や ctypes がある。
-- ABI は OS / CPU / toolchain ごとに違う。世界共通の単一ABIではない。
+- ABI は OS / CPU / ツールチェーン ごとに違う。世界共通の単一ABIではない。
 出典: nodejs.org/api/n-api.html / doc.rust-lang.org/reference/items/external-blocks.html
   / docs.python.org/3/extending/extending.html
 -->
@@ -713,7 +713,7 @@ class: bleed mid
 
 <h1 class="say">Cを書くことだけが、<br>Cを使うことではない</h1>
 
-<p class="lede">SQLiteを使うPythonのコードに、Cは1行も出てこない。<br>それでも、動いているのはCで書かれたcoreです。</p>
+<p class="lede">SQLiteを使うPythonのコードに、Cは1行も出てこない。<br>それでも、動いているのはCで書かれたコアです。</p>
 
 <!--
 想定: 20秒
@@ -731,18 +731,18 @@ class: bleed mid
 clicks: 1
 ---
 
-# 新しくC coreを書くのは、別の判断
+# 新しくCでコアを書くのは、別の判断
 
 <div class="conds">
-<span>OS / device / protocol の境界に触る<small>USB機器、シリアル通信、自作プロトコル</small></span>
+<span>OS・デバイス・プロトコルの境界に触る<small>USB機器、シリアル通信、自作プロトコル</small></span>
 <span>C APIを要求するSDKや既存環境につなぐ<small>マイコンのSDK、既存アプリのプラグイン</small></span>
-<span>runtime dependency を非常に薄くしたい<small>配布物を小さく、依存を増やさず</small></span>
-<span>nativeとWASMなど、複数targetへ持っていきたい<small>CLIとブラウザで同じ処理を動かす</small></span>
+<span>ランタイムの依存を非常に薄くしたい<small>配布物を小さく、依存を増やさず</small></span>
+<span>ネイティブとWASMなど、複数のターゲットへ持っていきたい<small>CLIとブラウザで同じ処理を動かす</small></span>
 </div>
 
 <div class="cost" v-click="1">
 <div class="cost-k">増えるコスト</div>
-<div class="cost-v">memory safety　/　FFI　/　build　/　ownership　/　deployment　/　debugging</div>
+<div class="cost-v">メモリ安全性　/　FFI　/　ビルド　/　所有権　/　デプロイ　/　デバッグ</div>
 </div>
 
 <p class="punch" v-click="1">条件が揃えば候補になる、というだけ。</p>
@@ -757,10 +757,10 @@ clicks: 1
 次への橋: 「ここまで見たものに、いま名前を付けます」
 
 絶対に言わないこと:
-- 「小さいcoreはCで書けばよい」── 言わない。条件付きの候補、まで。
+- 「小さいコアはCで書けばよい」── 言わない。条件付きの候補、まで。
 - 「Cを選べばABI stabilityが自動的に得られる」── 言わない。
-  API/ABIの長期安定性は target / platform / toolchain / project側の設計と
-  互換性維持にも依存する。Node-APIの安定性はNode.js側が約束しているもの。
+  API/ABIの長期安定性は ターゲット / プラットフォーム / ツールチェーン / プロジェクト側の
+  設計と互換性維持にも依存する。Node-APIの安定性はNode.js側が約束しているもの。
 新規コードなら Rust 等を先に検討する理由は強い。そこを弱く扱わない。
 -->
 
@@ -772,9 +772,9 @@ clicks: 2
 # 今日のCを、整理すると
 
 <div class="recall">
-<div class="recall-w" v-click="1">見える</div><div class="recall-s" v-click="1">byte representation / memory / lifetime<small>0x12345678 が 78 56 34 12 に見えた、あれ</small></div>
-<div class="recall-w" v-click="1">持っていける</div><div class="recall-s" v-click="1">C source → WebAssembly → Browser<small>42 と 0x046D を返してきた、あれ</small></div>
-<div class="recall-w" v-click="2">つながる</div><div class="recall-s" v-click="2">existing C libraries / bindings / native interfaces<small>SQLiteと、その周りの仕組み</small></div>
+<div class="recall-w" v-click="1">見える</div><div class="recall-s" v-click="1">バイト表現 / メモリ / 寿命<small>0x12345678 が 78 56 34 12 に見えた、あれ</small></div>
+<div class="recall-w" v-click="1">持っていける</div><div class="recall-s" v-click="1">Cのソース → WebAssembly → ブラウザ<small>42 と 0x046D を返してきた、あれ</small></div>
+<div class="recall-w" v-click="2">つながる</div><div class="recall-s" v-click="2">既存のCライブラリ / バインディング / ネイティブ連携<small>SQLiteと、その周りの仕組み</small></div>
 </div>
 
 <!--
@@ -798,10 +798,10 @@ class: bleed mid
 <div class="alt">
 <div class="alt-k">Webアプリ</div><div class="alt-v">TypeScriptでいい場面が多い</div>
 <div class="alt-k">AI / データ</div><div class="alt-v">Pythonでいい場面が多い</div>
-<div class="alt-k">新規のsystems code</div><div class="alt-v">memory safetyが重要なら、Rust等を選ぶ理由は十分にある</div>
+<div class="alt-k">新規のシステムコード</div><div class="alt-v">メモリ安全性が重要なら、Rust等を選ぶ理由は十分にある</div>
 </div>
 
-<p class="punch">それでも、機械・OS・device・protocolに近づくとき、<br>既存のC資産につながるとき、<br>小さいcoreを複数の環境へ持っていくとき。</p>
+<p class="punch">それでも、機械・OS・デバイス・プロトコルに近づくとき、<br>既存のC資産につながるとき、<br>小さいコアを複数の環境へ持っていくとき。</p>
 
 <!--
 想定: 28秒
@@ -812,8 +812,8 @@ class: bleed mid
 次への橋: 「それで、今日いちばん言いたかったのは」
 
 想定質問「それ Rust でよくないですか」への20秒回答:
-多くの場合 Rust はよい答え。ただし既存のC ABI・既存資産・toolchainがCしかない環境、
-あるいはSQLiteのように既に存在するCのcoreを使う場合は、Cが現実解になる。
+多くの場合 Rust はよい答え。ただし既存のC ABI・既存資産・ツールチェーンがCしかない環境、
+あるいはSQLiteのように既に存在するCのコアを使う場合は、Cが現実解になる。
 そこを「古いから」で塗りつぶさないでほしい、というのが今日の主張。
 -->
 
@@ -825,7 +825,7 @@ class: bleed spread
 
 <h1 class="say closing-title">技術選定で、<br>最初からCを<br>候補外にしないでほしい</h1>
 
-<p class="lede closing-sub">使うのは、既にあるCでいい。書くのは、小さなcoreだけでいい。<br>AIで実装のコストが下がっても、どの抽象度を選ぶかは残ります。</p>
+<p class="lede closing-sub">使うのは、既にあるCでいい。書くのは、小さなコアだけでいい。<br>AIで実装のコストが下がっても、どの抽象度を選ぶかは残ります。</p>
 
 </div>
 
@@ -902,18 +902,18 @@ class: bleed spread
 <div class="cols">
 <div>
 
-<h2>enumeration（時系列）<span class="faint">　host ▶ ◀ device</span></h2>
+<h2>enumeration（時系列）<span class="faint">　ホスト ▶ ◀ デバイス</span></h2>
 
 <div class="exch">
 <div class="exch-n">1</div>
 <div class="exch-out"></div>
-<div><div class="exch-req">接続検出 → バスリセット</div><div class="exch-foot"><span class="exch-sub">Default / address 0 / EP0 のみ</span></div></div>
+<div><div class="exch-req">接続検出 → バスリセット</div><div class="exch-foot"><span class="exch-sub">Default / アドレス 0 / EP0 のみ</span></div></div>
 <div class="exch-n">2</div>
 <div class="exch-out">▶</div>
 <div><div class="exch-req">GET_DESCRIPTOR(Device, 8)</div><div class="exch-foot"><span class="exch-sub">offset 7 の <code>bMaxPacketSize0</code> を知る<br>（必要なら再リセット：ホスト実装依存）</span><span class="exch-ret ">◀ 8 B</span></div></div>
 <div class="exch-n">3</div>
 <div class="exch-out">▶</div>
-<div><div class="exch-req">SET_ADDRESS(n)</div><div class="exch-foot"><span class="exch-sub">新 address は Status ステージ完了後に有効</span></div></div>
+<div><div class="exch-req">SET_ADDRESS(n)</div><div class="exch-foot"><span class="exch-sub">新しいアドレスは Status ステージ完了後に有効</span></div></div>
 <div class="exch-n">4</div>
 <div class="exch-out">▶</div>
 <div><div class="exch-req">GET_DESCRIPTOR(Device, 18)</div><div class="exch-foot"><span class="exch-sub"></span><span class="exch-ret sig">◀ 18 B</span></div></div>
@@ -970,7 +970,7 @@ Configuration 以下は順番に別々に取るのではなく、長さを読ん
 step 6 に「アドレス割り当て前は default address でアクセスできる」と書いており、
 順序の記述自体が噛み合っていない。8バイト読みと再リセットには一切言及がない。
 
-聞かれたら: bNumInterfaces は interface 番号の数であって Interface Descriptor の
+聞かれたら: bNumInterfaces は インターフェース番号の数であって Interface Descriptor の
 総数ではない。alternate setting の分だけ Interface Descriptor は増える。
 -->
 
@@ -980,7 +980,7 @@ step 6 に「アドレス割り当て前は default address でアクセスで�
 
 <div class="k">offset</div>
 
-<div class="dump-head"><span>wire bytes</span><span>C declaration</span><span>value</span></div>
+<div class="dump-head"><span>通信上のバイト列</span><span>C declaration</span><span>value</span></div>
 
 <div class="k cl"></div>
 <div class="dline"><span class="dline-hex "></span><span class="dline-src">typedef struct {</span><span class="dline-val "></span></div>
@@ -1015,7 +1015,7 @@ step 6 に「アドレス割り当て前は default address でアクセスで�
 <div class="k cl end">18</div>
 <div class="dline"><span class="dline-hex "></span><span class="dline-src">} UsbDeviceDescriptor;</span><span class="dline-val "></span></div>
 
-<p class="note" style="margin-top: 14px; max-width: none">フィールドの対応表。受信 bytes を <code>struct *</code> にキャストする実装例ではない。</p>
+<p class="note" style="margin-top: 14px; max-width: none">フィールドの対応表。受信したバイト列を <code>struct *</code> にキャストする実装例ではない。</p>
 
 <!--
 本編時間外。「残りの欄は何？」と聞かれたときだけ開く。
@@ -1029,25 +1029,25 @@ step 6 に「アドレス割り当て前は default address でアクセスで�
 
 <div class="k">ABI</div>
 
-<h1 class="compact">Appendix: wire の長さと <code>sizeof</code></h1>
+<h1 class="compact">Appendix: 通信上の長さと <code>sizeof</code></h1>
 
 <div class="abi" style="margin-top: 8px">
-<div class="abi-name">Device</div><div class="abi-lab">wire</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">18</div><div></div>
+<div class="abi-name">Device</div><div class="abi-lab">通信上</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">18</div><div></div>
 <div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">18</div><div class="abi-note ">たまたま一致</div>
 <div class="abi-gap"></div>
-<div class="abi-name">Configuration</div><div class="abi-lab">wire</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
-<div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div><div class="abi-num">10</div><div class="abi-note sig">末尾 padding 1</div>
+<div class="abi-name">Configuration</div><div class="abi-lab">通信上</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
+<div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div><div class="abi-num">10</div><div class="abi-note sig">末尾のパディング 1</div>
 <div class="abi-gap"></div>
-<div class="abi-name">Interface</div><div class="abi-lab">wire</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
+<div class="abi-name">Interface</div><div class="abi-lab">通信上</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div></div>
 <div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">9</div><div class="abi-note ">たまたま一致</div>
 <div class="abi-gap"></div>
-<div class="abi-name">Endpoint</div><div class="abi-lab">wire</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">7</div><div></div>
-<div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div><div class="abi-num">8</div><div class="abi-note sig">末尾 padding 1</div>
+<div class="abi-name">Endpoint</div><div class="abi-lab">通信上</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="abi-num">7</div><div></div>
+<div></div><div class="abi-lab">sizeof</div><div class="cellrow"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="pad"></span></div><div class="abi-num">8</div><div class="abi-note sig">末尾のパディング 1</div>
 </div>
 
-<p class="punch" style="margin-top: 22px; font-size: 20px">進む基準は wire 上の長さ。<br><span class="dim">ただし信頼できない入力では、その長さ自体も検証する。</span></p>
+<p class="punch" style="margin-top: 22px; font-size: 20px">進む基準は通信上の長さ。<br><span class="dim">ただし信頼できない入力では、その長さ自体も検証する。</span></p>
 
-<p class="note" style="margin-top: 14px">C 規格はこの <code>sizeof</code> を保証しない。典型 ABI の実演であって wire format の定義ではない。</p>
+<p class="note" style="margin-top: 14px">C 規格はこの <code>sizeof</code> を保証しない。<br>典型的な ABI の実演であって、通信上のフォーマットの定義ではない。</p>
 
 <!--
 本編時間外。
@@ -1063,9 +1063,9 @@ Device で18と出るのは正解ではなく偶然。Endpoint は7が8になる
     p += n; remain -= n;
   }
 
-生バイト列を (Desc *) にキャストしない理由: エンディアン、アライメント、padding、
-effective type。packed は非標準で、未アラインの member access 問題も残る。
-byte から明示的に組み立てるか、同等に境界・endian・alignment を処理する実装を使う。
+生のバイト列を (Desc *) にキャストしない理由: エンディアン、アライメント、パディング、
+effective type。packed は非標準で、未アラインのメンバアクセス問題も残る。
+バイトから明示的に組み立てるか、同等に境界・エンディアン・アライメントを処理する実装を使う。
 -->
 
 ---

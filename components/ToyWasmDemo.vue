@@ -40,7 +40,7 @@
       <div class="toy-path" :class="{ on: result !== null }" aria-live="polite">
         <span>JavaScript</span>
         <i>↓</i>
-        <span>WebAssembly module</span>
+        <span>WebAssembly モジュール</span>
         <i>↓</i>
         <span class="lit">double_it() <small>C</small></span>
         <i>↓</i>

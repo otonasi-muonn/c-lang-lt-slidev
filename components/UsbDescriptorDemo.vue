@@ -68,7 +68,7 @@
         </button>
       </div>
       <p class="detail-note">
-        Big-endian は同じ bytes の別解釈。WASM 自体は little-endian。
+        Big-endian は同じバイト列の別解釈。WASM 自体は little-endian。
       </p>
     </details>
     <details class="extra debug" name="demo-details">
@@ -129,7 +129,7 @@ const props = withDefaults(defineProps<{ wasmUrl?: string }>(), {
 
 const modes: { id: DemoMode; label: string }[] = [
   { id: "bad-length", label: "bLength を 0x14 にする" },
-  { id: "short", label: "8 bytes だけ渡す" },
+  { id: "short", label: "8バイトだけ渡す" },
   { id: "big-endian", label: "Big-endian として読む" },
 ];
 
@@ -217,7 +217,7 @@ const returnClass = computed(() => {
 });
 
 const resultMessage = computed(() => {
-  if (returnCode.value === -1) return "入力が短い：8 bytes / 必要な長さ 18";
+  if (returnCode.value === -1) return "入力が短い：8バイト / 必要な長さ 18";
   if (returnCode.value === -2) return "bLength が不正：20 / 期待する長さ 18";
   if (returnCode.value === -3) return "Device Descriptor ではない";
   return "解析できなかった";
@@ -230,10 +230,10 @@ const runSummary = computed(() => {
       : `この結果は JS の同等処理です${fallbackReason.value}`;
   }
   if (returnCode.value === null)
-    return "JS が bytes を渡し、C/WASM の解析結果を受け取ります。";
+    return "JS がバイト列を渡し、C/WASM の解析結果を受け取ります。";
   if (returnCode.value === 18) {
     return isBigEndian.value
-      ? "同じ bytes を big-endian として解釈した値です。"
+      ? "同じバイト列を big-endian として解釈した値です。"
       : "この値は、C からコンパイルした WASM が返しました。";
   }
   return "C/WASM が入力を検証し、解析を止めました。";
