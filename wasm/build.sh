@@ -15,8 +15,17 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUTPUT_DIR="$ROOT_DIR/public/wasm"
 mkdir -p "$OUTPUT_DIR"
 
-"$CLANG" --target=wasm32-unknown-unknown -nostdlib -ffreestanding -O2 \
-  -Wl,--no-entry -Wl,--export-memory -Wl,--strip-all \
-  -o "$OUTPUT_DIR/usb_descriptor.wasm" "$ROOT_DIR/wasm/usb_descriptor.c"
+build() {
+  local name="$1"
+  shift
+  "$CLANG" --target=wasm32-unknown-unknown -nostdlib -ffreestanding -O2 \
+    -Wl,--no-entry -Wl,--strip-all "$@" \
+    -o "$OUTPUT_DIR/$name.wasm" "$ROOT_DIR/wasm/$name.c"
+  echo "Built $OUTPUT_DIR/$name.wasm ($(wc -c < "$OUTPUT_DIR/$name.wasm") bytes)"
+}
 
-echo "Built $OUTPUT_DIR/usb_descriptor.wasm ($(wc -c < "$OUTPUT_DIR/usb_descriptor.wasm") bytes)"
+# The USB parser needs its linear memory exported so JS can hand it bytes.
+build usb_descriptor -Wl,--export-memory
+
+# The toy takes an int and returns an int, so it needs no shared memory at all.
+build double_it

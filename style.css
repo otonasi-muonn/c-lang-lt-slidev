@@ -11,8 +11,8 @@
    Everything not covered by those three is neutral ink.
 
    Radius is 0 everywhere. Memory is not rounded.
-   Design canvas is 900x506 (see canvasWidth in slides.md); all px below are
-   canvas px and are scaled by 1.42 at the 1280x720 presentation size.
+   Design canvas is 900x506 (see canvasWidth in slides.md); every px below is
+   a canvas px, scaled by 2.13 at the 1920x1080 size the talk is shared at.
    ========================================================================== */
 
 :root {
@@ -169,15 +169,6 @@ body,
 .k.sig {
   color: var(--sig);
 }
-.k.big {
-  font-size: 40px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-  padding-top: 0.06em;
-}
-
 /* --------------------------------------------------------------- utilities */
 
 /* Scoped so they outrank the inline-code colour reset below. */
@@ -217,16 +208,6 @@ body,
   color: var(--ink);
   max-width: 30em;
 }
-.gap-s {
-  height: 12px;
-}
-.gap-m {
-  height: 22px;
-}
-.gap-l {
-  height: 36px;
-}
-
 /* ------------------------------------------------------------- byte fields */
 
 /* 18 equal columns, so any ruler placed under the row aligns exactly. */
@@ -286,14 +267,6 @@ body,
   padding-top: 6px;
   min-height: 1.5em;
 }
-.ruler > span.t {
-  border-top-color: var(--rule-lit);
-  color: var(--ink-2);
-}
-.ruler > span.tsig {
-  border-top-color: var(--sig);
-  color: var(--sig);
-}
 .ruler > span.twide {
   border-top-color: var(--wide);
   color: var(--wide);
@@ -316,9 +289,6 @@ body,
   white-space: pre;
   overflow: visible;
 }
-.src .t {
-  color: var(--ink-3);
-}
 .src .sig {
   color: var(--sig);
 }
@@ -326,114 +296,10 @@ body,
   color: var(--wide);
 }
 
-/* ----------------------------------------------------------- listed things */
+/* -------------------------------------------------------------- the button */
 
-/* A stanza: several statements that are siblings, not a card grid. */
-.stanza {
-  display: grid;
-  row-gap: 18px;
-  font-size: 28px;
-  line-height: 1.42;
-  letter-spacing: -0.01em;
-}
-.stanza.tight {
-  row-gap: 9px;
-  font-size: 21px;
-}
-.stanza > li,
-.stanza > div {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* A two-track list: the rail names the thing, the measure explains it.
-   Replaces every "title + body inside a bordered card" in the deck. */
-.pairs {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  column-gap: 26px;
-  row-gap: 16px;
-  align-items: baseline;
-}
-.pairs > dt {
-  margin: 0;
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  white-space: nowrap;
-}
-.pairs > dd {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.66;
-  color: var(--ink-2);
-  max-width: 30em;
-}
-
-/* --------------------------------------------------------------- data grid */
-
-/* Tables are alignment plus one hairline under the header. Nothing else. */
-.slidev-layout .data,
-.slidev-layout .data tr,
-.slidev-layout .data th,
-.slidev-layout .data td {
-  border-color: var(--rule);
-}
-.data {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 17px;
-  line-height: 1.5;
-}
-.data th {
-  padding: 0 0 7px;
-  text-align: left;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--ink-3);
-  border-bottom: 1px solid var(--rule);
-}
-.data td {
-  padding: 9px 0;
-  vertical-align: baseline;
-  border-bottom: 1px solid var(--rule);
-}
-.data tr:last-child td {
-  border-bottom: none;
-}
-.data td + td,
-.data th + th {
-  padding-left: 22px;
-}
-.data .num {
-  font-family: var(--mono);
-  font-weight: 500;
-}
-.data th:nth-child(1),
-.data td:nth-child(1) {
-  width: 28%;
-}
-.data th:nth-child(2),
-.data td:nth-child(2) {
-  width: 18%;
-}
-.data th:nth-child(3),
-.data td:nth-child(3) {
-  width: 24%;
-}
-
-/* ---------------------------------------------------------- the demo shell */
-
-/* The demo is the one slide that genuinely represents an interface, so it is
-   the one place in the deck allowed a surface. */
-.shell {
-  background: var(--bg-lift);
-  border: 1px solid var(--rule);
-  padding: 14px 16px;
-}
+/* The two live demos are the only real interfaces in the deck, so this is the
+   only control it defines. */
 .btn {
   font-family: var(--sans);
   font-size: 14px;
@@ -503,12 +369,6 @@ body,
   line-height: 19px;
   color: var(--ink);
 }
-.slidev-layout .cl > .s {
-  white-space: pre;
-}
-.slidev-layout .cl > .s .t {
-  color: var(--ink-3);
-}
 .slidev-layout .cl > .g {
   font-family: var(--mono);
   font-size: 12px;
@@ -553,60 +413,9 @@ body,
   column-gap: 34px;
   align-items: start;
 }
-.slidev-layout .cols.code-left {
-  grid-template-columns: 0.94fr 1.06fr;
-}
-
-/* enumeration is an actual time sequence, so it is actually numbered. */
-.steps {
-  display: grid;
-  grid-template-columns: 15px 1fr;
-  column-gap: 11px;
-  row-gap: 10px;
-  align-items: baseline;
-}
-.steps > .n {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--ink-3);
-  text-align: right;
-}
-.steps > .s {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.42;
-  color: var(--ink);
-}
-.steps > .s .sub {
-  display: block;
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 1.55;
-  color: var(--ink-3);
-}
-.steps > .s .sub code {
-  font-family: var(--mono);
-  font-weight: 500;
-}
-
-.tree {
-  font-family: var(--mono);
-  font-size: 13.5px;
-  font-weight: 500;
-  line-height: 1.74;
-  color: var(--ink);
-  white-space: pre;
-  margin: 0;
-}
-.tree .t {
-  color: var(--ink-3);
-}
-
 /* The one line a slide exists to leave behind. */
 .slidev-layout .punch {
+  margin-top: 28px;
   font-size: 22px;
   line-height: 1.52;
   color: var(--ink);
@@ -632,13 +441,14 @@ body,
 }
 
 /* ==========================================================================
-   Visual explanation primitives.
+   The appendix, and the byte-cell primitives it shares with the deck.
 
    Everything below draws with the material the talk is already about —
-   byte cells, byte counts, offsets, addresses, scope extents — so the shape
-   of each slide is readable before a word of it is. Nothing here is
-   ornament: every rule, bar and cell stands for a quantity or a boundary
-   that the slide states in words anyway.
+   byte cells, byte counts, offsets, addresses — so the shape of a slide is
+   readable before a word of it is. Nothing here is ornament: every rule, bar
+   and cell stands for a quantity or a boundary the slide states anyway.
+
+   These slides sit after the closing and are opened only when asked.
    ========================================================================== */
 
 /* --- enumeration as an exchange: what goes out, what comes back ---------- */
@@ -848,108 +658,17 @@ body,
   background: var(--sig);
 }
 
-/* --- claim, and the thing from this talk that backs it ------------------- */
-
-.evid-row {
-  display: grid;
-  grid-template-columns: 160px 232px 1fr;
-  column-gap: 16px;
-  padding: 20px 0;
-  border-top: 1px solid var(--rule);
-}
-.evid-row:first-child {
-  border-top: none;
-  padding-top: 4px;
-}
-.evid-claim {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-.evid-fact {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--ink);
-  white-space: nowrap;
-}
-.evid-body {
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--ink-2);
-}
-
-/* --- how long the memory lives ------------------------------------------ */
-
-.life {
-  display: grid;
-  grid-template-columns: max-content 150px;
-  column-gap: 14px;
-  align-items: baseline;
-}
-.life-code {
-  grid-column: 1;
-  font-family: var(--mono);
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 30px;
-  color: var(--ink);
-  white-space: pre;
-}
-/* The extent spans exactly the lines on which buf exists. */
-.life-span {
-  grid-column: 2;
-  align-self: stretch;
-  border-left: 2px solid var(--ink-3);
-  padding-left: 10px;
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 30px;
-  color: var(--ink-3);
-}
-.life-end {
-  grid-column: 2;
-  padding-left: 12px;
-  font-size: 13px;
-  line-height: 30px;
-  color: var(--sig);
-}
-
-/* --- the branch the slide actually is ----------------------------------- */
-
-/* Scoped past the paragraph reset so the rule spans the measure and the
-   branch actually separates from the conditions above it. */
-.slidev-layout .branch {
-  border-top: 1px solid var(--rule);
-  margin-top: 30px;
-  padding-top: 24px;
-  max-width: none;
-}
-
 /* ==========================================================================
-   Second pass: primitives for the slides that now carry one idea each.
+   Main-deck compositions, in the order the talk reaches them.
+
+   Each block below belongs to one slide and is named for what that slide
+   does, not for what it looks like. Two marks recur and mean the same thing
+   wherever they appear, and nowhere else:
+
+     a left hairline   this text was taken from somewhere — real command
+                       output, or a project's own page
+     a vertical rule   these two things are separate mechanisms, not one
    ========================================================================== */
-
-/* --- who is speaking, and what they answered with ----------------------- */
-
-.who {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--ink-3);
-  margin-bottom: 10px;
-}
-.ask {
-  font-size: 46px;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-}
 
 /* --- field extents drawn under the byte row ----------------------------- */
 
@@ -969,76 +688,6 @@ body,
 .spans > i.on {
   border-color: var(--wide);
 }
-.span-labels {
-  display: grid;
-  grid-template-columns: repeat(18, 1fr);
-  column-gap: 0.22em;
-  font-size: 31px;
-  margin-top: 7px;
-}
-.span-labels > span {
-  font-family: var(--mono);
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--wide);
-  white-space: nowrap;
-  text-align: center;
-}
-
-/* --- two bytes becoming one value --------------------------------------- */
-
-.swap {
-  display: grid;
-  justify-items: center;
-  row-gap: 0;
-}
-.swap-k {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-align: center;
-  color: var(--ink-3);
-  margin-bottom: 6px;
-}
-.swap-row {
-  display: grid;
-  grid-template-columns: repeat(2, 98px);
-  column-gap: 42px;
-  font-family: var(--mono);
-  font-size: 50px;
-  font-weight: 500;
-  line-height: 1.1;
-  text-align: center;
-  color: var(--ink);
-}
-/* Two strokes that cross: the only thing on the slide that has to be drawn
-   rather than typed, because the swap is the point. */
-.swap-cross {
-  margin: 4px 0;
-}
-.swap-val {
-  font-family: var(--mono);
-  font-size: 50px;
-  font-weight: 500;
-  line-height: 1.2;
-  color: var(--wide);
-}
-.swap-mean {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--sig);
-  margin-top: 4px;
-}
-.swap-down {
-  font-family: var(--mono);
-  font-size: 20px;
-  color: var(--ink-3);
-  line-height: 1.4;
-  margin: 2px 0;
-}
-
 /* --- one payload, two lengths ------------------------------------------- */
 
 .pad {
@@ -1077,21 +726,6 @@ body,
   font-size: 27px;
 }
 
-/* --- a situation and the thing from this talk that proves it ------------- */
-
-.evid-row.two {
-  grid-template-columns: 330px 1fr;
-  padding: 13px 0;
-  line-height: 1.35;
-}
-.evid-row.two .evid-claim {
-  font-size: 22px;
-}
-.evid-row.two .evid-fact {
-  font-size: 15px;
-  color: var(--ink-2);
-}
-
 /* --- the demo's primary path -------------------------------------------- */
 
 /* The normal parse is the hero; the three ways to break it are quieter until
@@ -1105,11 +739,6 @@ body,
   border-color: var(--sig);
 }
 
-/* ==========================================================================
-   Third pass: the deck is now about C, with USB as one case study.
-   Primitives for the three chapters — 見える / 持っていける / つながる.
-   ========================================================================== */
-
 /* A chapter is a two-word mark on the slide that opens it, not a divider. */
 .chap {
   font-family: var(--mono);
@@ -1118,65 +747,6 @@ body,
   letter-spacing: 0.08em;
   color: var(--sig);
   margin-bottom: 12px;
-}
-
-/* --- the only roadmap: three words, each with the artifact it becomes ---- */
-
-.road {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  column-gap: 64px;
-  row-gap: 0;
-  align-items: stretch;
-}
-.road-w {
-  display: flex;
-  align-items: center;
-  font-size: 40px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  padding: 20px 0;
-  white-space: nowrap;
-}
-.road-x {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--mono);
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--ink-2);
-  padding: 22px 0;
-}
-.road > * {
-  border-top: 1px solid var(--rule);
-}
-.road > :nth-child(-n + 2) {
-  border-top: none;
-}
-
-/* --- pulling two bytes out of eighteen ---------------------------------- */
-
-.zoom {
-  display: grid;
-  justify-items: center;
-  margin-top: 18px;
-}
-.zoom-val {
-  font-family: var(--mono);
-  font-size: 78px;
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: 0.04em;
-  color: var(--ink);
-}
-.zoom-name {
-  font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink-3);
-  margin-top: 12px;
 }
 
 /* --- the same two bytes, read at two abstraction levels ------------------ */
@@ -1236,85 +806,24 @@ body,
   color: var(--wide);
 }
 
-/* --- one core, moved to another environment ----------------------------- */
-
-.chain {
-  display: grid;
-  justify-items: start;
-  row-gap: 0;
-}
-.chain-node {
-  font-family: var(--mono);
-  font-size: 26px;
-  font-weight: 500;
-  line-height: 1.3;
-  color: var(--ink);
-}
 .chain-node .sz {
   font-size: 16px;
   color: var(--ink-3);
   margin-left: 14px;
 }
-.chain-arrow {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  padding: 10px 0 10px 8px;
-  font-family: var(--mono);
-  font-size: 20px;
-  color: var(--ink-3);
-}
 .chain-arrow .how {
   font-size: 13px;
-}
-
-/* --- other languages reaching a C library ------------------------------- */
-
-.stack {
-  display: grid;
-  justify-items: center;
-  row-gap: 0;
-  text-align: center;
-}
-.stack-row {
-  display: flex;
-  gap: 40px;
-  font-size: 25px;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--ink);
-}
-.stack-row.lib {
-  font-family: var(--mono);
-  font-size: 25px;
-  font-weight: 500;
-}
-.stack-how {
-  font-size: 17px;
-  color: var(--ink-3);
-  line-height: 1.2;
-  padding: 6px 0;
-}
-.stack-abi {
-  width: 65%;
-  padding: 8px 0;
-  border-top: 1px solid var(--rule-lit);
-  border-bottom: 1px solid var(--rule-lit);
-  font-family: var(--mono);
-  font-size: 35px;
-  line-height: 1.2;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--sig);
 }
 
 /* --- the three, coming back as conditions ------------------------------- */
 
 .recall {
   display: grid;
-  grid-template-columns: 145px 1fr;
-  column-gap: 34px;
+  grid-template-columns: 179px 1fr;
   align-items: stretch;
+}
+.recall-w {
+  padding-right: 34px;
 }
 .recall > * {
   padding: 14px 0;
@@ -1337,76 +846,12 @@ body,
   letter-spacing: -0.01em;
   color: var(--ink);
 }
-.recall-t {
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--ink-3);
-  white-space: nowrap;
-}
-
-/* --- the three, coming back once more at the close ---------------------- */
-
-.three {
-  display: flex;
-  gap: 26px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--ink-2);
-}
-.three span {
-  color: var(--sig);
-}
-
-/* A field becomes a value, then a recognizable name. One reveal only. */
-.decode {
-  display: grid;
-  justify-items: center;
-}
-.decode-input {
-  display: grid;
-  grid-template-columns: 110px 110px;
-  gap: 0 40px;
-  text-align: center;
-  font: 500 68px/1.2 var(--mono);
-}
-.decode-input small {
-  font: 400 15px/1.8 var(--sans);
-  color: var(--ink-2);
-}
-.decode-cross {
-  margin: 8px 0;
-}
-.decode-value {
-  font: 500 64px/1.15 var(--mono);
-  color: var(--wide);
-}
-.decode-caption {
-  font-size: 16px;
-  color: var(--ink-2);
-  margin-top: 12px;
-}
-.decode-payoff {
-  display: grid;
-  justify-items: center;
-  line-height: 1.35;
-  margin-top: 8px;
-}
-.decode-payoff > span {
-  font-size: 22px;
-  color: var(--ink-3);
-}
-.decode-payoff strong {
-  font-size: 43px;
-  color: var(--sig);
-}
-
 /* Lifetime is a temporal boundary, not a quiz about a function. */
 .lifetime {
   display: grid;
-  grid-template-columns: 1fr 1.05fr;
-  gap: 38px;
-  margin-top: 18px;
+  grid-template-columns: 1fr 0.88fr;
+  gap: 30px;
+  margin-top: 14px;
   align-items: center;
 }
 .slidev-layout .lifetime-code {
@@ -1464,55 +909,6 @@ body,
 }
 
 /* Two compilation destinations. The browser path is the demonstrated one. */
-.portability {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-top: 10px;
-  column-gap: 48px;
-}
-.port-source {
-  grid-column: 1;
-  font: 500 34px var(--mono);
-}
-.port-source small,
-.port-native small {
-  display: block;
-  font: 400 16px/1.6 var(--sans);
-  color: var(--ink-2);
-  margin-top: 8px;
-}
-.port-native {
-  grid-column: 2;
-  font: 500 27px var(--mono);
-  color: var(--ink-2);
-  padding-top: 5px;
-}
-.port-native > span {
-  margin-right: 18px;
-}
-.port-browser {
-  grid-column: 1;
-  display: grid;
-  justify-items: start;
-  gap: 6px;
-}
-.port-browser > span {
-  font-size: 24px;
-  color: var(--ink-3);
-  padding-left: 14px;
-}
-.port-browser > strong {
-  font: 500 34px var(--mono);
-}
-.port-browser > strong:last-child {
-  color: var(--sig);
-}
-.stack-row small {
-  display: block;
-  font: 400 15px/1.5 var(--sans);
-  color: var(--ink-2);
-  margin-top: 5px;
-}
 .recall-s small {
   display: block;
   font: 400 15px/1.5 var(--sans);
@@ -1528,4 +924,507 @@ body,
 }
 .demo-slide .chap {
   margin-bottom: 8px;
+}
+
+/* --- the opening pivot: a position, then what follows from it ------------ */
+
+.pivot {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid var(--rule);
+}
+.slidev-layout .pivot-line {
+  margin: 0;
+  max-width: none;
+  font-size: 27px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.slidev-layout .pivot-tag {
+  margin-top: 13px;
+}
+
+/* --- a language, given as a data sheet ---------------------------------- */
+
+/* C and TypeScript get the same sheet on purpose: two languages read off the
+   same form, so the comparison needs no words. */
+.facts {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  align-items: start;
+  margin-top: 6px;
+}
+.facts > * {
+  padding: 14px 0;
+  border-top: 1px solid var(--rule);
+}
+.facts > :nth-child(-n + 2) {
+  border-top: none;
+  padding-top: 2px;
+}
+.facts > .facts-k {
+  padding-right: 30px;
+  padding-top: 25px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.facts > .facts-k:nth-child(-n + 2) {
+  padding-top: 13px;
+}
+.facts-v {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.42;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.facts-v .facts-s {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+  color: var(--ink-2);
+}
+
+/* --- what comes to the surface ------------------------------------------ */
+
+/* Four phenomena, not four cards. The middle dot is the only separator. */
+.surface {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 30px;
+  margin: 2px 0 32px;
+  font-family: var(--mono);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--wide);
+}
+.surface > span + span {
+  position: relative;
+}
+.surface > span + span::before {
+  content: "·";
+  position: absolute;
+  left: -18px;
+  color: var(--rule-lit);
+}
+
+/* --- a value, and the bytes it turned out to be ------------------------- */
+
+.obs {
+  display: grid;
+  margin-top: 4px;
+}
+.slidev-layout .obs-code {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 1.7;
+  white-space: pre;
+  color: var(--ink);
+}
+.slidev-layout .obs-code.obs-dim {
+  margin-top: 22px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--ink-2);
+}
+.obs-code .str {
+  color: var(--ink-3);
+}
+.obs-out {
+  margin-top: 26px;
+}
+.obs-prompt {
+  font: 500 13px var(--mono);
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+/* The observed bytes are the answer, so they are set larger than the source
+   that produced them: four cells sized by content, left-aligned under it. */
+.bytes.four {
+  grid-template-columns: repeat(4, max-content);
+  column-gap: 0.44em;
+  justify-content: start;
+  font-size: 46px;
+}
+.slidev-layout .obs-env {
+  margin-top: 14px;
+  max-width: 40em;
+}
+.obs-name {
+  margin-top: 24px;
+  font-size: 20px;
+  color: var(--ink-2);
+}
+.obs-name strong {
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 500;
+}
+
+/* --- two bytes lifted out of eighteen ----------------------------------- */
+
+/* Narrowing is the attention cue: the row stays, and everything but the field
+   under discussion steps back. */
+.bytes.narrowed > span {
+  color: var(--ink-3);
+  opacity: 0.34;
+  transition:
+    opacity 200ms ease,
+    color 200ms ease;
+}
+.bytes.narrowed > span.pick {
+  color: var(--wide);
+  opacity: 1;
+}
+
+.lift {
+  margin-top: 20px;
+}
+.lift-k {
+  font: 500 13px var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+.lift-chain {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.lift-raw {
+  font: 500 38px var(--mono);
+  color: var(--ink);
+}
+.lift-x {
+  flex: none;
+}
+.lift-val {
+  font: 500 44px var(--mono);
+}
+.lift-arrow {
+  font-size: 26px;
+  color: var(--ink-3);
+  margin-left: 10px;
+}
+.lift-name {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sig);
+}
+
+/* --- text that came from a real run, or from a project's own page ------- */
+
+.evidence {
+  margin-top: 22px;
+  padding-left: 16px;
+  border-left: 1px solid var(--rule-lit);
+}
+.evidence-out {
+  display: grid;
+  justify-items: start;
+  font: 500 14px var(--mono);
+  line-height: 1.75;
+  color: var(--ink-2);
+}
+.evidence-out > span {
+  white-space: pre;
+}
+.evidence-src {
+  margin-top: 7px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+.cite {
+  margin-top: 34px;
+  padding-left: 18px;
+  border-left: 1px solid var(--rule-lit);
+}
+.cite-src {
+  font: 500 12px var(--mono);
+  color: var(--ink-3);
+}
+.cite-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 34px;
+  margin-top: 13px;
+  font: 500 24px var(--mono);
+  color: var(--ink);
+}
+
+/* --- the one number that makes the risk real ---------------------------- */
+
+.risk {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 36px;
+  align-items: center;
+  margin-top: 10px;
+}
+.risk-big {
+  font-size: 78px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+.risk-txt {
+  font-size: 21px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+/* The half that is use-after-free is the half this talk already showed, so it
+   is lifted out of the sentence rather than trailing it. */
+.risk-note {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: 12px;
+  font: 500 17px/1.5 var(--mono);
+  color: var(--err);
+}
+.risk-note span {
+  font: 400 14px/1.5 var(--sans);
+  color: var(--ink-3);
+}
+.risk-2 {
+  margin-top: 26px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+
+/* --- the two different things "using C" can mean ------------------------ */
+
+/* The numbers arrive first and stay: the slide says "there are two of these"
+   before it says what either one is. */
+.paths {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  align-items: start;
+  margin-top: 6px;
+}
+.paths-n {
+  padding-right: 26px;
+}
+.paths > * {
+  padding: 17px 0;
+  border-top: 1px solid var(--rule);
+}
+.paths > :nth-child(-n + 2) {
+  border-top: none;
+  padding-top: 3px;
+}
+.paths-n {
+  font: 700 32px var(--mono);
+  line-height: 1.2;
+  color: var(--sig);
+}
+.paths-t {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.paths-s {
+  margin-top: 7px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* --- one library, named at the size of its reputation ------------------- */
+
+.sqlite {
+  margin-top: 8px;
+}
+.sqlite-name {
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.sqlite-s {
+  margin-top: 9px;
+  font-size: 19px;
+  color: var(--ink-2);
+}
+
+/* --- what is actually stacked up to run SQLite in a browser ------------- */
+
+.arch {
+  display: grid;
+  justify-items: start;
+  margin-top: 12px;
+}
+.arch-row {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 6px 0;
+}
+.arch-a {
+  font: 500 23px var(--mono);
+  color: var(--ink);
+}
+.arch-row.lit .arch-a {
+  color: var(--wide);
+}
+.arch-g {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.arch-ar {
+  font: 500 16px var(--mono);
+  line-height: 1.4;
+  color: var(--ink-3);
+  padding: 4px 0;
+}
+
+/* --- two worlds that are not the same mechanism ------------------------- */
+
+/* The rule down the middle is the whole argument: these do not merge into a
+   single "C ABI". */
+.worlds {
+  display: grid;
+  grid-template-columns: 0.86fr 1.14fr;
+  margin-top: 14px;
+}
+.worlds > :nth-child(2),
+.worlds > :nth-child(4) {
+  border-left: 1px solid var(--rule);
+  padding-left: 38px;
+}
+.worlds > :nth-child(1),
+.worlds > :nth-child(3) {
+  padding-right: 38px;
+}
+.worlds-h {
+  font: 500 13px var(--mono);
+  letter-spacing: 0.1em;
+  color: var(--sig);
+  padding-bottom: 11px;
+}
+.worlds-c {
+  padding-top: 18px;
+  padding-bottom: 4px;
+}
+.w-node {
+  font: 500 20px var(--mono);
+  color: var(--ink);
+}
+.w-node.lit {
+  color: var(--wide);
+}
+.w-tri {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  font: 500 20px var(--mono);
+  color: var(--ink);
+}
+.w-ar {
+  font: 500 13px var(--mono);
+  line-height: 1.75;
+  color: var(--ink-3);
+  padding: 11px 0;
+}
+.w-how {
+  color: var(--ink-2);
+}
+
+/* --- when new C is a candidate, and what it costs ----------------------- */
+
+.conds {
+  display: grid;
+  margin-top: 4px;
+}
+.conds > span {
+  padding: 11px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.conds > span:first-child {
+  border-top: none;
+  padding-top: 2px;
+}
+.cost {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 22px;
+  align-items: baseline;
+  margin-top: 26px;
+}
+.cost-k {
+  font: 500 13px var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--err);
+  white-space: nowrap;
+}
+.cost-v {
+  font: 500 15px var(--mono);
+  line-height: 1.75;
+  color: var(--ink-2);
+}
+
+/* --- where the other languages are simply the better answer ------------- */
+
+.alt {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: start;
+  margin-top: 6px;
+}
+.alt > * {
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+}
+.alt > :nth-child(-n + 2) {
+  border-top: none;
+  padding-top: 2px;
+}
+.alt > .alt-k {
+  padding-right: 28px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.alt-v {
+  font-size: 21px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+/* --- the close ---------------------------------------------------------- */
+
+.slidev-layout .closing-sub {
+  margin-top: 24px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 30em;
+}
+
+/* The naming slide arrives last, so each of the three carries the thing the
+   audience actually saw rather than a definition. */
+.recall-s {
+  font-size: 22px;
 }
